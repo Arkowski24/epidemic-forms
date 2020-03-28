@@ -1,10 +1,8 @@
 import React from 'react';
-import TextView from './views/forms/TextView';
+import FormView from './views/form/FormView';
+
 
 const App = () => (
-  <div>
-    <TextView message="lorem Ip" />
-  </div>
+  <FormView />
 );
-
 export default App;

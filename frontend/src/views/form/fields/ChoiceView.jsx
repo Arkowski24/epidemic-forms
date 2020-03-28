@@ -32,12 +32,15 @@ const ChoiceView = ({
   currentPage, totalPages,
   message,
   choices, isMultiple,
+  onClickPrev, onClickNext,
 }) => (
   <SinglePageForm
     currentPage={currentPage}
     totalPages={totalPages}
     header={isMultiple ? 'Choose multiple' : 'Choose one'}
     message={message}
+    onClickPrev={onClickPrev}
+    onClickNext={onClickNext}
   >
     <ChoiceForm choices={choices} isMultiple={isMultiple} />
   </SinglePageForm>

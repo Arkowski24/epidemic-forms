@@ -1,0 +1,36 @@
+{
+  "forms": [
+    {
+      "id": 1,
+      "choice": [
+        {
+          "order": 1,
+          "message":  "Your favourite author is:",
+          "choices": ["Kafka", "Prost", "Tolkien"]
+        }
+      ],
+      "sign": [
+        {
+          "order": 3,
+          "message": "I hereby agree everything is alright."
+        }
+      ],
+      "simple": [
+        {
+          "order": 0,
+          "message": "This form is used by hospital."
+        }
+      ],
+      "text": [
+        {
+          "order": 4,
+          "message":  "How tall are you?"
+        },
+        {
+          "order": 2,
+          "message":  "What have you eaten today?"
+        }
+      ]
+    }
+  ]
+}

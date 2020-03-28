@@ -1,8 +1,6 @@
 import { Container, ProgressBar } from 'react-bootstrap';
 import React from 'react';
-import NavigationButtons from './PrevNextButtons';
-
-const commonStyle = { padding: '5px' };
+import PrevNextButtons from './PrevNextButtons';
 
 const Header = ({ message }) => (
   <div className="m-2 border-bottom">
@@ -19,6 +17,7 @@ const InfoMessage = ({ message }) => (
 const SinglePageForm = ({
   currentPage, totalPages,
   header, message,
+  onClickPrev, onClickNext,
   children,
 }) => {
   const progress = Math.round((currentPage / totalPages) * 100);
@@ -37,7 +36,12 @@ const SinglePageForm = ({
       <Header message={header} />
       <InfoMessage message={message} />
       {children}
-      <NavigationButtons style={commonStyle} />
+      <PrevNextButtons
+        onClickPrev={onClickPrev}
+        onClickNext={onClickNext}
+        isFirst={currentPage === 1}
+        isFinal={currentPage === totalPages}
+      />
     </Container>
   );
 };

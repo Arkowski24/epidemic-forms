@@ -9,9 +9,9 @@ const SignField = () => {
   const handleClear = () => canvasRef.current.clear();
 
   return (
-    <Container className="w-100 border mt-2 mb-2">
+    <Container className="w-100 border mt-2 mb-2 rounded">
       <Row>
-        <div className="w-100 border-bottom">
+        <div className="w-100 border-bottom rounded">
           <Button className="btn float-right" variant="dark" onClick={handleClear}>
             Clear
           </Button>
@@ -33,12 +33,15 @@ const SignField = () => {
 const SignView = ({
   currentPage, totalPages,
   message,
+  onClickPrev, onClickNext,
 }) => (
   <SinglePageForm
     header="Sign Form"
     currentPage={currentPage}
     totalPages={totalPages}
     message={message}
+    onClickPrev={onClickPrev}
+    onClickNext={onClickNext}
   >
     <SignField />
   </SinglePageForm>

@@ -21,6 +21,7 @@ const InputForm = ({ text, setText }) => (
 const TextView = ({
   currentPage, totalPages,
   message,
+  onClickPrev, onClickNext,
 }) => {
   const [text, setText] = useState('');
 
@@ -30,6 +31,8 @@ const TextView = ({
       totalPages={totalPages}
       header="Fill-in the blank"
       message={message}
+      onClickPrev={onClickPrev}
+      onClickNext={onClickNext}
     >
       <InputForm text={text} setText={setText} />
     </SinglePageForm>
