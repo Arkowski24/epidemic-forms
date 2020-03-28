@@ -5,13 +5,13 @@ import NavigationButtons from './PrevNextButtons';
 const commonStyle = { padding: '5px' };
 
 const Header = ({ message }) => (
-  <div style={commonStyle}>
+  <div className="m-2 border-bottom">
     <h1>{message}</h1>
   </div>
 );
 
 const InfoMessage = ({ message }) => (
-  <div style={{ ...commonStyle, overflow: 'auto', maxHeight: '30vh' }}>
+  <div className="p-2 overflow-auto" style={{ maxHeight: '30vh' }}>
     <p className="text-justify">{message}</p>
   </div>
 );
