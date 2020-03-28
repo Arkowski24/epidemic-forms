@@ -47,22 +47,4 @@ public class FormController {
     ) {
         return formService.updateForm(token, question_id, values);
     }
-
-    /*
-    @PutMapping(path = "/updateForm")
-    public Boolean updateForm(
-            @RequestParam String token,
-            @RequestParam int question_id,
-            @RequestParam Map<String, Boolean> values
-    ) {
-        if (questionRepository.findById(question_id).isPresent()) {
-            ChoiceField question = (ChoiceField) questionRepository.findById(question_id).get();
-            question.setValues(values);
-
-            return true;
-        }
-
-        return false;
-    }
-    */
 }
