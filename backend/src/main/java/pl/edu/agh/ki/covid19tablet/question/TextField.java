@@ -1,12 +1,10 @@
-package pl.edu.agh.ki.covid19tablet.forms;
+package pl.edu.agh.ki.covid19tablet.question;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class TextField extends BaseField {
 
-    @Column
     private String value;
 
     public String getValue() {

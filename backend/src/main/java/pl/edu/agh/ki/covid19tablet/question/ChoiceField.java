@@ -1,6 +1,5 @@
-package pl.edu.agh.ki.covid19tablet.forms;
+package pl.edu.agh.ki.covid19tablet.question;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 @Entity
 public class ChoiceField extends BaseField {
 
-    @Column
     @ElementCollection
     private Map<String, Boolean> values;
 

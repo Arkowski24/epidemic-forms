@@ -1,4 +1,6 @@
-package pl.edu.agh.ki.covid19tablet.forms;
+package pl.edu.agh.ki.covid19tablet.question;
+
+import pl.edu.agh.ki.covid19tablet.form.Form;
 
 import javax.persistence.*;
 
@@ -13,8 +15,10 @@ public class BaseField {
     @JoinColumn(name = "form_id")
     private Form form;
 
-    @Column(nullable = false)
     private String description;
+
+    @Column(name = "order_number")
+    private int order;
 
     public int getId() {
         return id;
@@ -35,5 +39,12 @@ public class BaseField {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

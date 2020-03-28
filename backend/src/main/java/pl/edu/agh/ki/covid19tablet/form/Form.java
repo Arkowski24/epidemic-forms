@@ -1,6 +1,9 @@
-package pl.edu.agh.ki.covid19tablet.forms;
+package pl.edu.agh.ki.covid19tablet.form;
+
+import pl.edu.agh.ki.covid19tablet.question.BaseField;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,11 +13,12 @@ public class Form {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "form")
     private List<BaseField> fields;
 
-    public Form() {}
+    public Form() {
+        fields = new ArrayList<>();
+    }
 
     public Form(List<BaseField> fields) {
         this.fields = fields;
@@ -32,5 +36,9 @@ public class Form {
     }
     public void setFields(List<BaseField> fields) {
         this.fields = fields;
+    }
+
+    public void addField(BaseField field) {
+        fields.add(field);
     }
 }
