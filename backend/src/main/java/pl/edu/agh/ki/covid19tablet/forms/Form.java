@@ -14,6 +14,12 @@ public class Form {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "form")
     private List<BaseField> fields;
 
+    public Form() {}
+
+    public Form(List<BaseField> fields) {
+        this.fields = fields;
+    }
+
     public int getId() {
         return id;
     }
