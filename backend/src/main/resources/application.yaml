@@ -1,0 +1,7 @@
+spring.jpa:
+  properties:
+    hibernate.driverClassName: org.postgresql.Driver
+    hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+    hibernate.temp.use_jdbc_metadata_defaults: false
+  hibernate:
+    ddl-auto: update
