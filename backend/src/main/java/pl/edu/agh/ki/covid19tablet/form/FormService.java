@@ -2,7 +2,7 @@ package pl.edu.agh.ki.covid19tablet.form;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.ki.covid19tablet.form_pattern.FormPatternRepository;
+import pl.edu.agh.ki.covid19tablet.form_scheme.FormSchemeRepository;
 import pl.edu.agh.ki.covid19tablet.question.ChoiceField;
 import pl.edu.agh.ki.covid19tablet.question.QuestionRepository;
 import pl.edu.agh.ki.covid19tablet.question.TextField;
@@ -16,7 +16,7 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
     @Autowired
-    private FormPatternRepository formPatternRepository;
+    private FormSchemeRepository formSchemeRepository;
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -24,8 +24,8 @@ public class FormService {
     private Map<String, Form> activeForms = new HashMap<>();
 
     public String createForm(int id) {
-        if (formPatternRepository.findById(id).isPresent()) {
-            Form pattern = formPatternRepository.findById(id).get();
+        if (formSchemeRepository.findById(id).isPresent()) {
+            Form pattern = formSchemeRepository.findById(id).get();
             Form newForm = formBuilder.build(pattern);
             formRepository.save(newForm);
 
