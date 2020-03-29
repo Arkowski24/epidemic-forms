@@ -4,13 +4,13 @@ import { Button, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import SinglePageForm from './common/SinglePageForm';
 
-const SignField = ({ response, setResponse }) => {
+const SignField = ({ input, setInput }) => {
   const canvasRef = React.createRef();
-  const handleClear = () => { canvasRef.current.clear(); setResponse(null); };
+  const handleClear = () => { canvasRef.current.clear(); setInput(null); };
 
   useEffect(() => {
-    if (canvasRef.current && canvasRef.current.isEmpty()) canvasRef.current.fromDataURL(response);
-  }, [response, canvasRef]);
+    if (canvasRef.current && canvasRef.current.isEmpty()) canvasRef.current.fromDataURL(input);
+  }, [input, canvasRef]);
 
   return (
     <Container className="w-100 border mt-2 mb-2 rounded">
@@ -27,7 +27,7 @@ const SignField = ({ response, setResponse }) => {
             penColor="black"
             canvasProps={{ className: 'w-100 h-100 m-0' }}
             ref={canvasRef}
-            onEnd={() => { setResponse(canvasRef.current.toDataURL()); }}
+            onEnd={() => { setInput(canvasRef.current.toDataURL()); }}
           />
         </div>
       </Row>
@@ -39,7 +39,7 @@ const SignView = ({
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
-  response, setResponse,
+  input, setInput,
 }) => (
   <SinglePageForm
     header="Sign Form"
@@ -49,7 +49,7 @@ const SignView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <SignField response={response} setResponse={setResponse} />
+    <SignField input={input} setInput={setInput} />
   </SinglePageForm>
 );
 

@@ -13,17 +13,17 @@ import SliderView from './fields/SliderView';
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [responses, setResponses] = useState([{}]);
+  const [inputsState, setInputsState] = useState([{}]);
   const [finished, setFinished] = useState(null);
 
-  const sendResponse = async () => {
-    await formsService.postResponse(responses);
+  const sendFormResponse = async () => {
+    await formsService.postResponse(inputsState);
     setFinished(true);
   };
 
   const nextPage = (event) => {
     event.preventDefault();
-    if (currentPage === form.pages.length) sendResponse();
+    if (currentPage === form.pages.length) sendFormResponse();
     else setCurrentPage(currentPage + 1);
   };
   const prevPage = (event) => {
@@ -31,10 +31,10 @@ const FormView = () => {
     if (currentPage - 1 > 0) setCurrentPage(currentPage - 1);
   };
 
-  const setResponse = (response) => {
-    const newResponses = responses.slice();
-    newResponses[currentPage - 1] = response;
-    setResponses(newResponses);
+  const setInput = (input) => {
+    const newResponses = inputsState.slice();
+    newResponses[currentPage - 1] = input;
+    setInputsState(newResponses);
   };
 
   const createFieldResponse = (f) => {
@@ -64,7 +64,7 @@ const FormView = () => {
       const values = fields.map((f) => createFieldResponse(f));
 
       setForm({ pages: fields });
-      setResponses(values);
+      setInputsState(values);
     }
     fetchData();
   }, []);
@@ -73,7 +73,7 @@ const FormView = () => {
   if (finished) { return (<EndView />); }
 
   const page = form.pages[currentPage - 1];
-  const response = responses[currentPage - 1];
+  const input = inputsState[currentPage - 1];
   return (
     <div>
       {page.type === 'choice' && (
@@ -85,8 +85,8 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
-          response={response}
-          setResponse={setResponse}
+          input={input}
+          setInput={setInput}
         />
       )}
       {page.type === 'sign' && (
@@ -96,8 +96,8 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
-          response={response}
-          setResponse={setResponse}
+          input={input}
+          setInput={setInput}
         />
       )}
       {page.type === 'simple' && (
@@ -119,8 +119,8 @@ const FormView = () => {
           minValue={page.minValue}
           maxValue={page.maxValue}
           step={page.step}
-          response={response}
-          setResponse={setResponse}
+          input={input}
+          setInput={setInput}
         />
       )}
       {page.type === 'text' && (
@@ -130,8 +130,9 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
-          response={response}
-          setResponse={setResponse}
+          isMultiline={page.isMultiline}
+          input={input}
+          setInput={setInput}
         />
       )}
     </div>

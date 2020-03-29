@@ -5,13 +5,13 @@ import SinglePageForm from './common/SinglePageForm';
 
 const ChoiceForm = ({
   choices, isMultiple,
-  response, setResponse,
+  input, setInput,
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
-      const newResponse = isMultiple ? response.slice() : response.map(() => false);
-      newResponse[i] = !response[i];
-      setResponse(newResponse);
+      const newInput = isMultiple ? input.slice() : input.map(() => false);
+      newInput[i] = !input[i];
+      setInput(newInput);
     };
     return (
       <div
@@ -24,8 +24,8 @@ const ChoiceForm = ({
           type={isMultiple ? 'checkbox' : 'radio'}
           name="choiceForm"
           label={c}
-          checked={response[i]}
-          readOnly={true}
+          checked={input[i]}
+          readOnly
         />
       </div>
     );
@@ -49,7 +49,7 @@ const ChoiceView = ({
   message,
   choices, isMultiple,
   onClickPrev, onClickNext,
-  response, setResponse,
+  input, setInput,
 }) => (
   <SinglePageForm
     currentPage={currentPage}
@@ -62,8 +62,8 @@ const ChoiceView = ({
     <ChoiceForm
       choices={choices}
       isMultiple={isMultiple}
-      response={response}
-      setResponse={setResponse}
+      input={input}
+      setInput={setInput}
     />
   </SinglePageForm>
 );

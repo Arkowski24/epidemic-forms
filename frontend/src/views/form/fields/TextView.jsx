@@ -21,7 +21,7 @@ const TextView = ({
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
-  response, setResponse,
+  input, setInput,
 }) => (
   <SinglePageForm
     currentPage={currentPage}
@@ -31,7 +31,7 @@ const TextView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <InputForm text={response} setText={setResponse} isMultiline={isMultiline} />
+    <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
   </SinglePageForm>
 );
 

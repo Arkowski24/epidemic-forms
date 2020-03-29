@@ -66,7 +66,7 @@ const SliderView = ({
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
-  response, setResponse,
+  input, setInput,
 }) => (
   <SinglePageForm
     currentPage={currentPage}
@@ -80,8 +80,8 @@ const SliderView = ({
       minValue={minValue}
       maxValue={maxValue}
       step={step}
-      value={response}
-      setValue={setResponse}
+      value={input}
+      setValue={setInput}
     />
   </SinglePageForm>
 );
