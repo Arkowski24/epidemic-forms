@@ -42,7 +42,7 @@ const FormView = () => {
   const createFieldResponse = (f) => {
     if (f.type === 'choice') return f.choices.map(() => false);
     if (f.type === 'text') return '';
-    if (f.type === 'slide') return f.minValue;
+    if (f.type === 'slider') return f.minValue;
     return null;
   };
 
@@ -58,9 +58,9 @@ const FormView = () => {
       const choice = schema.choice.map((c) => ({ ...c, type: 'choice' }));
       const sign = schema.sign.map((s) => ({ ...s, type: 'sign' }));
       const simple = schema.simple.map((s) => ({ ...s, type: 'simple' }));
-      const slide = schema.slide.map((s) => ({ ...s, type: 'slide' }));
+      const slider = schema.slider.map((s) => ({ ...s, type: 'slider' }));
       const text = schema.text.map((t) => ({ ...t, type: 'text' }));
-      const fields = choice.concat(sign, simple, slide, text);
+      const fields = choice.concat(sign, simple, slider, text);
 
       fields.sort((a, b) => a.order - b.order);
       const values = fields.map((f) => createFieldResponse(f));
@@ -112,7 +112,7 @@ const FormView = () => {
           onClickNext={nextPage}
         />
       )}
-      {page.type === 'slide' && (
+      {page.type === 'slider' && (
         <SliderView
           message={page.message}
           currentPage={currentPage}
