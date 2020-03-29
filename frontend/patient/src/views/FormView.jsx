@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import formsService from '../../services/FormsService';
+import formsService from '../services/FormsService';
 
 import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
-import LoadingView from '../LoadingView';
-import EndView from '../EndView';
+import LoadingView from './utility/LoadingView';
+import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
-import LoginView from '../LoginView';
+import LoginView from './utility/LoginView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
