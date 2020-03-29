@@ -8,6 +8,7 @@ import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
 import LoadingView from '../LoadingView';
 import EndView from '../EndView';
+import SliderView from './fields/SliderView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -39,6 +40,7 @@ const FormView = () => {
   const createFieldResponse = (f) => {
     if (f.type === 'choice') return f.choices.map(() => false);
     if (f.type === 'text') return '';
+    if (f.type === 'slide') return f.minValue;
     return null;
   };
 
@@ -54,8 +56,9 @@ const FormView = () => {
       const choice = schema.choice.map((c) => ({ ...c, type: 'choice' }));
       const sign = schema.sign.map((s) => ({ ...s, type: 'sign' }));
       const simple = schema.simple.map((s) => ({ ...s, type: 'simple' }));
+      const slide = schema.slide.map((s) => ({ ...s, type: 'slide' }));
       const text = schema.text.map((t) => ({ ...t, type: 'text' }));
-      const fields = choice.concat(sign, simple, text);
+      const fields = choice.concat(sign, simple, slide, text);
 
       fields.sort((a, b) => a.order - b.order);
       const values = fields.map((f) => createFieldResponse(f));
@@ -104,6 +107,20 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
+        />
+      )}
+      {page.type === 'slide' && (
+        <SliderView
+          message={page.message}
+          currentPage={currentPage}
+          totalPages={form.pages.length}
+          onClickPrev={prevPage}
+          onClickNext={nextPage}
+          minValue={page.minValue}
+          maxValue={page.maxValue}
+          step={page.step}
+          response={response}
+          setResponse={setResponse}
         />
       )}
       {page.type === 'text' && (

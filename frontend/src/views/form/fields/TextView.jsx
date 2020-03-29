@@ -3,10 +3,8 @@ import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
 
-const commonStyle = { padding: '5px' };
-
 const InputForm = ({ text, setText, isMultiline }) => (
-  <div style={commonStyle}>
+  <div className="p-1">
     <Form>
       <Form.Control
         as="textarea"

@@ -3,7 +3,6 @@ import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
 
-
 const ChoiceForm = ({
   choices, isMultiple,
   response, setResponse,

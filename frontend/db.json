@@ -37,6 +37,15 @@
             "message": "This form is used by hospital."
           }
         ],
+        "slide": [
+          {
+            "order": 6,
+            "minValue": 0,
+            "maxValue": 100,
+            "step": 1,
+            "message": "Please slide freely."
+          }
+        ],
         "text": [
           {
             "order": 4,
