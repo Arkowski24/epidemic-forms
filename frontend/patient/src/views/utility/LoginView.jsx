@@ -12,7 +12,7 @@ const LoginView = ({ setToken }) => {
 
   return (
     <Container className="d-flex justify-content-center align-items-center">
-      <div className="w-50 m-5 p-5 border rounded">
+      <div className="w-50 m-5 p-2 border rounded">
         <Form onSubmit={handleLogin}>
           <Form.Group>
             <Form.Row>
