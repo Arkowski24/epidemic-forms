@@ -5,12 +5,12 @@ import SinglePageForm from './common/SinglePageForm';
 
 const commonStyle = { padding: '5px' };
 
-const InputForm = ({ text, setText }) => (
+const InputForm = ({ text, setText, isMultiline }) => (
   <div style={commonStyle}>
     <Form>
       <Form.Control
         as="textarea"
-        rows="3"
+        rows={isMultiline ? 3 : 1}
         value={text}
         onChange={(event) => setText(event.target.value)}
       />
@@ -19,6 +19,7 @@ const InputForm = ({ text, setText }) => (
 );
 
 const TextView = ({
+  isMultiline,
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
@@ -32,7 +33,7 @@ const TextView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <InputForm text={response} setText={setResponse} />
+    <InputForm text={response} setText={setResponse} isMultiline={isMultiline} />
   </SinglePageForm>
 );
 

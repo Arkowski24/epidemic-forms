@@ -1,9 +1,13 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3004/forms';
+const baseUrl = 'http://localhost:3004';
 
 const getForm = (id) => axios
-  .get(`${baseUrl}/${id}`)
+  .get(`${baseUrl}/forms/${id}`)
   .then((res) => res.data);
 
-export default { getForm };
+const postResponse = (response) => axios
+  .post(`${baseUrl}/responses/`, response)
+  .then((res) => res.data);
+
+export default { getForm, postResponse };

@@ -7,15 +7,23 @@ import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
 import LoadingView from '../LoadingView';
+import EndView from '../EndView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [responses, setResponses] = useState([{}]);
+  const [finished, setFinished] = useState(null);
+
+  const sendResponse = async () => {
+    await formsService.postResponse(responses);
+    setFinished(true);
+  };
 
   const nextPage = (event) => {
     event.preventDefault();
-    if (currentPage + 1 <= form.pages.length) setCurrentPage(currentPage + 1);
+    if (currentPage === form.pages.length) sendResponse();
+    else setCurrentPage(currentPage + 1);
   };
   const prevPage = (event) => {
     event.preventDefault();
@@ -38,10 +46,15 @@ const FormView = () => {
     async function fetchData() {
       const rawForm = await formsService.getForm(1);
 
-      const choice = rawForm.choice.map((c) => ({ ...c, type: 'choice' }));
-      const sign = rawForm.sign.map((s) => ({ ...s, type: 'sign' }));
-      const simple = rawForm.simple.map((s) => ({ ...s, type: 'simple' }));
-      const text = rawForm.text.map((t) => ({ ...t, type: 'text' }));
+      const formFinished = rawForm.finished;
+      setFinished(formFinished);
+      if (formFinished) return;
+
+      const { schema } = rawForm;
+      const choice = schema.choice.map((c) => ({ ...c, type: 'choice' }));
+      const sign = schema.sign.map((s) => ({ ...s, type: 'sign' }));
+      const simple = schema.simple.map((s) => ({ ...s, type: 'simple' }));
+      const text = schema.text.map((t) => ({ ...t, type: 'text' }));
       const fields = choice.concat(sign, simple, text);
 
       fields.sort((a, b) => a.order - b.order);
@@ -53,13 +66,8 @@ const FormView = () => {
     fetchData();
   }, []);
 
-  if (form === null) {
-    return (
-      <>
-        <LoadingView />
-      </>
-    );
-  }
+  if (form === null) { return (<LoadingView />); }
+  if (finished) { return (<EndView />); }
 
   const page = form.pages[currentPage - 1];
   const response = responses[currentPage - 1];
