@@ -9,12 +9,14 @@ import SimpleView from './fields/SimpleView';
 import LoadingView from '../LoadingView';
 import EndView from '../EndView';
 import SliderView from './fields/SliderView';
+import LoginView from '../LoginView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputsState, setInputsState] = useState([{}]);
   const [finished, setFinished] = useState(null);
+  const [token, setToken] = useState(null);
 
   const sendFormResponse = async () => {
     await formsService.postResponse(inputsState);
@@ -69,6 +71,7 @@ const FormView = () => {
     fetchData();
   }, []);
 
+  if (token === null) { return (<LoginView setToken={setToken} />); }
   if (form === null) { return (<LoadingView />); }
   if (finished) { return (<EndView />); }
 
