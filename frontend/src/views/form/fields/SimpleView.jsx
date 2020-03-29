@@ -5,6 +5,7 @@ const SimpleView = ({
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
+  response, setResponse,
 }) => (
   <SinglePageForm
     header="Read message"

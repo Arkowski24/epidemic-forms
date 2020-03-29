@@ -34,6 +34,7 @@ const SignView = ({
   currentPage, totalPages,
   message,
   onClickPrev, onClickNext,
+  response, setResponse,
 }) => (
   <SinglePageForm
     header="Sign Form"

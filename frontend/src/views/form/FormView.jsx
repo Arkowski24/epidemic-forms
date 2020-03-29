@@ -11,6 +11,7 @@ import LoadingView from '../LoadingView';
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [responses, setResponses] = useState([{}]);
 
   const nextPage = (event) => {
     event.preventDefault();
@@ -19,6 +20,19 @@ const FormView = () => {
   const prevPage = (event) => {
     event.preventDefault();
     if (currentPage - 1 > 0) setCurrentPage(currentPage - 1);
+  };
+
+  const setResponse = (response) => {
+    const newResponses = responses.slice();
+    newResponses[currentPage - 1] = response;
+    setResponses(newResponses);
+  };
+
+  const createFieldResponse = (f) => {
+    if (f.type === 'choice') return f.choices.map(() => false);
+    if (f.type === 'sign') return {};
+    if (f.type === 'text') return '';
+    return null;
   };
 
   useEffect(() => {
@@ -32,7 +46,10 @@ const FormView = () => {
       const fields = choice.concat(sign, simple, text);
 
       fields.sort((a, b) => a.order - b.order);
+      const values = fields.map((f) => createFieldResponse(f));
+
       setForm({ pages: fields });
+      setResponses(values);
     }
     fetchData();
   }, []);
@@ -46,6 +63,7 @@ const FormView = () => {
   }
 
   const page = form.pages[currentPage - 1];
+  const response = responses[currentPage - 1];
   return (
     <div>
       {page.type === 'choice' && (
@@ -53,9 +71,12 @@ const FormView = () => {
           message={page.message}
           choices={page.choices}
           currentPage={currentPage}
+          isMultiple={page.isMultiple}
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
+          response={response}
+          setResponse={setResponse}
         />
       )}
       {page.type === 'sign' && (
@@ -65,6 +86,8 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
+          response={response}
+          setResponse={setResponse}
         />
       )}
       {page.type === 'simple' && (
@@ -83,6 +106,8 @@ const FormView = () => {
           totalPages={form.pages.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
+          response={response}
+          setResponse={setResponse}
         />
       )}
     </div>

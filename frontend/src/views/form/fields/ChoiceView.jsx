@@ -3,20 +3,37 @@ import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
 
-const choiceFormStyle = { padding: '10px 20px' };
 
-const ChoiceForm = ({ choices, isMultiple }) => {
-  const buttons = choices.map((c) => (
-    <Form.Check
-      key={c}
-      type={isMultiple ? 'checkbox' : 'radio'}
-      name="choiceForm"
-      label={c}
-    />
-  ));
+const ChoiceForm = ({
+  choices, isMultiple,
+  response, setResponse,
+}) => {
+  const buttons = choices.map((c, i) => {
+    const setChecked = () => {
+      const newResponse = isMultiple ? response.slice() : response.map(() => false);
+      newResponse[i] = !response[i];
+      setResponse(newResponse);
+    };
+    return (
+      <div
+        className="border rounded p-1 m-1"
+        onClick={() => setChecked(true)}
+        key={c}
+      >
+        <Form.Check
+          key={c}
+          type={isMultiple ? 'checkbox' : 'radio'}
+          name="choiceForm"
+          label={c}
+          checked={response[i]}
+          readOnly={true}
+        />
+      </div>
+    );
+  });
 
   return (
-    <div style={choiceFormStyle}>
+    <div className="m-1">
       <Form>
         <fieldset>
           <Form.Group>
@@ -33,6 +50,7 @@ const ChoiceView = ({
   message,
   choices, isMultiple,
   onClickPrev, onClickNext,
+  response, setResponse,
 }) => (
   <SinglePageForm
     currentPage={currentPage}
@@ -42,7 +60,12 @@ const ChoiceView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <ChoiceForm choices={choices} isMultiple={isMultiple} />
+    <ChoiceForm
+      choices={choices}
+      isMultiple={isMultiple}
+      response={response}
+      setResponse={setResponse}
+    />
   </SinglePageForm>
 );
 

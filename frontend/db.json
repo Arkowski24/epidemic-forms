@@ -5,8 +5,22 @@
       "choice": [
         {
           "order": 1,
-          "message":  "Your favourite author is:",
-          "choices": ["Kafka", "Prost", "Tolkien"]
+          "message": "Your favourite author is:",
+          "choices": [
+            "Kafka",
+            "Prost",
+            "Tolkien"
+          ]
+        },
+        {
+          "order": 5,
+          "message": "Your favourite author is:",
+          "choices": [
+            "Kafka",
+            "Prost",
+            "Tolkien"
+          ],
+          "isMultiple": true
         }
       ],
       "sign": [
@@ -17,18 +31,18 @@
       ],
       "simple": [
         {
-          "order": 0,
+          "order": 2,
           "message": "This form is used by hospital."
         }
       ],
       "text": [
         {
           "order": 4,
-          "message":  "How tall are you?"
+          "message": "How tall are you?"
         },
         {
-          "order": 2,
-          "message":  "What have you eaten today?"
+          "order": 0,
+          "message": "What have you eaten today?"
         }
       ]
     }
