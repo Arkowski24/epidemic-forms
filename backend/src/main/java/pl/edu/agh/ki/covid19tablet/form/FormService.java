@@ -42,17 +42,17 @@ public class FormService {
         return activeForms.get(token);
     }
 
-    public Boolean updateForm(String token, int question_id, String value) {
-        if (questionRepository.findById(question_id).isPresent()) {
-            TextField question = (TextField) questionRepository.findById(question_id).get();
+    public Boolean updateForm(String token, int questionId, String value) {
+        if (questionRepository.findById(questionId).isPresent()) {
+            TextField question = (TextField) questionRepository.findById(questionId).get();
             question.setValue(value);
             return true;
         }
         return false;
     }
-    public Boolean updateForm(String token, int question_id, Map<String, Boolean> values) {
-        if (questionRepository.findById(question_id).isPresent()) {
-            ChoiceField question = (ChoiceField) questionRepository.findById(question_id).get();
+    public Boolean updateForm(String token, int questionId, Map<String, Boolean> values) {
+        if (questionRepository.findById(questionId).isPresent()) {
+            ChoiceField question = (ChoiceField) questionRepository.findById(questionId).get();
             question.setValues(values);
             return true;
         }

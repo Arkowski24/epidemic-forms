@@ -34,17 +34,17 @@ public class FormController {
     @PutMapping(path = "/update/textfield")
     public Boolean updateForm(
             @RequestParam String token,
-            @RequestParam int question_id,
+            @RequestParam int questionId,
             @RequestParam String value
     ) {
-        return formService.updateForm(token, question_id, value);
+        return formService.updateForm(token, questionId, value);
     }
     @PutMapping(path = "/update/choicefield")
     public Boolean updateForm(
             @RequestParam String token,
-            @RequestParam int question_id,
+            @RequestParam int questionId,
             @RequestParam Map<String, Boolean> values
     ) {
-        return formService.updateForm(token, question_id, values);
+        return formService.updateForm(token, questionId, values);
     }
 }
