@@ -30,7 +30,6 @@ const FormView = () => {
 
   const createFieldResponse = (f) => {
     if (f.type === 'choice') return f.choices.map(() => false);
-    if (f.type === 'sign') return {};
     if (f.type === 'text') return '';
     return null;
   };

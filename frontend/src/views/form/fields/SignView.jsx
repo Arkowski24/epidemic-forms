@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import { Button, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import SinglePageForm from './common/SinglePageForm';
 
-const SignField = () => {
+const SignField = ({ response, setResponse }) => {
   const canvasRef = React.createRef();
-  const handleClear = () => canvasRef.current.clear();
+  const handleClear = () => { canvasRef.current.clear(); setResponse(null); };
+
+  useEffect(() => {
+    if (canvasRef.current && canvasRef.current.isEmpty()) canvasRef.current.fromDataURL(response);
+  }, [response, canvasRef]);
 
   return (
     <Container className="w-100 border mt-2 mb-2 rounded">
@@ -23,6 +27,7 @@ const SignField = () => {
             penColor="black"
             canvasProps={{ className: 'w-100 h-100 m-0' }}
             ref={canvasRef}
+            onEnd={() => { setResponse(canvasRef.current.toDataURL()); }}
           />
         </div>
       </Row>
@@ -44,7 +49,7 @@ const SignView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <SignField />
+    <SignField response={response} setResponse={setResponse} />
   </SinglePageForm>
 );
 
