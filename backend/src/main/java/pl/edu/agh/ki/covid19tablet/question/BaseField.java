@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class BaseField {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "form_id")
+    @JsonIgnore
     private Form form;
 
     private String description;

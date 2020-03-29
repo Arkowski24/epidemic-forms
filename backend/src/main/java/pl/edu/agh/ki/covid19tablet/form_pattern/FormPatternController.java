@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 
 @RestController
-@RequestMapping(path = "/formPatterns")
+@RequestMapping(path = "/formpatterns")
 public class FormPatternController {
 
     @Autowired
@@ -13,7 +13,7 @@ public class FormPatternController {
 
     @PostMapping(path = "/")
     public String addFormPattern(
-            @RequestParam Form form
+            @RequestBody Form form
     ) {
         formPatternService.add(form);
         return "Added Form Pattern";
