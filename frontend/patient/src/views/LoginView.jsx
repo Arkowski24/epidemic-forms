@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Form, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 
-const LoginView = () => {
-  const [token, setToken] = useState('');
+const LoginView = ({ setToken }) => {
+  const [text, setText] = useState('');
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -17,7 +17,7 @@ const LoginView = () => {
           <Form.Row>
             <Form.Label column>Token</Form.Label>
             <Col sm={10}>
-              <Form.Control type="text" value={token} onChange={(event) => setToken(event.target.value)} />
+              <Form.Control type="text" value={text} onChange={(event) => setText(event.target.value)} />
             </Col>
           </Form.Row>
         </Form.Group>
