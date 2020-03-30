@@ -1,10 +1,13 @@
 package pl.edu.agh.ki.covid19tablet.form;
 
 import pl.edu.agh.ki.covid19tablet.question.BaseField;
+import pl.edu.agh.ki.covid19tablet.question.ChoiceField;
+import pl.edu.agh.ki.covid19tablet.question.TextField;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Form {
@@ -40,5 +43,14 @@ public class Form {
 
     public void addField(BaseField field) {
         fields.add(field);
+    }
+
+    public void updateChoiceField(Map<String, Boolean> values, int field) {
+        ChoiceField choiceField = (ChoiceField) fields.get(field);
+        choiceField.setValues(values);
+    }
+    public void updateTextField(String value, int field) {
+        TextField textField = (TextField) fields.get(field);
+        textField.setValue(value);
     }
 }

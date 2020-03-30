@@ -6,6 +6,8 @@ import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.question.BaseField;
 import pl.edu.agh.ki.covid19tablet.question.QuestionRepository;
 
+import java.util.Optional;
+
 @Service
 public class FormSchemeService {
 
@@ -24,6 +26,10 @@ public class FormSchemeService {
             questionRepository.save(question);
         }
         formSchemeRepository.save(newForm);
+    }
+
+    public Optional<Form> get(int id) {
+        return formSchemeRepository.findById(id);
     }
 
     public Iterable<Form> getAll() {

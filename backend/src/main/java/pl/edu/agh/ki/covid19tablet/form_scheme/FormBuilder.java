@@ -1,6 +1,7 @@
-package pl.edu.agh.ki.covid19tablet.form;
+package pl.edu.agh.ki.covid19tablet.form_scheme;
 
 import com.google.gson.Gson;
+import pl.edu.agh.ki.covid19tablet.form.Form;
 
 public class FormBuilder {
 

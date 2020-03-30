@@ -1,50 +1,39 @@
 package pl.edu.agh.ki.covid19tablet.form;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 
-import java.util.Map;
-
-@RestController
-@RequestMapping(path = "/forms")
+@Controller
 public class FormController {
 
     @Autowired
-    FormService formService;
+    private FormService formService;
 
-    @RequestMapping(path = "/")
-    public String greet() {
-        return "Welcome to the Form Controller!";
+    @MessageMapping("/choicefield.update")
+    @SendTo("/topic/update")
+    public UpdateChoiceFieldMessage updateChoiceField(@Payload UpdateChoiceFieldMessage updateChoiceFieldMessage) {
+        formService.updateChoiceField(updateChoiceFieldMessage);
+        return updateChoiceFieldMessage;
     }
 
-    @GetMapping(path = "/create")
-    public String createForm(
-            @RequestParam int id
-    ) {
-        return formService.createForm(id);
+    @MessageMapping("/textfield.update")
+    @SendTo("/topic/update")
+    public UpdateTextFieldMessage updateTextField(@Payload UpdateTextFieldMessage updateTextFieldMessage) {
+        formService.updateTextField(updateTextFieldMessage);
+        return updateTextFieldMessage;
     }
 
-    @GetMapping(path = "/get")
-    public Form getForm(
-            @RequestParam String token
-    ) {
-        return formService.getForm(token);
+    @MessageMapping("/form.get")
+    @SendTo("/topic/get")
+    public Form getForm() {
+        return formService.getCurrentForm();
     }
 
-    @PutMapping(path = "/update/textfield")
-    public Boolean updateForm(
-            @RequestParam String token,
-            @RequestParam int questionId,
-            @RequestParam String value
-    ) {
-        return formService.updateForm(token, questionId, value);
-    }
-    @PutMapping(path = "/update/choicefield")
-    public Boolean updateForm(
-            @RequestParam String token,
-            @RequestParam int questionId,
-            @RequestParam Map<String, Boolean> values
-    ) {
-        return formService.updateForm(token, questionId, values);
+    @MessageMapping("/form.create")
+    public void createForm(@Payload Form form) {
+        formService.setCurrentForm(form);
     }
 }
