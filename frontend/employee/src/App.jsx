@@ -1,5 +1,5 @@
 import React from 'react';
-import FormView from './views/FormView';
+import FormView from './views/form/FormView';
 
 const App = () => (
   <FormView />
