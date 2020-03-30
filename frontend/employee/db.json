@@ -1,9 +1,9 @@
 {
-  "forms": [
+  "schemas": [
     {
       "id": 1,
-      "finished": false,
-      "schema": {
+      "name": "My Form 1",
+      "fields": {
         "simple": [
           {
             "order": 0,
@@ -59,6 +59,19 @@
           }
         ]
       }
+    }
+  ],
+  "patients": [
+    {
+      "id": 0,
+      "name": "Johny Doe",
+      "schema": {
+        "id": 1,
+        "name": "My Schema"
+      },
+      "pin": 123456,
+      "finished": false,
+      "response": []
     }
   ],
   "responses": []

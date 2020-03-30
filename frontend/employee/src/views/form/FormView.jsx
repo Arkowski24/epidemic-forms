@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
-import formsService from '../../services/FormsService';
+
+import patientService from '../../services/PatientService';
 
 import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
@@ -20,7 +21,7 @@ const FormView = () => {
   const [token, setToken] = useState(null);
 
   const sendFormResponse = async () => {
-    await formsService.postResponse(inputsState);
+    await patientService.postResponse(inputsState);
     setFinished(true);
   };
 
@@ -33,24 +34,24 @@ const FormView = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const rawForm = await formsService.getForm(1);
+      const rawForm = await schemaService.getSchema(1);
 
       const formFinished = rawForm.finished;
       setFinished(formFinished);
       if (formFinished) return;
 
-      const { schema } = rawForm;
-      const choice = schema.choice.map((c) => ({ ...c, type: 'choice' }));
-      const sign = schema.sign.map((s) => ({ ...s, type: 'sign' }));
-      const simple = schema.simple.map((s) => ({ ...s, type: 'simple' }));
-      const slider = schema.slider.map((s) => ({ ...s, type: 'slider' }));
-      const text = schema.text.map((t) => ({ ...t, type: 'text' }));
-      const fields = choice.concat(sign, simple, slider, text);
+      const { fields } = rawForm;
+      const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
+      const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
+      const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
+      const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
+      const text = fields.text.map((t) => ({ ...t, type: 'text' }));
+      const allFields = choice.concat(sign, simple, slider, text);
 
-      fields.sort((a, b) => a.order - b.order);
-      const values = fields.map((f) => createFieldResponse(f));
+      allFields.sort((a, b) => a.order - b.order);
+      const values = allFields.map((f) => createFieldResponse(f));
 
-      setForm({ schema: fields });
+      setForm({ fields: allFields });
       setInputsState(values);
     }
     fetchData();
@@ -129,7 +130,7 @@ const FormView = () => {
     </Row>
   );
 
-  const fields = form.schema
+  const fields = form.fields
     // eslint-disable-next-line react/no-array-index-key
     .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 

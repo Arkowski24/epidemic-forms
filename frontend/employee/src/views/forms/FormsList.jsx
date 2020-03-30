@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button, Container, Form, Row, Table,
 } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
+
+import patientService from '../../services/PatientService';
+import schemaService from '../../services/SchemaService';
 
 const Header = ({ setVisible }) => (
   <Row className="w-100 m-1 p-1 border-bottom">
@@ -21,19 +24,19 @@ const Header = ({ setVisible }) => (
   </Row>
 );
 
-const FormsTable = ({ forms }) => {
+const FormsTable = ({ patients }) => {
   const headers = ['#', 'Patient Name', 'Schema', 'Pin']
     .map((h) => <th key={h}>{h}</th>);
 
-  const buildPatientRow = (patientForm) => (
-    <tr key={patientForm.id}>
-      <td>{patientForm.id}</td>
-      <td>{patientForm.name}</td>
-      <td>{patientForm.schema}</td>
-      <td>{patientForm.pin}</td>
+  const buildPatientRow = (patient) => (
+    <tr key={patient.id} onClick={() => console.log('xd')}>
+      <td>{patient.id}</td>
+      <td>{patient.name}</td>
+      <td>{patient.schema.name}</td>
+      <td>{patient.pin}</td>
     </tr>
   );
-  const patientForms = forms
+  const patientForms = patients
     .map((p) => buildPatientRow(p));
 
   return (
@@ -54,7 +57,7 @@ const FormsTable = ({ forms }) => {
 
 const NewFormModal = ({ visible, setVisible, schemas }) => {
   const handleClose = () => setVisible(false);
-  const schemaOptions = schemas.map((s) => <option value={s.id}>{s.name}</option>);
+  const schemaOptions = schemas.map((s) => <option value={s.id} key={s.id}>{s.name}</option>);
 
   return (
     <>
@@ -91,13 +94,24 @@ const NewFormModal = ({ visible, setVisible, schemas }) => {
 
 const FormsList = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [forms, setForms] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [schemas, setSchemas] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const patientResponse = await patientService.getPatients();
+      setPatients(patientResponse);
+
+      const schemaResponse = await schemaService.getSchemas();
+      setSchemas(schemaResponse);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Container>
       <Header setVisible={setModalVisible} />
-      <FormsTable forms={forms} />
+      <FormsTable patients={patients} />
       <NewFormModal visible={modalVisible} setVisible={setModalVisible} schemas={schemas} />
     </Container>
   );

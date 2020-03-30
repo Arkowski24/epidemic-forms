@@ -1,7 +1,7 @@
 import React from 'react';
-import FormView from './views/form/FormView';
+import FormsList from './views/forms/FormsList';
 
 const App = () => (
-  <FormView />
+  <FormsList />
 );
 export default App;
