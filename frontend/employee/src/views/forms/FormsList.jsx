@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
+import { useHistory } from 'react-router-dom';
 
 import patientService from '../../services/PatientService';
 import schemaService from '../../services/SchemaService';
@@ -25,19 +26,21 @@ const Header = ({ setVisible }) => (
 );
 
 const FormsTable = ({ patients }) => {
-  const headers = ['#', 'Patient Name', 'Schema', 'Pin']
+  const history = useHistory();
+
+  const headers = ['#', 'Patient Name', 'Schema', 'Token']
     .map((h) => <th key={h}>{h}</th>);
 
-  const buildPatientRow = (patient) => (
-    <tr key={patient.id} onClick={() => console.log('xd')}>
-      <td>{patient.id}</td>
+  const buildPatientRow = (patient, index) => (
+    <tr key={patient.id} onClick={() => history.push(`/patient/${patient.id}`)}>
+      <td>{index}</td>
       <td>{patient.name}</td>
       <td>{patient.schema.name}</td>
-      <td>{patient.pin}</td>
+      <td>{patient.id}</td>
     </tr>
   );
   const patientForms = patients
-    .map((p) => buildPatientRow(p));
+    .map((p, i) => buildPatientRow(p, i));
 
   return (
     <Row className="w-100 m-1 p-1">

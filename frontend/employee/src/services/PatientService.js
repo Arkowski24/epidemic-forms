@@ -6,6 +6,10 @@ const getPatients = () => axios
   .get(`${baseUrl}/patients/`)
   .then((res) => res.data);
 
+const getPatient = (token) => axios
+  .get(`${baseUrl}/patients/${token}`)
+  .then((res) => res.data);
+
 const createPatient = (name, schemaId) => axios
   .post(`${baseUrl}/patients/`, { name, schemaId })
   .then((res) => res.data);
@@ -14,4 +18,6 @@ const postResponse = (response) => axios
   .post(`${baseUrl}/responses/`, response)
   .then((res) => res.data);
 
-export default { getPatients, createPatient, postResponse };
+export default {
+  getPatients, getPatient, createPatient, postResponse,
+};

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
+import { useParams, useHistory } from 'react-router-dom';
 
 import patientService from '../../services/PatientService';
 
@@ -12,13 +13,14 @@ import SimpleView from './fields/SimpleView';
 import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
-import LoginView from './utility/LoginView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [inputsState, setInputsState] = useState(null);
   const [finished, setFinished] = useState(null);
-  const [token, setToken] = useState(null);
+
+  const history = useHistory();
+  const { token } = useParams();
 
   const sendFormResponse = async () => {
     await patientService.postResponse(inputsState);
@@ -34,33 +36,35 @@ const FormView = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const rawForm = await schemaService.getSchema(1);
+      try {
+        const patient = await patientService.getPatient(token);
 
-      const formFinished = rawForm.finished;
-      setFinished(formFinished);
-      if (formFinished) return;
+        const formFinished = patient.finished;
+        setFinished(formFinished);
+        if (formFinished) return;
 
-      const { fields } = rawForm;
-      const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
-      const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
-      const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
-      const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
-      const text = fields.text.map((t) => ({ ...t, type: 'text' }));
-      const allFields = choice.concat(sign, simple, slider, text);
+        const { fields } = patient.schema;
+        const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
+        const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
+        const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
+        const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
+        const text = fields.text.map((t) => ({ ...t, type: 'text' }));
+        const allFields = choice.concat(sign, simple, slider, text);
 
-      allFields.sort((a, b) => a.order - b.order);
-      const values = allFields.map((f) => createFieldResponse(f));
+        allFields.sort((a, b) => a.order - b.order);
+        const values = allFields.map((f) => createFieldResponse(f));
 
-      setForm({ fields: allFields });
-      setInputsState(values);
+        setInputsState(values);
+        setForm({ fields: allFields });
+      } catch (e) {
+        history.push('/');
+      }
     }
     fetchData();
-  }, []);
+  }, [history, token]);
 
-  if (token === null) { return (<LoginView setToken={setToken} />); }
   if (form === null) { return (<LoadingView />); }
   if (finished) { return (<EndView />); }
-
 
   const createField = (fieldSchema, index) => {
     const input = inputsState[index];
