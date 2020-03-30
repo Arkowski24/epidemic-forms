@@ -10,13 +10,13 @@ typealias SignFieldId = Long
 data class SignField(
     @Id
     val id: SimpleFieldId? = null,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String
 )
 
 fun SignField.toDTO() =
     SignFieldDTO(
         id = id!!,
-        order = order,
+        fieldNumber = fieldNumber,
         description = description
     )

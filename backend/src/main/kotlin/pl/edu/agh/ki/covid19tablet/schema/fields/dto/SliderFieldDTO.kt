@@ -4,7 +4,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SliderFieldId
 
 data class SliderFieldDTO(
     val id: SliderFieldId,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     val minValue: Double,
     val maxValue: Double,

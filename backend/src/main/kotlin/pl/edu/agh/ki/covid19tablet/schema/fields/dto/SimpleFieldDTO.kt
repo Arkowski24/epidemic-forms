@@ -4,6 +4,6 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleFieldId
 
 data class SimpleFieldDTO(
     val id: SimpleFieldId,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String
 )

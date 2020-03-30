@@ -11,7 +11,7 @@ typealias ChoiceFieldId = Long
 data class ChoiceField(
     @Id
     val id: ChoiceFieldId? = null,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     @ElementCollection
     val choices: List<String> = listOf(),
@@ -21,7 +21,7 @@ data class ChoiceField(
 fun ChoiceField.toDTO() =
     ChoiceFieldDTO(
         id = id!!,
-        order = order,
+        fieldNumber = fieldNumber,
         description = description,
         choices = choices,
         isMultiChoice = isMultiChoice

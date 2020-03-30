@@ -10,7 +10,7 @@ typealias SliderFieldId = Long
 data class SliderField(
     @Id
     val id: SliderFieldId? = null,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     val minValue: Double,
     val maxValue: Double,
@@ -20,7 +20,7 @@ data class SliderField(
 fun SliderField.toDTO() =
     SliderFieldDTO(
         id = id!!,
-        order = order,
+        fieldNumber = fieldNumber,
         description = description,
         minValue = minValue,
         maxValue = maxValue,

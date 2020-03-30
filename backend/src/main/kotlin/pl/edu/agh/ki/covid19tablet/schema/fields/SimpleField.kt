@@ -10,13 +10,13 @@ typealias SimpleFieldId = Long
 data class SimpleField(
     @Id
     val id: SimpleFieldId? = null,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String
 )
 
 fun SimpleField.toDTO() =
     SimpleFieldDTO(
         id = id!!,
-        order = order,
+        fieldNumber = fieldNumber,
         description = description
     )

@@ -10,7 +10,7 @@ typealias TextFieldId = Long
 data class TextField(
     @Id
     val id: TextFieldId? = null,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     val isMultiline: Boolean
 )
@@ -18,7 +18,7 @@ data class TextField(
 fun TextField.toDTO() =
     TextFieldDTO(
         id = id!!,
-        order = order,
+        fieldNumber = fieldNumber,
         description = description,
         isMultiline = isMultiline
     )

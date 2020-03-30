@@ -4,6 +4,6 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SignFieldId
 
 data class SignFieldDTO(
     val id: SignFieldId,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String
 )

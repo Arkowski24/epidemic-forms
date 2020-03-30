@@ -4,7 +4,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.TextFieldId
 
 data class TextFieldDTO(
     val id: TextFieldId,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     val isMultiline: Boolean
 )

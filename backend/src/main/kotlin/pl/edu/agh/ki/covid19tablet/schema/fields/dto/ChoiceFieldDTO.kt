@@ -4,7 +4,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceFieldId
 
 data class ChoiceFieldDTO(
     val id: ChoiceFieldId,
-    val order: Int,
+    val fieldNumber: Int,
     val description: String,
     val choices: List<String>,
     val isMultiChoice: Boolean
