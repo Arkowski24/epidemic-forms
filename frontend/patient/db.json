@@ -31,7 +31,7 @@
             "isMultiple": true
           }
         ],
-        "slide": [
+        "slider": [
           {
             "order": 3,
             "minValue": 0,
