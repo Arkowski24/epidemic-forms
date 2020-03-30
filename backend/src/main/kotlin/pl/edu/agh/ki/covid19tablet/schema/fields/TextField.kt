@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
+import pl.edu.agh.ki.covid19tablet.form.state.fields.TextFieldState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.TextFieldDTO
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -21,4 +22,10 @@ fun TextField.toDTO() =
         fieldNumber = fieldNumber,
         description = description,
         isMultiline = isMultiline
+    )
+
+fun TextField.buildInitialState() =
+    TextFieldState(
+        field = this,
+        value = ""
     )

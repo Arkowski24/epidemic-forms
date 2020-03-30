@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
+import pl.edu.agh.ki.covid19tablet.form.state.FormState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.SchemaFieldsDTO
 import javax.persistence.Embeddable
 import javax.persistence.OneToMany
@@ -25,4 +26,12 @@ fun SchemaFields.toDTO() =
         simple = simple.map { it.toDTO() },
         slider = slider.map { it.toDTO() },
         text = text.map { it.toDTO() }
+    )
+
+fun SchemaFields.buildInitialState() =
+    FormState(
+        choice = choice.map { it.buildInitialState() },
+        sign = sign.map { it.buildInitialState() },
+        slider = slider.map { it.buildInitialState() },
+        text = text.map { it.buildInitialState() }
     )

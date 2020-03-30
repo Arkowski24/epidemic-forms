@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
+import pl.edu.agh.ki.covid19tablet.form.state.fields.ChoiceFieldState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.ChoiceFieldDTO
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
@@ -25,4 +26,10 @@ fun ChoiceField.toDTO() =
         description = description,
         choices = choices,
         isMultiChoice = isMultiChoice
+    )
+
+fun ChoiceField.buildInitialState() =
+    ChoiceFieldState(
+        field = this,
+        values = choices.map { false }
     )

@@ -6,6 +6,7 @@ import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
+import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 
 interface FormService {
     fun getAllForms(): List<FormDTO>
@@ -38,7 +39,8 @@ class FormServiceImpl(
         val form = formRepository.save(
             Form(
                 schema = schema,
-                patientName = createFormRequest.patientName
+                patientName = createFormRequest.patientName,
+                state = schema.fields.buildInitialState()
             )
         )
         return form.toDTO()
