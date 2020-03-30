@@ -1,8 +1,8 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
-import pl.edu.agh.ki.covid19tablet.form.state.FormState
-import pl.edu.agh.ki.covid19tablet.form.state.toDTO
+import pl.edu.agh.ki.covid19tablet.formState.FormState
+import pl.edu.agh.ki.covid19tablet.formState.toDTO
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import javax.persistence.Embedded

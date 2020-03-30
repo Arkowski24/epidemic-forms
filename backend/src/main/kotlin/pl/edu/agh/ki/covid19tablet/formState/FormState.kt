@@ -1,11 +1,11 @@
-package pl.edu.agh.ki.covid19tablet.form.state
+package pl.edu.agh.ki.covid19tablet.formState
 
-import pl.edu.agh.ki.covid19tablet.form.state.dto.FormStateDTO
-import pl.edu.agh.ki.covid19tablet.form.state.fields.ChoiceFieldState
-import pl.edu.agh.ki.covid19tablet.form.state.fields.SignFieldState
-import pl.edu.agh.ki.covid19tablet.form.state.fields.SliderFieldState
-import pl.edu.agh.ki.covid19tablet.form.state.fields.TextFieldState
-import pl.edu.agh.ki.covid19tablet.form.state.fields.toDTO
+import pl.edu.agh.ki.covid19tablet.formState.dto.FormStateDTO
+import pl.edu.agh.ki.covid19tablet.formState.fields.ChoiceFieldState
+import pl.edu.agh.ki.covid19tablet.formState.fields.SignFieldState
+import pl.edu.agh.ki.covid19tablet.formState.fields.SliderFieldState
+import pl.edu.agh.ki.covid19tablet.formState.fields.TextFieldState
+import pl.edu.agh.ki.covid19tablet.formState.fields.toDTO
 import javax.persistence.CascadeType
 import javax.persistence.Embeddable
 import javax.persistence.OneToMany

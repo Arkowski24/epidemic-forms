@@ -1,6 +1,6 @@
-package pl.edu.agh.ki.covid19tablet.form.state.fields
+package pl.edu.agh.ki.covid19tablet.formState.fields
 
-import pl.edu.agh.ki.covid19tablet.form.state.fields.dto.SignFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.formState.fields.dto.SignFieldStateDTO
 import pl.edu.agh.ki.covid19tablet.schema.fields.SignField
 import java.util.Base64
 import javax.persistence.Entity

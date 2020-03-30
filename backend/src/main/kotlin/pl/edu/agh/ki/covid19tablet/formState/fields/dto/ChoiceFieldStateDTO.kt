@@ -1,6 +1,6 @@
-package pl.edu.agh.ki.covid19tablet.form.state.fields.dto
+package pl.edu.agh.ki.covid19tablet.formState.fields.dto
 
-import pl.edu.agh.ki.covid19tablet.form.state.fields.ChoiceFieldStateId
+import pl.edu.agh.ki.covid19tablet.formState.fields.ChoiceFieldStateId
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceFieldId
 
 data class ChoiceFieldStateDTO(

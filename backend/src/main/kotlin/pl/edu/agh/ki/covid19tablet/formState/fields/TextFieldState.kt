@@ -1,6 +1,6 @@
-package pl.edu.agh.ki.covid19tablet.form.state.fields
+package pl.edu.agh.ki.covid19tablet.formState.fields
 
-import pl.edu.agh.ki.covid19tablet.form.state.fields.dto.TextFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.formState.fields.dto.TextFieldStateDTO
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
 import javax.persistence.Entity
 import javax.persistence.Id
