@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Container } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import formsService from '../services/FormsService';
 
@@ -15,7 +15,7 @@ import LoginView from './utility/LoginView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [inputsState, setInputsState] = useState([{}]);
+  const [inputsState, setInputsState] = useState(null);
   const [finished, setFinished] = useState(null);
   const [token, setToken] = useState(null);
 
@@ -120,12 +120,38 @@ const FormView = () => {
     );
   };
 
+  const header = (
+    <Row>
+      <div className="w-100 m-2 p-1 border-bottom">
+        <h1>Patient Form</h1>
+        <p>This form is filled by patient.</p>
+      </div>
+    </Row>
+  );
+
   const fields = form.schema
-    .map((s, i) => createField(s, i));
+    // eslint-disable-next-line react/no-array-index-key
+    .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
+
+  const footer = (
+    <Row>
+      <div className="w-100 m-2 p-1 border-top">
+        <Button
+          className="btn float-right"
+          type="submit"
+          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+        >
+          Submit
+        </Button>
+      </div>
+    </Row>
+  );
 
   return (
     <Container>
+      {header}
       {fields}
+      {footer}
     </Container>
   );
 };
