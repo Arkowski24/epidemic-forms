@@ -40,6 +40,7 @@ public class FormSchemeService {
         Optional<Form> formSchemeOptional = formSchemeRepository.findById(id);
         if (formSchemeOptional.isPresent()) {
             Form formScheme = formSchemeOptional.get();
+            System.out.println(formScheme.getId());
             return formBuilder.build(formScheme);
         }
         return null;

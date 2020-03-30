@@ -1,14 +1,21 @@
 package pl.edu.agh.ki.covid19tablet.form_scheme;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 
 public class FormBuilder {
 
     public Form build(Form form) {
 
-        Gson gson = new Gson();
-        String jsonForm = gson.toJson(form);
-        return gson.fromJson(jsonForm, Form.class);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonForm = mapper.writeValueAsString(form);
+            return mapper.readValue(jsonForm, Form.class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
