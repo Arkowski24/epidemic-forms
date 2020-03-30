@@ -16,7 +16,9 @@ public class FormSchemeService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public void add(Form form) {
+    private FormBuilder formBuilder = new FormBuilder();
+
+    public String add(Form form) {
         Form newForm = new Form();
         formSchemeRepository.save(newForm);
 
@@ -26,13 +28,20 @@ public class FormSchemeService {
             questionRepository.save(question);
         }
         formSchemeRepository.save(newForm);
-    }
 
-    public Optional<Form> get(int id) {
-        return formSchemeRepository.findById(id);
+        return "Added Form Scheme!";
     }
 
     public Iterable<Form> getAll() {
         return formSchemeRepository.findAll();
+    }
+
+    public Form createForm(int id) {
+        Optional<Form> formSchemeOptional = formSchemeRepository.findById(id);
+        if (formSchemeOptional.isPresent()) {
+            Form formScheme = formSchemeOptional.get();
+            return formBuilder.build(formScheme);
+        }
+        return null;
     }
 }

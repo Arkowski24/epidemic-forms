@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping(path = "/formschemes")
 public class FormSchemeController {
@@ -13,26 +11,18 @@ public class FormSchemeController {
     @Autowired
     private FormSchemeService formSchemeService;
 
-    private FormBuilder formBuilder = new FormBuilder();
-
     @PostMapping(path = "/")
     public String addFormScheme(
             @RequestBody Form form
     ) {
-        formSchemeService.add(form);
-        return "Added Form Scheme";
+        return formSchemeService.add(form);
     }
 
     @GetMapping(path = "/")
     public Form createForm(
             @RequestParam int id
     ) {
-        Optional<Form> formSchemeOptional = formSchemeService.get(id);
-        if (formSchemeOptional.isPresent()) {
-            Form formScheme = formSchemeOptional.get();
-            return formBuilder.build(formScheme);
-        }
-        return null;
+        return formSchemeService.createForm(id);
     }
 
     @GetMapping(path = "/all")
