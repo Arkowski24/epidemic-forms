@@ -1,10 +1,10 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
-import pl.edu.agh.ki.covid19tablet.formState.FormState
-import pl.edu.agh.ki.covid19tablet.formState.toDTO
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
+import pl.edu.agh.ki.covid19tablet.state.FormState
+import pl.edu.agh.ki.covid19tablet.state.toDTO
 import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

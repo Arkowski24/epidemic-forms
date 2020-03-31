@@ -1,7 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
-import pl.edu.agh.ki.covid19tablet.formState.FormState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.SchemaFieldsDTO
+import pl.edu.agh.ki.covid19tablet.state.FormState
 import javax.persistence.CascadeType
 import javax.persistence.Embeddable
 import javax.persistence.OneToMany

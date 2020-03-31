@@ -1,20 +1,20 @@
-package pl.edu.agh.ki.covid19tablet.formState
+package pl.edu.agh.ki.covid19tablet.state
 
 import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.FieldNotFoundException
-import pl.edu.agh.ki.covid19tablet.formState.fields.ChoiceFieldStateId
-import pl.edu.agh.ki.covid19tablet.formState.fields.SignFieldStateId
-import pl.edu.agh.ki.covid19tablet.formState.fields.SliderFieldStateId
-import pl.edu.agh.ki.covid19tablet.formState.fields.TextFieldStateId
-import pl.edu.agh.ki.covid19tablet.formState.fields.dto.ChoiceFieldStateDTO
-import pl.edu.agh.ki.covid19tablet.formState.fields.dto.SignFieldStateDTO
-import pl.edu.agh.ki.covid19tablet.formState.fields.dto.SliderFieldStateDTO
-import pl.edu.agh.ki.covid19tablet.formState.fields.dto.TextFieldStateDTO
-import pl.edu.agh.ki.covid19tablet.formState.fields.repositories.ChoiceFieldStateRepository
-import pl.edu.agh.ki.covid19tablet.formState.fields.repositories.SignFieldStateRepository
-import pl.edu.agh.ki.covid19tablet.formState.fields.repositories.SliderFieldStateRepository
-import pl.edu.agh.ki.covid19tablet.formState.fields.repositories.TextFieldStateRepository
-import pl.edu.agh.ki.covid19tablet.formState.fields.toDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldStateId
+import pl.edu.agh.ki.covid19tablet.state.fields.SignFieldStateId
+import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldStateId
+import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldStateId
+import pl.edu.agh.ki.covid19tablet.state.fields.dto.ChoiceFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.dto.SignFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.dto.SliderFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.dto.TextFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.repositories.ChoiceFieldStateRepository
+import pl.edu.agh.ki.covid19tablet.state.fields.repositories.SignFieldStateRepository
+import pl.edu.agh.ki.covid19tablet.state.fields.repositories.SliderFieldStateRepository
+import pl.edu.agh.ki.covid19tablet.state.fields.repositories.TextFieldStateRepository
+import pl.edu.agh.ki.covid19tablet.state.fields.toDTO
 import java.util.Base64
 
 interface FormStateService {

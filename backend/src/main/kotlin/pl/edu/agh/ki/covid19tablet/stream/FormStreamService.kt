@@ -1,18 +1,18 @@
-package pl.edu.agh.ki.covid19tablet.formStream
+package pl.edu.agh.ki.covid19tablet.stream
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.form.FormId
 import pl.edu.agh.ki.covid19tablet.form.FormService
-import pl.edu.agh.ki.covid19tablet.formState.FormStateService
-import pl.edu.agh.ki.covid19tablet.formStream.dto.FormStateRequest
-import pl.edu.agh.ki.covid19tablet.formStream.dto.FormStateRequestType
-import pl.edu.agh.ki.covid19tablet.formStream.dto.FormStateResponse
-import pl.edu.agh.ki.covid19tablet.formStream.dto.FormStateResponseType
-import pl.edu.agh.ki.covid19tablet.formStream.dto.update.ChoiceFieldStateUpdate
-import pl.edu.agh.ki.covid19tablet.formStream.dto.update.SignFieldStateUpdate
-import pl.edu.agh.ki.covid19tablet.formStream.dto.update.SliderFieldStateUpdate
-import pl.edu.agh.ki.covid19tablet.formStream.dto.update.TextFieldStateUpdate
+import pl.edu.agh.ki.covid19tablet.state.FormStateService
+import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequest
+import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequestType
+import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponse
+import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponseType
+import pl.edu.agh.ki.covid19tablet.stream.dto.update.ChoiceFieldStateUpdate
+import pl.edu.agh.ki.covid19tablet.stream.dto.update.SignFieldStateUpdate
+import pl.edu.agh.ki.covid19tablet.stream.dto.update.SliderFieldStateUpdate
+import pl.edu.agh.ki.covid19tablet.stream.dto.update.TextFieldStateUpdate
 
 interface FormStreamService {
     fun handleRequest(formId: FormId, request: FormStateRequest): FormStateResponse

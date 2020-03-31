@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.formStream.dto
+package pl.edu.agh.ki.covid19tablet.stream.dto
 
 import com.fasterxml.jackson.annotation.JsonRawValue
 

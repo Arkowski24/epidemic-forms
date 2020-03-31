@@ -1,7 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
-import pl.edu.agh.ki.covid19tablet.formState.fields.SignFieldState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.SignFieldDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.SignFieldState
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id

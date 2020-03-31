@@ -1,7 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.schema.fields
 
-import pl.edu.agh.ki.covid19tablet.formState.fields.ChoiceFieldState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.ChoiceFieldDTO
+import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
