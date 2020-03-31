@@ -13,7 +13,7 @@ data class TextField(
     val id: TextFieldId? = null,
     val fieldNumber: Int,
     val description: String,
-    val isMultiline: Boolean
+    val isMultiline: Boolean = false
 )
 
 fun TextField.toDTO() =

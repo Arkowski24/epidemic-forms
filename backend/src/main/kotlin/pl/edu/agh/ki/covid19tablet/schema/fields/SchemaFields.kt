@@ -2,20 +2,21 @@ package pl.edu.agh.ki.covid19tablet.schema.fields
 
 import pl.edu.agh.ki.covid19tablet.formState.FormState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.SchemaFieldsDTO
+import javax.persistence.CascadeType
 import javax.persistence.Embeddable
 import javax.persistence.OneToMany
 
 @Embeddable
 data class SchemaFields(
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     val choice: List<ChoiceField> = listOf(),
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     val sign: List<SignField> = listOf(),
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     val simple: List<SimpleField> = listOf(),
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     val slider: List<SliderField> = listOf(),
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     val text: List<TextField> = listOf()
 )
 

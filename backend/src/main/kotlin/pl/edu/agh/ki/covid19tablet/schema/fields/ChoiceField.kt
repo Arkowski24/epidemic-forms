@@ -16,7 +16,7 @@ data class ChoiceField(
     val description: String,
     @ElementCollection
     val choices: List<String> = listOf(),
-    val isMultiChoice: Boolean
+    val isMultiChoice: Boolean = false
 )
 
 fun ChoiceField.toDTO() =
