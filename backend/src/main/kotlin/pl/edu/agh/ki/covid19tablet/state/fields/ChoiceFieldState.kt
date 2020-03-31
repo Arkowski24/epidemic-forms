@@ -18,7 +18,7 @@ data class ChoiceFieldState(
     @ManyToOne
     val field: ChoiceField,
     @ElementCollection
-    val values: List<Boolean>
+    val value: List<Boolean>
 )
 
 fun ChoiceFieldState.toDTO() =
@@ -26,5 +26,5 @@ fun ChoiceFieldState.toDTO() =
         id = id!!,
         fieldId = field.id!!,
         fieldNumber = field.fieldNumber,
-        values = values
+        value = value
     )

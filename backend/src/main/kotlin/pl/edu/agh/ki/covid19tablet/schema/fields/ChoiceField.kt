@@ -33,5 +33,5 @@ fun ChoiceField.toDTO() =
 fun ChoiceField.buildInitialState() =
     ChoiceFieldState(
         field = this,
-        values = choices.map { false }
+        value = choices.map { false }
     )

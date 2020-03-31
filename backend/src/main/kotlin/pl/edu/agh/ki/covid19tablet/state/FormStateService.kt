@@ -35,7 +35,7 @@ class FormStateServiceImpl(
         val fieldState = choiceFieldStateRepository
             .findById(id)
             .orElseThrow { FieldNotFoundException() }
-            .copy(values = values)
+            .copy(value = values)
 
         return choiceFieldStateRepository
             .save(fieldState)

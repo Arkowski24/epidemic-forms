@@ -27,7 +27,7 @@ class FormStreamServiceImpl(
     override fun handleRequest(formId: FormId, request: FormStateRequest): FormStateResponse {
         when (request.requestType) {
             FormStateRequestType.GET_STATE -> {
-                val formState = formService.getForm(formId).state
+                val formState = formService.getForm(formId)
                 val formStateAsJSON = serializeState(formState)
 
                 return FormStateResponse(
@@ -37,38 +37,38 @@ class FormStreamServiceImpl(
             }
             FormStateRequestType.UPDATE_CHOICE -> {
                 val updatePayload = objectMapper.readValue(request.payload, ChoiceFieldStateUpdate::class.java)
-                formStateService.modifyChoiceFieldState(updatePayload.id, updatePayload.newValues)
+                val response = formStateService.modifyChoiceFieldState(updatePayload.id, updatePayload.newValue)
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_CHOICE,
-                    payload = request.payload!!
+                    payload = objectMapper.writeValueAsString(response)
                 )
             }
             FormStateRequestType.UPDATE_SIGN -> {
                 val updatePayload = objectMapper.readValue(request.payload, SignFieldStateUpdate::class.java)
-                formStateService.modifySignFieldState(updatePayload.id, updatePayload.newValue)
+                val response = formStateService.modifySignFieldState(updatePayload.id, updatePayload.newValue)
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_SIGN,
-                    payload = request.payload!!
+                    payload = objectMapper.writeValueAsString(response)
                 )
             }
             FormStateRequestType.UPDATE_SLIDER -> {
                 val updatePayload = objectMapper.readValue(request.payload, SliderFieldStateUpdate::class.java)
-                formStateService.modifySliderFieldState(updatePayload.id, updatePayload.newValue)
+                val response = formStateService.modifySliderFieldState(updatePayload.id, updatePayload.newValue)
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_SLIDER,
-                    payload = request.payload!!
+                    payload = objectMapper.writeValueAsString(response)
                 )
             }
             FormStateRequestType.UPDATE_TEXT -> {
                 val updatePayload = objectMapper.readValue(request.payload, TextFieldStateUpdate::class.java)
-                formStateService.modifyTextFieldState(updatePayload.id, updatePayload.newValue)
+                val response = formStateService.modifyTextFieldState(updatePayload.id, updatePayload.newValue)
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_TEXT,
-                    payload = request.payload!!
+                    payload = objectMapper.writeValueAsString(response)
                 )
             }
         }

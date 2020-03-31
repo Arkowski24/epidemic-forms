@@ -7,5 +7,5 @@ data class ChoiceFieldStateDTO(
     val id: ChoiceFieldStateId,
     val fieldId: ChoiceFieldId,
     val fieldNumber: Int,
-    val values: List<Boolean>
+    val value: List<Boolean>
 )
