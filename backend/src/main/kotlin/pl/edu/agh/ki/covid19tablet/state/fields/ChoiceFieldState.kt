@@ -25,5 +25,6 @@ fun ChoiceFieldState.toDTO() =
     ChoiceFieldStateDTO(
         id = id!!,
         fieldId = field.id!!,
+        fieldNumber = field.fieldNumber,
         values = values
     )

@@ -6,5 +6,6 @@ import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldStateId
 data class SignFieldStateDTO(
     val id: ChoiceFieldStateId,
     val fieldId: ChoiceFieldId,
+    val fieldNumber: Int,
     val value: String
 )

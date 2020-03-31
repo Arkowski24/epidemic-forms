@@ -6,6 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import formService from '../../services/FormService';
+import webSocketsHelper from '../../helper/WebSocketsHelper';
 
 import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
@@ -19,9 +20,24 @@ const FormView = () => {
   const [form, setForm] = useState(null);
   const [inputsState, setInputsState] = useState(null);
   const [finished, setFinished] = useState(null);
+  const [webSocket, setWebsocket] = useState(null);
 
   const history = useHistory();
   const { token } = useParams();
+
+  const sendInput = (newInput, index) => {
+    const fieldType = form.fields[index].toUpperCase();
+    const messageType = `UPDATE_${fieldType}`;
+    const payload = JSON.stringify({ requestType: messageType, newValue: newInput });
+
+    webSocket.publish({ destination: `/app/requests/${token}`, body: payload });
+  };
+
+  const setInputState = (newInput, index) => {
+    const newResponses = inputsState.slice();
+    newResponses[index] = newInput;
+    setInputsState(newResponses);
+  };
 
   const sendFormResponse = async () => {
     setFinished(true);
@@ -55,25 +71,41 @@ const FormView = () => {
         const values = allFields.map((f) => createFieldResponse(f));
 
         setInputsState(values);
-        setForm({ fields: allFields });
+        setForm({ schema: response.schema, fields: allFields });
       } catch (e) {
         history.push('/');
       }
     }
+
     fetchData();
   }, [history, token]);
 
   useEffect(() => {
     const url = 'ws://localhost:8080/requests';
     const ws = new Stomp.client(url);
+    setWebsocket(ws);
 
-    const initialRequest = { destination: `/app/requests/${token}`, body: JSON.stringify({ requestType: 'GET_STATE' }) };
+    const handleResponse = (message) => {
+      const response = JSON.parse(message.body);
+
+      if (response.responseType === 'STATE') {
+        const fields = response.payload;
+        const simple = form.schema.simple.map((s) => ({ fieldNumber: s.fieldNumber, value: null }));
+        const allFields = simple.concat(fields.choice, fields.sign, fields.slider, fields.text);
+
+        allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
+        const values = allFields.map((f) => f.value);
+        setInputsState(values);
+      } else if (response.responseType === 'UPDATE_CHOICE') {
+        setInputState(response.payload.values, response.payload.fieldNumber);
+      } else {
+        setInputState(response.payload.value, response.payload.fieldNumber);
+      }
+    };
 
     ws.connect({}, () => {
-      ws.subscribe(`/updates/${token}`, (m) => {
-        console.log(m);
-      });
-      ws.publish(initialRequest);
+      ws.subscribe(`/updates/${token}`, handleResponse);
+      ws.publish(webSocketsHelper.buildInitialRequest(token));
     }, (error) => {
       console.log(error);
     });
@@ -88,11 +120,7 @@ const FormView = () => {
 
   const createField = (fieldSchema, index) => {
     const input = inputsState[index];
-    const setInput = (newInput) => {
-      const newResponses = inputsState.slice();
-      newResponses[index] = newInput;
-      setInputsState(newResponses);
-    };
+    const setInput = (newInput) => sendInput(newInput, index);
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -164,7 +192,10 @@ const FormView = () => {
         <Button
           className="btn float-right"
           type="submit"
-          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          onClick={(e) => {
+            e.preventDefault();
+            sendFormResponse();
+          }}
         >
           Submit
         </Button>

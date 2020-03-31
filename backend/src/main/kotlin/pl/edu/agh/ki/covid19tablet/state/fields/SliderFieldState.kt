@@ -23,5 +23,6 @@ fun SliderFieldState.toDTO() =
     SliderFieldStateDTO(
         id = id!!,
         fieldId = field.id!!,
+        fieldNumber = field.fieldNumber,
         value = value
     )

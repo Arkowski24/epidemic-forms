@@ -46,5 +46,6 @@ fun SignFieldState.toDTO() =
     SignFieldStateDTO(
         id = id!!,
         fieldId = field.id!!,
+        fieldNumber = field.fieldNumber,
         value = Base64.getUrlEncoder().encodeToString(value)
     )

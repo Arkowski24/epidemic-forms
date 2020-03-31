@@ -6,5 +6,6 @@ import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldStateId
 data class SliderFieldStateDTO(
     val id: SliderFieldStateId,
     val fieldId: SliderFieldId,
+    val fieldNumber: Int,
     val value: Double
 )

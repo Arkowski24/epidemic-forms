@@ -5,6 +5,7 @@ import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldStateId
 
 data class TextFieldStateDTO(
     val id: TextFieldStateId,
-    val field: TextFieldId,
+    val fieldId: TextFieldId,
+    val fieldNumber: Int,
     val value: String
 )

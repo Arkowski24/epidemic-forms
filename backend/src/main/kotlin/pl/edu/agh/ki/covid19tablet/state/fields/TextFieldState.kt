@@ -22,6 +22,7 @@ data class TextFieldState(
 fun TextFieldState.toDTO() =
     TextFieldStateDTO(
         id = id!!,
-        field = field.id!!,
+        fieldId = field.id!!,
+        fieldNumber = field.fieldNumber,
         value = value
     )
