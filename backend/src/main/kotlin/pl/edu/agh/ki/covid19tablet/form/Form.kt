@@ -7,6 +7,7 @@ import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
 
@@ -15,6 +16,7 @@ typealias FormId = Long
 @Entity
 data class Form(
     @Id
+    @GeneratedValue
     val id: FormId? = null,
     @ManyToOne
     val schema: Schema,

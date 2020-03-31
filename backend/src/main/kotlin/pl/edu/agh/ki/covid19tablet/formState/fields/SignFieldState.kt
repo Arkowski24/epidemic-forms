@@ -4,6 +4,7 @@ import pl.edu.agh.ki.covid19tablet.formState.fields.dto.SignFieldStateDTO
 import pl.edu.agh.ki.covid19tablet.schema.fields.SignField
 import java.util.Base64
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Lob
 import javax.persistence.ManyToOne
@@ -13,6 +14,7 @@ typealias SignFieldStateId = Long
 @Entity
 data class SignFieldState(
     @Id
+    @GeneratedValue
     val id: SignFieldStateId? = null,
     @ManyToOne
     val field: SignField,

@@ -5,6 +5,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.toDTO
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 typealias SchemaId = Long
@@ -12,6 +13,7 @@ typealias SchemaId = Long
 @Entity
 class Schema(
     @Id
+    @GeneratedValue
     val id: SchemaId? = null,
     val title: String,
     @Embedded

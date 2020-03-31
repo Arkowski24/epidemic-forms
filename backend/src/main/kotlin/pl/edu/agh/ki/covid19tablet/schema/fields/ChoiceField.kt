@@ -4,6 +4,7 @@ import pl.edu.agh.ki.covid19tablet.formState.fields.ChoiceFieldState
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.ChoiceFieldDTO
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 typealias ChoiceFieldId = Long
@@ -11,6 +12,7 @@ typealias ChoiceFieldId = Long
 @Entity
 data class ChoiceField(
     @Id
+    @GeneratedValue
     val id: ChoiceFieldId? = null,
     val fieldNumber: Int,
     val description: String,
