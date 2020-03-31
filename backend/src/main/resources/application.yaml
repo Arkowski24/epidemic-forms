@@ -5,3 +5,6 @@ spring.jpa:
     hibernate.temp.use_jdbc_metadata_defaults: false
   hibernate:
     ddl-auto: update
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate.SQL: INFO

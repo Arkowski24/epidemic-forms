@@ -4,6 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams, useHistory } from 'react-router-dom';
 
+import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import formService from '../../services/FormService';
 
 import SignView from './fields/SignView';
@@ -36,13 +37,13 @@ const FormView = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const form = await formService.getForm(token);
+        const response = await formService.getForm(token);
 
-        const formFinished = form.finished;
+        const formFinished = response.finished;
         setFinished(formFinished);
         if (formFinished) return;
 
-        const { fields } = form.schema;
+        const { fields } = response.schema;
         const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
         const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
         const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
@@ -61,6 +62,26 @@ const FormView = () => {
     }
     fetchData();
   }, [history, token]);
+
+  useEffect(() => {
+    const url = 'ws://localhost:8080/requests';
+    const ws = new Stomp.client(url);
+
+    const initialRequest = { destination: `/app/requests/${token}`, body: JSON.stringify({ requestType: 'GET_STATE' }) };
+
+    ws.connect({}, () => {
+      ws.subscribe(`/updates/${token}`, (m) => {
+        console.log(m);
+      });
+      ws.publish(initialRequest);
+    }, (error) => {
+      console.log(error);
+    });
+
+    return () => {
+      if (ws !== null) ws.close();
+    };
+  }, [token]);
 
   if (form === null) { return (<LoadingView />); }
   if (finished) { return (<EndView />); }
