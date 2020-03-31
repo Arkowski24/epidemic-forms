@@ -4,7 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams, useHistory } from 'react-router-dom';
 
-import patientService from '../../services/PatientService';
+import formService from '../../services/FormService';
 
 import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
@@ -23,7 +23,6 @@ const FormView = () => {
   const { token } = useParams();
 
   const sendFormResponse = async () => {
-    await patientService.postResponse(inputsState);
     setFinished(true);
   };
 
@@ -37,13 +36,13 @@ const FormView = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const patient = await patientService.getPatient(token);
+        const form = await formService.getForm(token);
 
-        const formFinished = patient.finished;
+        const formFinished = form.finished;
         setFinished(formFinished);
         if (formFinished) return;
 
-        const { fields } = patient.schema;
+        const { fields } = form.schema;
         const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
         const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
         const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
@@ -51,7 +50,7 @@ const FormView = () => {
         const text = fields.text.map((t) => ({ ...t, type: 'text' }));
         const allFields = choice.concat(sign, simple, slider, text);
 
-        allFields.sort((a, b) => a.order - b.order);
+        allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
         const values = allFields.map((f) => createFieldResponse(f));
 
         setInputsState(values);
@@ -77,9 +76,9 @@ const FormView = () => {
     if (fieldSchema.type === 'choice') {
       return (
         <ChoiceView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           choices={fieldSchema.choices}
-          isMultiple={fieldSchema.isMultiple}
+          isMultiChoice={fieldSchema.isMultiChoice}
           input={input}
           setInput={setInput}
         />
@@ -89,7 +88,7 @@ const FormView = () => {
     if (fieldSchema.type === 'sign') {
       return (
         <SignView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           input={input}
           setInput={setInput}
         />
@@ -99,7 +98,7 @@ const FormView = () => {
     if (fieldSchema.type === 'slider') {
       return (
         <SliderView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
@@ -112,7 +111,7 @@ const FormView = () => {
     if (fieldSchema.type === 'text') {
       return (
         <TextView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           isMultiline={fieldSchema.isMultiline}
           input={input}
           setInput={setInput}
@@ -121,7 +120,7 @@ const FormView = () => {
     }
 
     return (
-      <SimpleView message={fieldSchema.message} />
+      <SimpleView message={fieldSchema.description} />
     );
   };
 

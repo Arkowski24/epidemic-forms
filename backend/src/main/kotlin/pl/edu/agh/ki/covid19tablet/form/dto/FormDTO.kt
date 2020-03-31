@@ -8,5 +8,6 @@ data class FormDTO(
     val id: FormId,
     val schema: SchemaDTO,
     val patientName: String,
-    val state: FormStateDTO
+    val state: FormStateDTO,
+    val finished: Boolean
 )

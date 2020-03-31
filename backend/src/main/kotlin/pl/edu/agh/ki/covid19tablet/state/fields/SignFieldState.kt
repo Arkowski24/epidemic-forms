@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.state.fields
 
+import org.hibernate.annotations.Type
 import pl.edu.agh.ki.covid19tablet.schema.fields.SignField
 import pl.edu.agh.ki.covid19tablet.state.fields.dto.SignFieldStateDTO
 import java.util.Base64
@@ -19,6 +20,7 @@ data class SignFieldState(
     @ManyToOne
     val field: SignField,
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     val value: ByteArray
 ) {
     override fun equals(other: Any?): Boolean {

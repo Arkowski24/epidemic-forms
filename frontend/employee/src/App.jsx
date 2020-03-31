@@ -7,7 +7,7 @@ import FormView from './views/form/FormView';
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/patient/:token">
+      <Route path="/forms/:token">
         <FormView />
       </Route>
       <Route path="/">

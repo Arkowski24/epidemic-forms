@@ -22,12 +22,14 @@ data class Form(
     val schema: Schema,
     val patientName: String,
     @Embedded
-    val state: FormState
+    val state: FormState,
+    val finished: Boolean = false
 )
 
 fun Form.toDTO() = FormDTO(
     id = id!!,
     schema = schema.toDTO(),
     patientName = patientName,
-    state = state.toDTO()
+    state = state.toDTO(),
+    finished = finished
 )

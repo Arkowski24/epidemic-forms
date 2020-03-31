@@ -22,7 +22,7 @@ class DatabaseInitializer {
         CommandLineRunner {
             schemaRepository.save(
                 Schema(
-                    title = "My Schema",
+                    name = "My Schema",
                     fields = SchemaFields(
                         simple = listOf(
                             SimpleField(

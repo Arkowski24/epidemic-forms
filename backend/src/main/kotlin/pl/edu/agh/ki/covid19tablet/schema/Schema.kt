@@ -15,13 +15,13 @@ class Schema(
     @Id
     @GeneratedValue
     val id: SchemaId? = null,
-    val title: String,
+    val name: String,
     @Embedded
     val fields: SchemaFields
 )
 
 fun Schema.toDTO() = SchemaDTO(
     id = id!!,
-    title = title,
+    name = name,
     fields = fields.toDTO()
 )

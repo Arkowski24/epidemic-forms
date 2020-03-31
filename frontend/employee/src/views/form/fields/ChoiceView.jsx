@@ -4,12 +4,13 @@ import { Form } from 'react-bootstrap';
 import SingleInput from './common/SingleInput';
 
 const ChoiceForm = ({
-  choices, isMultiple,
+  choices,
+  isMultiChoice,
   input, setInput,
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
-      const newInput = isMultiple ? input.slice() : input.map(() => false);
+      const newInput = isMultiChoice ? input.slice() : input.map(() => false);
       newInput[i] = !input[i];
       setInput(newInput);
     };
@@ -21,7 +22,7 @@ const ChoiceForm = ({
       >
         <Form.Check
           key={c}
-          type={isMultiple ? 'checkbox' : 'radio'}
+          type={isMultiChoice ? 'checkbox' : 'radio'}
           name="choiceForm"
           label={c}
           checked={input[i]}
@@ -46,16 +47,16 @@ const ChoiceForm = ({
 
 const ChoiceView = ({
   message,
-  choices, isMultiple,
+  choices, isMultiChoice,
   input, setInput,
 }) => (
   <SingleInput
-    header={isMultiple ? 'Choose multiple' : 'Choose one'}
+    header={isMultiChoice ? 'Choose multiple' : 'Choose one'}
     message={message}
   >
     <ChoiceForm
       choices={choices}
-      isMultiple={isMultiple}
+      isMultiChoice={isMultiChoice}
       input={input}
       setInput={setInput}
     />
