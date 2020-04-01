@@ -87,44 +87,42 @@ const NewFormModal = ({
   };
 
   return (
-    <>
-      <Modal show={visible} onHide={handleClose}>
+    <Modal show={visible} onHide={handleClose}>
+      <Form onSubmit={createNewForm}>
         <Modal.Header closeButton>
           <Modal.Title>Create new form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="formPatientName">
-              <Form.Label>Form Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="My form"
-                value={formName}
-                onChange={(e) => setFormName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="forSchema">
-              <Form.Label>Schema</Form.Label>
-              <Form.Control
-                as="select"
-                value={schemaId}
-                onChange={(e) => setSchemaId(e.target.value)}
-              >
-                {schemaOptions}
-              </Form.Control>
-            </Form.Group>
-          </Form>
+          <Form.Group controlId="inputFormName">
+            <Form.Label>Form Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="My form"
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="inputFormSchema">
+            <Form.Label>Schema</Form.Label>
+            <Form.Control
+              as="select"
+              value={schemaId}
+              onChange={(e) => setSchemaId(e.target.value)}
+            >
+              {schemaOptions}
+            </Form.Control>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" type="button" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" type="submit" onClick={createNewForm}>
+          <Button variant="primary" type="submit">
             Create
           </Button>
         </Modal.Footer>
-      </Modal>
-    </>
+      </Form>
+    </Modal>
   );
 };
 
