@@ -55,22 +55,32 @@ class DatabaseInitializer {
                                 minValue = 0.0,
                                 maxValue = 100.0,
                                 step = 5.0
+                            ),
+                            SliderField(
+                                fieldNumber = 4,
+                                fieldType = FieldType.BLOCKED,
+                                title = "Fancy slider 2",
+                                description = "This slider is blocked.",
+                                minValue = 0.0,
+                                maxValue = 100.0,
+                                step = 5.0
                             )
                         ),
                         text = listOf(
                             TextField(
-                                fieldNumber = 4,
+                                fieldNumber = 5,
                                 fieldType = FieldType.HIDDEN,
                                 title = "Hidden field",
                                 description = "Patient cannot read this."
                             ),
                             TextField(
-                                fieldNumber = 5,
+                                fieldNumber = 6,
                                 title = "Easy question",
-                                description = "How tall are you?"
+                                fieldType = FieldType.BLOCKED,
+                                description = "How tall are you? - only employee can answer"
                             ),
                             TextField(
-                                fieldNumber = 6,
+                                fieldNumber = 7,
                                 title = "Hard question",
                                 description = "What have you eaten today?",
                                 isMultiline = true

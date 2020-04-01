@@ -6,6 +6,7 @@ import SinglePageForm from './common/SinglePageForm';
 const ChoiceForm = ({
   choices, isMultiple,
   input, setInput,
+  disabled
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
@@ -26,6 +27,7 @@ const ChoiceForm = ({
           label={c}
           checked={input[i]}
           readOnly
+          disabled={disabled}
         />
       </div>
     );
@@ -50,6 +52,7 @@ const ChoiceView = ({
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
+  disabled
 }) => (
   <SinglePageForm
     currentPage={currentPage}
@@ -64,6 +67,7 @@ const ChoiceView = ({
       isMultiple={isMultiple}
       input={input}
       setInput={setInput}
+      disabled={disabled}
     />
   </SinglePageForm>
 );

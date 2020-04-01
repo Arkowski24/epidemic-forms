@@ -3,7 +3,10 @@ import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
 
-const InputForm = ({ text, setText, isMultiline }) => (
+const InputForm = ({
+  text, setText,
+  isMultiline, disabled,
+}) => (
   <div className="p-1">
     <Form>
       <Form.Control
@@ -11,6 +14,7 @@ const InputForm = ({ text, setText, isMultiline }) => (
         rows={isMultiline ? 3 : 1}
         value={text}
         onChange={(event) => setText(event.target.value)}
+        disabled={disabled}
       />
     </Form>
   </div>
@@ -22,6 +26,7 @@ const TextView = ({
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
+  disabled
 }) => (
   <SinglePageForm
     title={title}
@@ -31,7 +36,12 @@ const TextView = ({
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
-    <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
+    <InputForm
+      text={input}
+      setText={setInput}
+      isMultiline={isMultiline}
+      disabled={disabled}
+    />
   </SinglePageForm>
 );
 

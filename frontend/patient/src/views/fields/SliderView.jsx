@@ -8,6 +8,7 @@ import SinglePageForm from './common/SinglePageForm';
 const RangeForm = ({
   minValue, maxValue, step,
   value, setValue,
+  disabled,
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -20,7 +21,7 @@ const RangeForm = ({
             <Button
               onClick={decValue}
               variant="danger"
-              disabled={value - step < minValue}
+              disabled={disabled || (value - step < minValue)}
             >
               -
             </Button>
@@ -37,7 +38,7 @@ const RangeForm = ({
               className="btn float-right"
               onClick={incValue}
               variant="success"
-              disabled={value + step > maxValue}
+              disabled={disabled || (value + step > maxValue)}
             >
               +
             </Button>
@@ -54,6 +55,7 @@ const RangeForm = ({
               step={step}
               value={value}
               onChange={(event) => setValue(Number(event.target.value))}
+              disabled={disabled}
             />
           </Form.Group>
         </Form>
@@ -68,6 +70,7 @@ const SliderView = ({
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
+  disabled,
 }) => (
   <SinglePageForm
     title={title}
@@ -83,6 +86,7 @@ const SliderView = ({
       step={step}
       value={input}
       setValue={setInput}
+      disabled={disabled}
     />
   </SinglePageForm>
 );
