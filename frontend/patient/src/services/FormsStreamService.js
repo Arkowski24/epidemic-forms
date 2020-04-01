@@ -4,6 +4,7 @@ import { WS_URL } from '../config';
 
 const url = `${WS_URL}/requests`;
 const webSocket = new Stomp.client(url);
+webSocket.debug = () => {};
 
 let token = null;
 let internalForms = null;
