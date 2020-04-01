@@ -39,7 +39,7 @@ class FormServiceImpl(
         val form = formRepository.save(
             Form(
                 schema = schema,
-                patientName = createFormRequest.patientName,
+                formName = createFormRequest.formName,
                 state = schema.fields.buildInitialState()
             )
         )

@@ -6,8 +6,8 @@ import pl.edu.agh.ki.covid19tablet.state.dto.FormStateDTO
 
 data class FormDTO(
     val id: FormId,
+    val formName: String,
     val schema: SchemaDTO,
-    val patientName: String,
     val state: FormStateDTO,
     val finished: Boolean
 )

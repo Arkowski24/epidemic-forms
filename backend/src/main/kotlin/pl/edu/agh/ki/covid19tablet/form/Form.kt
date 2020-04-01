@@ -18,18 +18,20 @@ data class Form(
     @Id
     @GeneratedValue
     val id: FormId? = null,
+    val formName: String,
+
     @ManyToOne
     val schema: Schema,
-    val patientName: String,
     @Embedded
     val state: FormState,
+
     val finished: Boolean = false
 )
 
 fun Form.toDTO() = FormDTO(
     id = id!!,
+    formName = formName,
     schema = schema.toDTO(),
-    patientName = patientName,
     state = state.toDTO(),
     finished = finished
 )
