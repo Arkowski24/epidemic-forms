@@ -81,8 +81,10 @@ public class PDFGeneratorService {
             Document document,
             Font font) {
         try {
+            int fieldNumber = 0;
+
             while (true) {
-                int fieldNumber = 0;
+
                 Field currentField = findCurrentField(schemaFields, fieldNumber);
                 if (currentField == null) {
                     return;
@@ -147,6 +149,8 @@ public class PDFGeneratorService {
                     Paragraph line = new Paragraph(currentField.getDescription() + " " + value, font);
                     document.add(line);
                 }
+
+                fieldNumber++;
             }
 
         } catch (DocumentException e) {
