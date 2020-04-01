@@ -55,12 +55,12 @@ const subscribe = (formHandler) => {
 
   const handleStateResponse = (response) => {
     const responseForm = response.payload;
-    const { id, formName, status } = responseForm;
     const schema = buildSchema(responseForm.schema);
     const state = buildState(responseForm.state, responseForm.schema.fields.simple);
+    const { patientSign, employeeSign } = responseForm.schema;
 
     internalForms = {
-      id, formName, status, schema, state,
+      ...responseForm, schema, state, patientSign, employeeSign,
     };
     formHandler(internalForms);
   };

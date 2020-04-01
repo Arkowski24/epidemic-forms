@@ -38,7 +38,7 @@ const FormView = () => {
 
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
-  if (form.status === 'SIGNED') { return <SignView title="Pendix" description="Appendix" sendSign={sendSign} />; }
+  if (form.status === 'SIGNED') { return <SignView title={form.employeeSign.title} description={form.employeeSign.description} sendSign={sendSign} />; }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {
