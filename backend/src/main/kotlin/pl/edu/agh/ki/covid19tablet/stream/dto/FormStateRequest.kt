@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonRawValue
 enum class FormStateRequestType {
     GET_STATE,
     UPDATE_CHOICE,
-    UPDATE_SIGN,
     UPDATE_SLIDER,
     UPDATE_TEXT,
 }

@@ -8,10 +8,10 @@ import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
-import pl.edu.agh.ki.covid19tablet.schema.fields.SignField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
+import pl.edu.agh.ki.covid19tablet.schema.sign.SignField
 
 @Component
 @Profile("dev")
@@ -68,14 +68,15 @@ class DatabaseInitializer {
                                 description = "What have you eaten today?",
                                 isMultiline = true
                             )
-                        ),
-                        sign = listOf(
-                            SignField(
-                                fieldNumber = 6,
-                                title = "Sign field",
-                                description = "I hereby agree everything is alright."
-                            )
                         )
+                    ),
+                    patientSign = SignField(
+                        title = "Sign field - Patient",
+                        description = "I hereby agree everything is alright."
+                    ),
+                    employeeSign = SignField(
+                        title = "Sign field - Employee",
+                        description = "I certify everything is all-right."
                     )
                 )
             )

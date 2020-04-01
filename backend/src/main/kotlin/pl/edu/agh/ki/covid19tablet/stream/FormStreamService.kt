@@ -10,7 +10,6 @@ import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequestType
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponse
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponseType
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.ChoiceFieldStateUpdate
-import pl.edu.agh.ki.covid19tablet.stream.dto.update.SignFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.SliderFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.TextFieldStateUpdate
 
@@ -41,15 +40,6 @@ class FormStreamServiceImpl(
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_CHOICE,
-                    payload = objectMapper.writeValueAsString(response)
-                )
-            }
-            FormStateRequestType.UPDATE_SIGN -> {
-                val updatePayload = objectMapper.readValue(request.payload, SignFieldStateUpdate::class.java)
-                val response = formStateService.modifySignFieldState(updatePayload.id, updatePayload.newValue)
-
-                return FormStateResponse(
-                    responseType = FormStateResponseType.UPDATE_SIGN,
                     payload = objectMapper.writeValueAsString(response)
                 )
             }
