@@ -1,16 +1,17 @@
 import React from 'react';
+
 import SinglePageForm from './common/SinglePageForm';
 
 const SimpleView = ({
+  title, description,
   currentPage, totalPages,
-  message,
   onClickPrev, onClickNext,
 }) => (
   <SinglePageForm
-    header="Read message"
+    title={title}
+    description={description}
     currentPage={currentPage}
     totalPages={totalPages}
-    message={message}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   />

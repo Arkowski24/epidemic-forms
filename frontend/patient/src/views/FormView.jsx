@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import formsService from '../services/FormsService';
+import formStreamService from '../services/FormsStreamService';
 
-import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
@@ -13,19 +12,16 @@ import LoginView from './utility/LoginView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [inputsState, setInputsState] = useState([{}]);
-  const [finished, setFinished] = useState(null);
   const [token, setToken] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const sendFormResponse = async () => {
-    await formsService.postResponse(inputsState);
-    setFinished(true);
+    formStreamService.sendMove('FILLED');
   };
 
   const nextPage = (event) => {
     event.preventDefault();
-    if (currentPage === form.pages.length) sendFormResponse();
+    if (currentPage === form.schema.length) sendFormResponse();
     else setCurrentPage(currentPage + 1);
   };
   const prevPage = (event) => {
@@ -33,112 +29,95 @@ const FormView = () => {
     if (currentPage - 1 > 0) setCurrentPage(currentPage - 1);
   };
 
-  const setInput = (input) => {
-    const newResponses = inputsState.slice();
-    newResponses[currentPage - 1] = input;
-    setInputsState(newResponses);
-  };
-
-  const createFieldResponse = (f) => {
-    if (f.type === 'choice') return f.choices.map(() => false);
-    if (f.type === 'text') return '';
-    if (f.type === 'slider') return f.minValue;
-    return null;
-  };
-
   useEffect(() => {
-    async function fetchData() {
-      const rawForm = await formsService.getForm(1);
+    if (token === null) return;
+    const setNewForm = (newForm) => setForm(newForm);
 
-      const formFinished = rawForm.finished;
-      setFinished(formFinished);
-      if (formFinished) return;
-
-      const { schema } = rawForm;
-      const choice = schema.choice.map((c) => ({ ...c, type: 'choice' }));
-      const sign = schema.sign.map((s) => ({ ...s, type: 'sign' }));
-      const simple = schema.simple.map((s) => ({ ...s, type: 'simple' }));
-      const slider = schema.slider.map((s) => ({ ...s, type: 'slider' }));
-      const text = schema.text.map((t) => ({ ...t, type: 'text' }));
-      const fields = choice.concat(sign, simple, slider, text);
-
-      fields.sort((a, b) => a.order - b.order);
-      const values = fields.map((f) => createFieldResponse(f));
-
-      setForm({ pages: fields });
-      setInputsState(values);
-    }
-    fetchData();
-  }, []);
+    formStreamService.setToken(token);
+    formStreamService.subscribe(setNewForm);
+  }, [token]);
 
   if (token === null) { return (<LoginView setToken={setToken} />); }
   if (form === null) { return (<LoadingView />); }
-  if (finished) { return (<EndView />); }
+  if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
+  if (form.status === 'SIGNED') { return (<LoadingView message="Waiting for employee to sign." />); }
+  if (form.status === 'CLOSED') { return (<EndView />); }
 
-  const page = form.pages[currentPage - 1];
-  const input = inputsState[currentPage - 1];
-  return (
-    <div>
-      {page.type === 'choice' && (
+  const createField = () => {
+    const index = currentPage - 1;
+    const fieldSchema = form.schema[index];
+    const input = form.state[index].value;
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+
+    if (fieldSchema.type === 'choice') {
+      return (
         <ChoiceView
-          message={page.message}
-          choices={page.choices}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
+          choices={fieldSchema.choices}
+          isMultiChoice={fieldSchema.isMultiChoice}
           currentPage={currentPage}
-          isMultiple={page.isMultiple}
-          totalPages={form.pages.length}
+          totalPages={form.schema.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
           input={input}
           setInput={setInput}
         />
-      )}
-      {page.type === 'sign' && (
-        <SignView
-          message={page.message}
-          currentPage={currentPage}
-          totalPages={form.pages.length}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
-          input={input}
-          setInput={setInput}
-        />
-      )}
-      {page.type === 'simple' && (
-        <SimpleView
-          message={page.message}
-          currentPage={currentPage}
-          totalPages={form.pages.length}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
-        />
-      )}
-      {page.type === 'slider' && (
+      );
+    }
+
+    if (fieldSchema.type === 'slider') {
+      return (
         <SliderView
-          message={page.message}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
+          minValue={fieldSchema.minValue}
+          maxValue={fieldSchema.maxValue}
+          step={fieldSchema.step}
           currentPage={currentPage}
-          totalPages={form.pages.length}
+          totalPages={form.schema.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
-          minValue={page.minValue}
-          maxValue={page.maxValue}
-          step={page.step}
           input={input}
           setInput={setInput}
         />
-      )}
-      {page.type === 'text' && (
+      );
+    }
+
+    if (fieldSchema.type === 'text') {
+      return (
         <TextView
-          message={page.message}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
+          isMultiline={fieldSchema.isMultiline}
           currentPage={currentPage}
-          totalPages={form.pages.length}
+          totalPages={form.schema.length}
           onClickPrev={prevPage}
           onClickNext={nextPage}
-          isMultiline={page.isMultiline}
           input={input}
           setInput={setInput}
         />
-      )}
-    </div>
+      );
+    }
+
+    return (
+      <SimpleView
+        title={fieldSchema.title}
+        description={fieldSchema.description}
+        currentPage={currentPage}
+        totalPages={form.schema.length}
+        onClickPrev={prevPage}
+        onClickNext={nextPage}
+        input={input}
+        setInput={setInput}
+      />
+    );
+  };
+
+  return (
+    <>
+      {createField()}
+    </>
   );
 };
 

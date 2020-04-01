@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
+
 import SinglePageForm from './common/SinglePageForm';
 
 const RangeForm = ({
@@ -62,17 +63,17 @@ const RangeForm = ({
 };
 
 const SliderView = ({
+  title, description,
   minValue, maxValue, step,
   currentPage, totalPages,
-  message,
   onClickPrev, onClickNext,
   input, setInput,
 }) => (
   <SinglePageForm
+    title={title}
+    description={description}
     currentPage={currentPage}
     totalPages={totalPages}
-    header="Slide the content"
-    message={message}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
