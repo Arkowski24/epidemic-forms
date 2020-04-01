@@ -15,8 +15,8 @@ const InfoMessage = ({ message }) => (
 );
 
 const SinglePageForm = ({
+  title, description,
   currentPage, totalPages,
-  header, message,
   onClickPrev, onClickNext,
   children,
 }) => {
@@ -33,8 +33,8 @@ const SinglePageForm = ({
   return (
     <Container style={{ padding: '30px' }}>
       <ProgressBar now={progress} label={progressLabel} />
-      <Header message={header} />
-      <InfoMessage message={message} />
+      <Header message={title} />
+      <InfoMessage message={description} />
       {children}
       <PrevNextButtons
         onClickPrev={onClickPrev}

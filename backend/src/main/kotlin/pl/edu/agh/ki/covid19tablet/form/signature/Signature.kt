@@ -1,20 +1,20 @@
-package pl.edu.agh.ki.covid19tablet.form.sign
+package pl.edu.agh.ki.covid19tablet.form.signature
 
 import org.hibernate.annotations.Type
-import pl.edu.agh.ki.covid19tablet.form.sign.dto.SignDTO
+import pl.edu.agh.ki.covid19tablet.form.signature.dto.SignatureDTO
 import java.util.Base64
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Lob
 
-typealias SignId = Long
+typealias SignatureId = Long
 
 @Entity
-data class Sign(
+data class Signature(
     @Id
     @GeneratedValue
-    val id: SignId? = null,
+    val id: SignatureId? = null,
 
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
@@ -24,7 +24,7 @@ data class Sign(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Sign
+        other as Signature
 
         if (id != other.id) return false
         if (!value.contentEquals(other.value)) return false
@@ -33,14 +33,14 @@ data class Sign(
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + value.contentHashCode()
         return result
     }
 }
 
-fun Sign.toDTO() =
-    SignDTO(
+fun Signature.toDTO() =
+    SignatureDTO(
         id = id!!,
-        value = Base64.getUrlEncoder().encodeToString(value)
+        value = Base64.getEncoder().encodeToString(value)
     )

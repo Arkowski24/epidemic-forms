@@ -1,11 +1,12 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
-import pl.edu.agh.ki.covid19tablet.form.sign.Sign
+import pl.edu.agh.ki.covid19tablet.form.signature.Signature
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import pl.edu.agh.ki.covid19tablet.state.FormState
 import pl.edu.agh.ki.covid19tablet.state.toDTO
+import javax.persistence.CascadeType
 import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -28,10 +29,10 @@ data class Form(
     @Embedded
     val state: FormState,
 
-    @OneToOne
-    val patientSign: Sign? = null,
-    @OneToOne
-    val employeeSign: Sign? = null
+    @OneToOne(cascade = [CascadeType.ALL])
+    val patientSignature: Signature? = null,
+    @OneToOne(cascade = [CascadeType.ALL])
+    val employeeSignature: Signature? = null
 )
 
 fun Form.toDTO() = FormDTO(

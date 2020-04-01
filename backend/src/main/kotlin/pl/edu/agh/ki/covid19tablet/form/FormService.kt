@@ -4,9 +4,10 @@ import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
-import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignRequest
+import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
-import pl.edu.agh.ki.covid19tablet.form.sign.Sign
+import pl.edu.agh.ki.covid19tablet.form.signature.Signature
+import pl.edu.agh.ki.covid19tablet.form.signature.SignatureRepository
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import java.util.Base64
@@ -18,13 +19,14 @@ interface FormService {
     fun createForm(request: CreateFormRequest): FormDTO
     fun updateFormStatus(formId: FormId, newStatus: FormStatus)
 
-    fun createPatientSign(formId: FormId, request: CreateSignRequest)
-    fun createEmployeeSign(formId: FormId, request: CreateSignRequest)
+    fun createPatientSignature(formId: FormId, request: CreateSignatureRequest)
+    fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest)
 }
 
 @Service
 class FormServiceImpl(
     private val formRepository: FormRepository,
+    private val signatureRepository: SignatureRepository,
     private val schemaRepository: SchemaRepository
 ) : FormService {
     override fun getAllForms(): List<FormDTO> =
@@ -63,33 +65,33 @@ class FormServiceImpl(
         formRepository.save(form)
     }
 
-    override fun createPatientSign(formId: FormId, request: CreateSignRequest) {
-        val sign = Sign(
-            value = serializeImage(request.sign)
+    override fun createPatientSignature(formId: FormId, request: CreateSignatureRequest) {
+        val signature = signatureRepository.save(
+            Signature(value = serializeImage(request.signature))
         )
 
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
-            .copy(patientSign = sign)
+            .copy(patientSignature = signature)
 
         formRepository.save(form)
     }
 
-    override fun createEmployeeSign(formId: FormId, request: CreateSignRequest) {
-        val sign = Sign(
-            value = serializeImage(request.sign)
+    override fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest) {
+        val signature = signatureRepository.save(
+            Signature(value = serializeImage(request.signature))
         )
 
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
-            .copy(employeeSign = sign)
+            .copy(employeeSignature = signature)
 
         formRepository.save(form)
     }
 
     private fun serializeImage(image: String): ByteArray =
-        Base64.getUrlDecoder().decode(image)
+        Base64.getDecoder().decode(image)
 
 }

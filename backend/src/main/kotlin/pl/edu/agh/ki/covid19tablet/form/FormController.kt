@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
-import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignRequest
+import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import javax.validation.Valid
 
@@ -43,25 +43,25 @@ class FormController(
             ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-    @PostMapping("{formId}/sign/patient")
+    @PostMapping("{formId}/signature/patient")
     fun createPatientSign(
         @PathVariable formId: FormId,
-        @Valid @RequestBody request: CreateSignRequest
+        @Valid @RequestBody request: CreateSignatureRequest
     ): ResponseEntity<Nothing> =
         try {
-            createPatientSign(formId, request)
+            formService.createPatientSignature(formId, request)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
         }
 
-    @PostMapping("{formId}/sign/employee")
+    @PostMapping("{formId}/signature/employee")
     fun createEmployeeSign(
         @PathVariable formId: FormId,
-        @Valid @RequestBody request: CreateSignRequest
+        @Valid @RequestBody request: CreateSignatureRequest
     ): ResponseEntity<Nothing> =
         try {
-            createEmployeeSign(formId, request)
+            formService.createEmployeeSignature(formId, request)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)

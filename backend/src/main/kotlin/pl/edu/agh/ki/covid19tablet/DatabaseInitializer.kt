@@ -11,7 +11,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
-import pl.edu.agh.ki.covid19tablet.schema.sign.SignField
+import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
 
 @Component
 @Profile("dev")
@@ -70,11 +70,11 @@ class DatabaseInitializer {
                             )
                         )
                     ),
-                    patientSign = SignField(
+                    patientSignature = SignatureField(
                         title = "Sign field - Patient",
                         description = "I hereby agree everything is alright."
                     ),
-                    employeeSign = SignField(
+                    employeeSignature = SignatureField(
                         title = "Sign field - Employee",
                         description = "I certify everything is all-right."
                     )

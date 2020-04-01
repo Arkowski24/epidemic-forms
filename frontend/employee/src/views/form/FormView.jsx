@@ -4,6 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams } from 'react-router-dom';
 
+import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
 
 import ChoiceView from './fields/ChoiceView';
@@ -13,14 +14,19 @@ import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 
+import SignatureView from './signature/SignatureView';
+
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [finished, setFinished] = useState(null);
-
   const { token } = useParams();
 
-  const sendFormResponse = async () => {
-    setFinished(true);
+  const sendFormResponse = () => {
+    formStreamService.sendMove('ACCEPTED');
+  };
+
+  const sendSignature = (signature) => {
+    formService.createSignature(form.id, signature)
+      .then(() => formStreamService.sendMove('CLOSED'));
   };
 
   useEffect(() => {
@@ -31,7 +37,9 @@ const FormView = () => {
   }, [token]);
 
   if (form === null) { return (<LoadingView />); }
-  if (finished) { return (<EndView />); }
+  if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
+  if (form.status === 'SIGNED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
+  if (form.status === 'CLOSED') { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
@@ -103,10 +111,8 @@ const FormView = () => {
         <Button
           className="btn float-right"
           type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            sendFormResponse();
-          }}
+          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          disabled={form.status !== 'FILLED'}
         >
           Submit
         </Button>

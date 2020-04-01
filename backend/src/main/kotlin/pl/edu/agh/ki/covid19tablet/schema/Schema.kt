@@ -3,8 +3,8 @@ package pl.edu.agh.ki.covid19tablet.schema
 import pl.edu.agh.ki.covid19tablet.schema.dto.SchemaDTO
 import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.toDTO
-import pl.edu.agh.ki.covid19tablet.schema.sign.SignField
-import pl.edu.agh.ki.covid19tablet.schema.sign.toDTO
+import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
+import pl.edu.agh.ki.covid19tablet.schema.signature.toDTO
 import javax.persistence.CascadeType
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -25,15 +25,15 @@ class Schema(
     val fields: SchemaFields,
 
     @OneToOne(cascade = [CascadeType.ALL])
-    val patientSign: SignField,
+    val patientSignature: SignatureField,
     @OneToOne(cascade = [CascadeType.ALL])
-    val employeeSign: SignField
+    val employeeSignature: SignatureField
 )
 
 fun Schema.toDTO() = SchemaDTO(
     id = id!!,
     name = name,
     fields = fields.toDTO(),
-    patientSign = patientSign.toDTO(),
-    employeeSign = employeeSign.toDTO()
+    patientSignature = patientSignature.toDTO(),
+    employeeSignature = employeeSignature.toDTO()
 )

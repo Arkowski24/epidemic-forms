@@ -16,7 +16,7 @@ const createForm = (schemaId, formName) => axios
   .then((res) => res.data);
 
 const createSignature = (formId, signature) => axios
-  .post(`${baseUrl}/${formId}/signature/employee`, { signature });
+  .post(`${baseUrl}/${formId}/signature/patient`, { signature });
 
 export default {
   getForms, getForm, createForm, createSignature,

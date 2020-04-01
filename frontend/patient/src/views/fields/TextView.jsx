@@ -17,17 +17,17 @@ const InputForm = ({ text, setText, isMultiline }) => (
 );
 
 const TextView = ({
+  title, description,
   isMultiline,
   currentPage, totalPages,
-  message,
   onClickPrev, onClickNext,
   input, setInput,
 }) => (
   <SinglePageForm
+    title={title}
+    description={description}
     currentPage={currentPage}
     totalPages={totalPages}
-    header="Fill-in the blank"
-    message={message}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
   >
