@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField
+import pl.edu.agh.ki.covid19tablet.schema.fields.FieldType
 import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
@@ -59,11 +60,17 @@ class DatabaseInitializer {
                         text = listOf(
                             TextField(
                                 fieldNumber = 4,
+                                fieldType = FieldType.HIDDEN,
+                                title = "Hidden field",
+                                description = "Patient cannot read this."
+                            ),
+                            TextField(
+                                fieldNumber = 5,
                                 title = "Easy question",
                                 description = "How tall are you?"
                             ),
                             TextField(
-                                fieldNumber = 5,
+                                fieldNumber = 6,
                                 title = "Hard question",
                                 description = "What have you eaten today?",
                                 isMultiline = true
