@@ -36,13 +36,10 @@ const SignField = ({ input, setInput }) => {
 };
 
 const SignView = ({
-  message,
+  title, description,
   input, setInput,
 }) => (
-  <SingleInput
-    header="Sign Form"
-    message={message}
-  >
+  <SingleInput title={title} description={description}>
     <SignField input={input} setInput={setInput} />
   </SingleInput>
 );

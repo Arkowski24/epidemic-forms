@@ -15,7 +15,10 @@ data class ChoiceField(
     @GeneratedValue
     val id: ChoiceFieldId? = null,
     val fieldNumber: Int,
-    val description: String,
+
+    val title: String,
+    val description: String = "",
+
     @ElementCollection
     val choices: List<String> = listOf(),
     val isMultiChoice: Boolean = false
@@ -25,6 +28,7 @@ fun ChoiceField.toDTO() =
     ChoiceFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        title = title,
         description = description,
         choices = choices,
         isMultiChoice = isMultiChoice

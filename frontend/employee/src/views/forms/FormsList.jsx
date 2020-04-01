@@ -17,6 +17,7 @@ const Header = ({ setVisible }) => (
     <Col md="auto">
       <Button
         variant="primary"
+        type="button"
         onClick={(e) => {
           e.preventDefault();
           setVisible(true);
@@ -31,19 +32,19 @@ const Header = ({ setVisible }) => (
 const FormsTable = ({ forms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Patient Name', 'Schema', 'Token']
+  const headers = ['#', 'Form Name', 'Schema', 'Token']
     .map((h) => <th key={h}>{h}</th>);
 
-  const buildPatientRow = (form, index) => (
+  const buildFormRow = (form, index) => (
     <tr key={form.id} onClick={() => history.push(`/forms/${form.id}`)}>
       <td>{index}</td>
-      <td>{form.patientName}</td>
+      <td>{form.formName}</td>
       <td>{form.schema.name}</td>
       <td>{form.id}</td>
     </tr>
   );
   const patientForms = forms
-    .map((f, i) => buildPatientRow(f, i));
+    .map((f, i) => buildFormRow(f, i));
 
   return (
     <Row className="w-100 m-1 p-1">
@@ -66,7 +67,7 @@ const NewFormModal = ({
   schemas,
   createForm,
 }) => {
-  const [patientName, setPatientName] = useState('');
+  const [formName, setFormName] = useState('');
   const [schemaId, setSchemaId] = useState('');
 
   const handleClose = () => setVisible(false);
@@ -81,7 +82,7 @@ const NewFormModal = ({
       else return;
     }
 
-    createForm(formSchemaId, patientName);
+    createForm(formSchemaId, formName);
     handleClose();
   };
 
@@ -89,17 +90,17 @@ const NewFormModal = ({
     <>
       <Modal show={visible} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Create new patient form</Modal.Title>
+          <Modal.Title>Create new form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="formPatientName">
-              <Form.Label>Patient Name</Form.Label>
+              <Form.Label>Form Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="John Doe"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
+                placeholder="My form"
+                value={formName}
+                onChange={(e) => setFormName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="forSchema">
@@ -115,7 +116,7 @@ const NewFormModal = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" type="button" onClick={handleClose}>
             Close
           </Button>
           <Button variant="primary" type="submit" onClick={createNewForm}>
@@ -132,8 +133,8 @@ const FormsList = () => {
   const [forms, setForms] = useState([]);
   const [schemas, setSchemas] = useState([]);
 
-  const createForm = async (schemaId, patientName) => {
-    const form = await formService.createForm(schemaId, patientName);
+  const createForm = async (schemaId, formName) => {
+    const form = await formService.createForm(schemaId, formName);
     const newForms = forms.concat(form);
     setForms(newForms);
   };

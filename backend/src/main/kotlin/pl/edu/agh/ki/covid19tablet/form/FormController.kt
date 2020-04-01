@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
+import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import javax.validation.Valid
 
@@ -40,5 +41,29 @@ class FormController(
             ResponseEntity(form, HttpStatus.OK)
         } catch (ex: SchemaNotFoundException) {
             ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+    @PostMapping("{formId}/sign/patient")
+    fun createPatientSign(
+        @PathVariable formId: FormId,
+        @Valid @RequestBody request: CreateSignRequest
+    ): ResponseEntity<Nothing> =
+        try {
+            createPatientSign(formId, request)
+            ResponseEntity(HttpStatus.NO_CONTENT)
+        } catch (ex: FormNotFoundException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+
+    @PostMapping("{formId}/sign/employee")
+    fun createEmployeeSign(
+        @PathVariable formId: FormId,
+        @Valid @RequestBody request: CreateSignRequest
+    ): ResponseEntity<Nothing> =
+        try {
+            createEmployeeSign(formId, request)
+            ResponseEntity(HttpStatus.NO_CONTENT)
+        } catch (ex: FormNotFoundException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
         }
 }

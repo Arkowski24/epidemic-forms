@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.form.FormId
 import pl.edu.agh.ki.covid19tablet.form.FormService
+import pl.edu.agh.ki.covid19tablet.form.FormStatus
 import pl.edu.agh.ki.covid19tablet.state.FormStateService
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequest
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequestType
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponse
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponseType
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.ChoiceFieldStateUpdate
-import pl.edu.agh.ki.covid19tablet.stream.dto.update.SignFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.SliderFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.TextFieldStateUpdate
 
@@ -35,21 +35,13 @@ class FormStreamServiceImpl(
                     payload = formStateAsJSON
                 )
             }
+
             FormStateRequestType.UPDATE_CHOICE -> {
                 val updatePayload = objectMapper.readValue(request.payload, ChoiceFieldStateUpdate::class.java)
                 val response = formStateService.modifyChoiceFieldState(updatePayload.id, updatePayload.newValue)
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_CHOICE,
-                    payload = objectMapper.writeValueAsString(response)
-                )
-            }
-            FormStateRequestType.UPDATE_SIGN -> {
-                val updatePayload = objectMapper.readValue(request.payload, SignFieldStateUpdate::class.java)
-                val response = formStateService.modifySignFieldState(updatePayload.id, updatePayload.newValue)
-
-                return FormStateResponse(
-                    responseType = FormStateResponseType.UPDATE_SIGN,
                     payload = objectMapper.writeValueAsString(response)
                 )
             }
@@ -69,6 +61,42 @@ class FormStreamServiceImpl(
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_TEXT,
                     payload = objectMapper.writeValueAsString(response)
+                )
+            }
+
+            FormStateRequestType.MOVE_NEW -> {
+                formService.updateFormStatus(formId, FormStatus.NEW)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.MOVE_NEW
+                )
+            }
+            FormStateRequestType.MOVE_FILLED -> {
+                formService.updateFormStatus(formId, FormStatus.FILLED)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.MOVE_FILLED
+                )
+            }
+            FormStateRequestType.MOVE_ACCEPTED -> {
+                formService.updateFormStatus(formId, FormStatus.ACCEPTED)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.MOVE_ACCEPTED
+                )
+            }
+            FormStateRequestType.MOVE_SIGNED -> {
+                formService.updateFormStatus(formId, FormStatus.SIGNED)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.MOVE_SIGNED
+                )
+            }
+            FormStateRequestType.MOVE_CLOSED -> {
+                formService.updateFormStatus(formId, FormStatus.CLOSED)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.MOVE_CLOSED
                 )
             }
         }

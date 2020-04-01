@@ -2,12 +2,9 @@ import React from 'react';
 import SingleInput from './common/SingleInput';
 
 const SimpleView = ({
-  message,
+  title, description,
 }) => (
-  <SingleInput
-    header="Read message"
-    message={message}
-  />
+  <SingleInput title={title} description={description} />
 );
 
 export default SimpleView;

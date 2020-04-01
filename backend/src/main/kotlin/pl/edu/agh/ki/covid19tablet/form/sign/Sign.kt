@@ -1,33 +1,30 @@
-package pl.edu.agh.ki.covid19tablet.state.fields
+package pl.edu.agh.ki.covid19tablet.form.sign
 
 import org.hibernate.annotations.Type
-import pl.edu.agh.ki.covid19tablet.schema.fields.SignField
-import pl.edu.agh.ki.covid19tablet.state.fields.dto.SignFieldStateDTO
+import pl.edu.agh.ki.covid19tablet.form.sign.dto.SignDTO
 import java.util.Base64
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Lob
-import javax.persistence.ManyToOne
 
-typealias SignFieldStateId = Long
+typealias SignId = Long
 
 @Entity
-data class SignFieldState(
+data class Sign(
     @Id
     @GeneratedValue
-    val id: SignFieldStateId? = null,
-    @ManyToOne
-    val field: SignField,
+    val id: SignId? = null,
+
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
-    val value: ByteArray
+    val value: ByteArray = byteArrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as SignFieldState
+        other as Sign
 
         if (id != other.id) return false
         if (!value.contentEquals(other.value)) return false
@@ -36,16 +33,14 @@ data class SignFieldState(
     }
 
     override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
+        var result = id.hashCode()
         result = 31 * result + value.contentHashCode()
         return result
     }
 }
 
-fun SignFieldState.toDTO() =
-    SignFieldStateDTO(
+fun Sign.toDTO() =
+    SignDTO(
         id = id!!,
-        fieldId = field.id!!,
-        fieldNumber = field.fieldNumber,
         value = Base64.getUrlEncoder().encodeToString(value)
     )
