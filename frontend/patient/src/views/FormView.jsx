@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
 import ChoiceView from './fields/ChoiceView';
@@ -10,13 +11,20 @@ import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 import LoginView from './utility/LoginView';
 
+import SignView from './sign/SignView';
+
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [token, setToken] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const sendFormResponse = async () => {
+  const sendFormResponse = () => {
     formStreamService.sendMove('FILLED');
+  };
+
+  const sendSign = (sign) => {
+    formService.createSign(form.id, sign)
+      .then(() => formStreamService.sendMove('SIGNED'));
   };
 
   const nextPage = (event) => {
@@ -40,6 +48,7 @@ const FormView = () => {
   if (token === null) { return (<LoginView setToken={setToken} />); }
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
+  if (form.status === 'ACCEPTED') { return <SignView title="Pendix" description="Appendix" sendSign={sendSign} />; }
   if (form.status === 'SIGNED') { return (<LoadingView message="Waiting for employee to sign." />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
 

@@ -4,6 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams } from 'react-router-dom';
 
+import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
 
 import ChoiceView from './fields/ChoiceView';
@@ -13,12 +14,19 @@ import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 
+import SignView from './sign/SignView';
+
 const FormView = () => {
   const [form, setForm] = useState(null);
   const { token } = useParams();
 
-  const sendFormResponse = async () => {
+  const sendFormResponse = () => {
     formStreamService.sendMove('ACCEPTED');
+  };
+
+  const sendSign = (sign) => {
+    formService.createSign(form.id, sign)
+      .then(() => formStreamService.sendMove('CLOSED'));
   };
 
   useEffect(() => {
@@ -30,6 +38,7 @@ const FormView = () => {
 
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
+  if (form.status === 'SIGNED') { return <SignView title="Pendix" description="Appendix" sendSign={sendSign} />; }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {

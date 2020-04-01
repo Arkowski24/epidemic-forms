@@ -7,6 +7,7 @@ import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import pl.edu.agh.ki.covid19tablet.form.sign.Sign
+import pl.edu.agh.ki.covid19tablet.form.sign.SignRepository
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import java.util.Base64
@@ -25,6 +26,7 @@ interface FormService {
 @Service
 class FormServiceImpl(
     private val formRepository: FormRepository,
+    private val signRepository: SignRepository,
     private val schemaRepository: SchemaRepository
 ) : FormService {
     override fun getAllForms(): List<FormDTO> =
@@ -64,8 +66,8 @@ class FormServiceImpl(
     }
 
     override fun createPatientSign(formId: FormId, request: CreateSignRequest) {
-        val sign = Sign(
-            value = serializeImage(request.sign)
+        val sign = signRepository.save(
+            Sign(value = serializeImage(request.sign))
         )
 
         val form = formRepository
@@ -77,8 +79,8 @@ class FormServiceImpl(
     }
 
     override fun createEmployeeSign(formId: FormId, request: CreateSignRequest) {
-        val sign = Sign(
-            value = serializeImage(request.sign)
+        val sign = signRepository.save(
+            Sign(value = serializeImage(request.sign))
         )
 
         val form = formRepository
@@ -90,6 +92,6 @@ class FormServiceImpl(
     }
 
     private fun serializeImage(image: String): ByteArray =
-        Base64.getUrlDecoder().decode(image)
+        Base64.getDecoder().decode(image)
 
 }

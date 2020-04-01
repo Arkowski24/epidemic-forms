@@ -15,4 +15,9 @@ const createForm = (schemaId, formName) => axios
   .post(`${baseUrl}/`, { schemaId, formName })
   .then((res) => res.data);
 
-export default { getForms, getForm, createForm };
+const createSign = (formId, sign) => axios
+  .post(`${baseUrl}/${formId}/sign/employee`, { sign });
+
+export default {
+  getForms, getForm, createForm, createSign,
+};

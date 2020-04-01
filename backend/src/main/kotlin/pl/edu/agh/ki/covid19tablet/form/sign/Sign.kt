@@ -42,5 +42,5 @@ data class Sign(
 fun Sign.toDTO() =
     SignDTO(
         id = id!!,
-        value = Base64.getUrlEncoder().encodeToString(value)
+        value = Base64.getEncoder().encodeToString(value)
     )

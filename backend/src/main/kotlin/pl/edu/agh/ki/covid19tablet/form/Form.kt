@@ -6,6 +6,7 @@ import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import pl.edu.agh.ki.covid19tablet.state.FormState
 import pl.edu.agh.ki.covid19tablet.state.toDTO
+import javax.persistence.CascadeType
 import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -28,9 +29,9 @@ data class Form(
     @Embedded
     val state: FormState,
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     val patientSign: Sign? = null,
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     val employeeSign: Sign? = null
 )
 

@@ -49,7 +49,7 @@ class FormController(
         @Valid @RequestBody request: CreateSignRequest
     ): ResponseEntity<Nothing> =
         try {
-            createPatientSign(formId, request)
+            formService.createPatientSign(formId, request)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
@@ -61,7 +61,7 @@ class FormController(
         @Valid @RequestBody request: CreateSignRequest
     ): ResponseEntity<Nothing> =
         try {
-            createEmployeeSign(formId, request)
+            formService.createEmployeeSign(formId, request)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
