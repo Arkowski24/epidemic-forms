@@ -1,7 +1,8 @@
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import webSocketsHelper from '../helper/WebSocketsHelper';
+import { WS_URL } from '../config';
 
-const url = 'ws://localhost:8080/requests';
+const url = `${WS_URL}/requests`;
 const webSocket = new Stomp.client(url);
 
 let token = null;

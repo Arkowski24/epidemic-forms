@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '../config';
 
-const baseUrl = 'http://localhost:8080/forms';
+const baseUrl = `${API_URL}/forms`;
 
 const getForms = () => axios
   .get(`${baseUrl}/`)
