@@ -17,14 +17,11 @@ const InputForm = ({ text, setText, isMultiline }) => (
 );
 
 const TextView = ({
+  title, description,
   isMultiline,
-  message,
   input, setInput,
 }) => (
-  <SingleInput
-    header="Fill-in the blank"
-    message={message}
-  >
+  <SingleInput title={title} description={description}>
     <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
   </SingleInput>
 );

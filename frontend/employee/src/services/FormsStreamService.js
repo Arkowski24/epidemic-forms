@@ -55,10 +55,11 @@ const subscribe = (formHandler) => {
 
     if (response.responseType === 'STATE') {
       const responseForm = response.payload;
+      const { formName } = responseForm;
       const schema = buildSchema(responseForm.schema);
       const state = buildState(responseForm.state, responseForm.schema.fields.simple);
 
-      internalForms = { schema, state };
+      internalForms = { formName, schema, state };
       formHandler(internalForms);
     } else {
       setFieldState(response.payload.value, response.payload.fieldNumber);

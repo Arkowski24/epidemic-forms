@@ -13,12 +13,12 @@ const InfoMessage = ({ message }) => (
 );
 
 const SinglePageForm = ({
-  header, message,
+  title, description,
   children,
 }) => (
   <div className="w-100 m-1 p-1 border rounded">
-    <Header message={header} />
-    <InfoMessage message={message} />
+    <Header message={title} />
+    <InfoMessage message={description} />
     {children}
   </div>
 );

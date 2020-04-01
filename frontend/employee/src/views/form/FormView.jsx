@@ -41,7 +41,8 @@ const FormView = () => {
     if (fieldSchema.type === 'choice') {
       return (
         <ChoiceView
-          message={fieldSchema.description}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.isMultiChoice}
           input={input}
@@ -53,7 +54,8 @@ const FormView = () => {
     if (fieldSchema.type === 'sign') {
       return (
         <SignView
-          message={fieldSchema.description}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
           input={input}
           setInput={setInput}
         />
@@ -63,7 +65,8 @@ const FormView = () => {
     if (fieldSchema.type === 'slider') {
       return (
         <SliderView
-          message={fieldSchema.description}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
@@ -76,7 +79,8 @@ const FormView = () => {
     if (fieldSchema.type === 'text') {
       return (
         <TextView
-          message={fieldSchema.description}
+          title={fieldSchema.title}
+          description={fieldSchema.description}
           isMultiline={fieldSchema.isMultiline}
           input={input}
           setInput={setInput}
@@ -85,7 +89,10 @@ const FormView = () => {
     }
 
     return (
-      <SimpleView message={fieldSchema.description} />
+      <SimpleView
+        title={fieldSchema.title}
+        description={fieldSchema.description}
+      />
     );
   };
 

@@ -62,14 +62,11 @@ const RangeForm = ({
 };
 
 const SliderView = ({
+  title, description,
   minValue, maxValue, step,
-  message,
   input, setInput,
 }) => (
-  <SingleInput
-    header="Slide the content"
-    message={message}
-  >
+  <SingleInput title={title} description={description}>
     <RangeForm
       minValue={minValue}
       maxValue={maxValue}
