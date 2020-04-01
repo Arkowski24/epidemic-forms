@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import patientService from '../../services/PatientService';
+import formStreamService from '../../services/FormsStreamService';
 
 import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
@@ -16,70 +16,34 @@ import SliderView from './fields/SliderView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [inputsState, setInputsState] = useState(null);
   const [finished, setFinished] = useState(null);
 
-  const history = useHistory();
   const { token } = useParams();
 
   const sendFormResponse = async () => {
-    await patientService.postResponse(inputsState);
     setFinished(true);
   };
 
-  const createFieldResponse = (f) => {
-    if (f.type === 'choice') return f.choices.map(() => false);
-    if (f.type === 'text') return '';
-    if (f.type === 'slider') return f.minValue;
-    return null;
-  };
-
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const patient = await patientService.getPatient(token);
+    const setNewForm = (newForm) => setForm(newForm);
 
-        const formFinished = patient.finished;
-        setFinished(formFinished);
-        if (formFinished) return;
-
-        const { fields } = patient.schema;
-        const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
-        const sign = fields.sign.map((s) => ({ ...s, type: 'sign' }));
-        const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
-        const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
-        const text = fields.text.map((t) => ({ ...t, type: 'text' }));
-        const allFields = choice.concat(sign, simple, slider, text);
-
-        allFields.sort((a, b) => a.order - b.order);
-        const values = allFields.map((f) => createFieldResponse(f));
-
-        setInputsState(values);
-        setForm({ fields: allFields });
-      } catch (e) {
-        history.push('/');
-      }
-    }
-    fetchData();
-  }, [history, token]);
+    formStreamService.setToken(token);
+    formStreamService.subscribe(setNewForm);
+  }, [token]);
 
   if (form === null) { return (<LoadingView />); }
   if (finished) { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {
-    const input = inputsState[index];
-    const setInput = (newInput) => {
-      const newResponses = inputsState.slice();
-      newResponses[index] = newInput;
-      setInputsState(newResponses);
-    };
+    const input = form.state[index].value;
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
 
     if (fieldSchema.type === 'choice') {
       return (
         <ChoiceView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           choices={fieldSchema.choices}
-          isMultiple={fieldSchema.isMultiple}
+          isMultiChoice={fieldSchema.isMultiChoice}
           input={input}
           setInput={setInput}
         />
@@ -89,7 +53,7 @@ const FormView = () => {
     if (fieldSchema.type === 'sign') {
       return (
         <SignView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           input={input}
           setInput={setInput}
         />
@@ -99,7 +63,7 @@ const FormView = () => {
     if (fieldSchema.type === 'slider') {
       return (
         <SliderView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
@@ -112,7 +76,7 @@ const FormView = () => {
     if (fieldSchema.type === 'text') {
       return (
         <TextView
-          message={fieldSchema.message}
+          message={fieldSchema.description}
           isMultiline={fieldSchema.isMultiline}
           input={input}
           setInput={setInput}
@@ -121,7 +85,7 @@ const FormView = () => {
     }
 
     return (
-      <SimpleView message={fieldSchema.message} />
+      <SimpleView message={fieldSchema.description} />
     );
   };
 
@@ -134,7 +98,7 @@ const FormView = () => {
     </Row>
   );
 
-  const fields = form.fields
+  const fields = form.schema
     // eslint-disable-next-line react/no-array-index-key
     .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 
@@ -144,7 +108,10 @@ const FormView = () => {
         <Button
           className="btn float-right"
           type="submit"
-          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          onClick={(e) => {
+            e.preventDefault();
+            sendFormResponse();
+          }}
         >
           Submit
         </Button>

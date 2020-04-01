@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '../config';
 
-const baseUrl = 'http://localhost:3004/schemas';
+const baseUrl = `${API_URL}/schemas`;
 
 const getSchemas = () => axios
   .get(`${baseUrl}/`)
