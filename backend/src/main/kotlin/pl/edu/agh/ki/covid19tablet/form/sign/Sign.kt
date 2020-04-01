@@ -1,6 +1,8 @@
 package pl.edu.agh.ki.covid19tablet.form.sign
 
 import org.hibernate.annotations.Type
+import pl.edu.agh.ki.covid19tablet.form.sign.dto.SignDTO
+import java.util.Base64
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -12,7 +14,7 @@ typealias SignId = Long
 data class Sign(
     @Id
     @GeneratedValue
-    val id: SignId,
+    val id: SignId? = null,
 
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
@@ -36,3 +38,9 @@ data class Sign(
         return result
     }
 }
+
+fun Sign.toDTO() =
+    SignDTO(
+        id = id!!,
+        value = Base64.getUrlEncoder().encodeToString(value)
+    )
