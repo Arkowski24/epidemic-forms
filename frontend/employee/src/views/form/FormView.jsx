@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 
 import formStreamService from '../../services/FormsStreamService';
 
-import SignView from './fields/SignView';
 import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
@@ -45,17 +44,6 @@ const FormView = () => {
           description={fieldSchema.description}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.isMultiChoice}
-          input={input}
-          setInput={setInput}
-        />
-      );
-    }
-
-    if (fieldSchema.type === 'sign') {
-      return (
-        <SignView
-          title={fieldSchema.title}
-          description={fieldSchema.description}
           input={input}
           setInput={setInput}
         />
