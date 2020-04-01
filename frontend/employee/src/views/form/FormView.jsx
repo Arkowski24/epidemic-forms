@@ -15,12 +15,10 @@ import SliderView from './fields/SliderView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [finished, setFinished] = useState(null);
-
   const { token } = useParams();
 
   const sendFormResponse = async () => {
-    setFinished(true);
+    formStreamService.sendMove('ACCEPTED');
   };
 
   useEffect(() => {
@@ -31,7 +29,8 @@ const FormView = () => {
   }, [token]);
 
   if (form === null) { return (<LoadingView />); }
-  if (finished) { return (<EndView />); }
+  if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
+  if (form.status === 'CLOSED') { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
@@ -103,10 +102,8 @@ const FormView = () => {
         <Button
           className="btn float-right"
           type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            sendFormResponse();
-          }}
+          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          disabled={form.status !== 'FILLED'}
         >
           Submit
         </Button>

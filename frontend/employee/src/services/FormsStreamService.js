@@ -13,6 +13,11 @@ const setToken = (newToken) => {
 };
 
 const subscribe = (formHandler) => {
+  const setFormStatus = (newStatus) => {
+    const newForm = { ...internalForms, status: newStatus };
+    formHandler(newForm);
+  };
+
   const setFieldState = (newInput, index) => {
     const oldFieldState = internalForms.state[index];
     internalForms.state[index] = { ...oldFieldState, value: newInput };
@@ -48,19 +53,36 @@ const subscribe = (formHandler) => {
     return allFields;
   };
 
+  const handleStateResponse = (response) => {
+    const responseForm = response.payload;
+    const { formName, status } = responseForm;
+    const schema = buildSchema(responseForm.schema);
+    const state = buildState(responseForm.state, responseForm.schema.fields.simple);
+
+    internalForms = {
+      formName, status, schema, state,
+    };
+    formHandler(internalForms);
+  };
+
+  const handleUpdateResponse = (response) => {
+    setFieldState(response.payload.value, response.payload.fieldNumber);
+  };
+
+  const handleMoveResponse = (response) => {
+    const newStatus = response.responseType.substr(5);
+    setFormStatus(newStatus);
+  };
+
   const handleResponse = (message) => {
     const response = JSON.parse(message.body);
 
     if (response.responseType === 'STATE') {
-      const responseForm = response.payload;
-      const { formName } = responseForm;
-      const schema = buildSchema(responseForm.schema);
-      const state = buildState(responseForm.state, responseForm.schema.fields.simple);
-
-      internalForms = { formName, schema, state };
-      formHandler(internalForms);
+      handleStateResponse(response);
+    } else if (response.responseType.substr(0, 4) === 'MOVE') {
+      handleMoveResponse(response);
     } else {
-      setFieldState(response.payload.value, response.payload.fieldNumber);
+      handleUpdateResponse(response);
     }
   };
 
@@ -82,4 +104,13 @@ const sendInput = (newInput, index) => {
   webSocket.publish({ destination: `/app/requests/${token}`, body: request });
 };
 
-export default { setToken, subscribe, sendInput };
+const sendMove = (newStatus) => {
+  const requestType = `MOVE_${newStatus}`;
+  const request = JSON.stringify({ requestType });
+
+  webSocket.publish({ destination: `/app/requests/${token}`, body: request });
+};
+
+export default {
+  setToken, subscribe, sendInput, sendMove,
+};
