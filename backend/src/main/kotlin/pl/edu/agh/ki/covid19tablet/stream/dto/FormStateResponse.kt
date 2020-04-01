@@ -4,13 +4,20 @@ import com.fasterxml.jackson.annotation.JsonRawValue
 
 enum class FormStateResponseType {
     STATE,
+
     UPDATE_CHOICE,
     UPDATE_SLIDER,
     UPDATE_TEXT,
+
+    MOVE_NEW,
+    MOVE_FILLED,
+    MOVE_ACCEPTED,
+    MOVE_SIGNED,
+    MOVE_CLOSED
 }
 
 data class FormStateResponse(
     val responseType: FormStateResponseType,
     @JsonRawValue
-    val payload: String
+    val payload: String? = null
 )

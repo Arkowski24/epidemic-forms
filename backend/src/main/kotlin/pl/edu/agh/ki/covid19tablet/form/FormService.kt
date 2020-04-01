@@ -14,7 +14,9 @@ import java.util.Base64
 interface FormService {
     fun getAllForms(): List<FormDTO>
     fun getForm(formId: FormId): FormDTO
+
     fun createForm(request: CreateFormRequest): FormDTO
+    fun updateFormStatus(formId: FormId, newStatus: FormStatus)
 
     fun createPatientSign(formId: FormId, request: CreateSignRequest)
     fun createEmployeeSign(formId: FormId, request: CreateSignRequest)
@@ -50,6 +52,15 @@ class FormServiceImpl(
             )
         )
         return form.toDTO()
+    }
+
+    override fun updateFormStatus(formId: FormId, newStatus: FormStatus) {
+        val form = formRepository
+            .findById(formId)
+            .orElseThrow { FormNotFoundException() }
+            .copy(status = newStatus)
+
+        formRepository.save(form)
     }
 
     override fun createPatientSign(formId: FormId, request: CreateSignRequest) {
