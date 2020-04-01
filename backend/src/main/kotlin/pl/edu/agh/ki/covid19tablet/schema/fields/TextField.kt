@@ -14,7 +14,10 @@ data class TextField(
     @GeneratedValue
     val id: TextFieldId? = null,
     val fieldNumber: Int,
-    val description: String,
+
+    val title: String,
+    val description: String = "",
+
     val isMultiline: Boolean = false
 )
 
@@ -22,6 +25,7 @@ fun TextField.toDTO() =
     TextFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        title = title,
         description = description,
         isMultiline = isMultiline
     )

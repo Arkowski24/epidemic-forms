@@ -14,7 +14,10 @@ data class SliderField(
     @GeneratedValue
     val id: SliderFieldId? = null,
     val fieldNumber: Int,
-    val description: String,
+
+    val title: String,
+    val description: String = "",
+
     val minValue: Double,
     val maxValue: Double,
     val step: Double
@@ -24,6 +27,7 @@ fun SliderField.toDTO() =
     SliderFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        title = title,
         description = description,
         minValue = minValue,
         maxValue = maxValue,

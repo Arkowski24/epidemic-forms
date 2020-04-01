@@ -27,17 +27,20 @@ class DatabaseInitializer {
                         simple = listOf(
                             SimpleField(
                                 fieldNumber = 0,
+                                title = "Read document",
                                 description = "This form is used by hospital."
                             )
                         ),
                         choice = listOf(
                             ChoiceField(
                                 fieldNumber = 1,
+                                title = "Favourite authors",
                                 description = "Your favourite author is:",
                                 choices = listOf("Kafka", "Prost", "Tolkien")
                             ),
                             ChoiceField(
                                 fieldNumber = 2,
+                                title = "Favourite authors pt.2",
                                 description = "Your favourite author is:",
                                 choices = listOf("Kafka", "Prost", "Tolkien"),
                                 isMultiChoice = true
@@ -46,6 +49,7 @@ class DatabaseInitializer {
                         slider = listOf(
                             SliderField(
                                 fieldNumber = 3,
+                                title = "Fancy slider",
                                 description = "Please slide freely.",
                                 minValue = 0.0,
                                 maxValue = 100.0,
@@ -55,10 +59,12 @@ class DatabaseInitializer {
                         text = listOf(
                             TextField(
                                 fieldNumber = 4,
+                                title = "Easy question",
                                 description = "How tall are you?"
                             ),
                             TextField(
                                 fieldNumber = 5,
+                                title = "Hard question",
                                 description = "What have you eaten today?",
                                 isMultiline = true
                             )
@@ -66,6 +72,7 @@ class DatabaseInitializer {
                         sign = listOf(
                             SignField(
                                 fieldNumber = 6,
+                                title = "Sign field",
                                 description = "I hereby agree everything is alright."
                             )
                         )

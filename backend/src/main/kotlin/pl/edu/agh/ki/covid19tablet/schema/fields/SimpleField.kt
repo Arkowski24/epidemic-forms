@@ -13,12 +13,15 @@ data class SimpleField(
     @GeneratedValue
     val id: SimpleFieldId? = null,
     val fieldNumber: Int,
-    val description: String
+
+    val title: String,
+    val description: String = ""
 )
 
 fun SimpleField.toDTO() =
     SimpleFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        title = title,
         description = description
     )

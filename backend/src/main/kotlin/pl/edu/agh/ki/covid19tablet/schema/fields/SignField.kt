@@ -14,13 +14,16 @@ data class SignField(
     @GeneratedValue
     val id: SimpleFieldId? = null,
     val fieldNumber: Int,
-    val description: String
+
+    val title: String,
+    val description: String = ""
 )
 
 fun SignField.toDTO() =
     SignFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        title = title,
         description = description
     )
 
