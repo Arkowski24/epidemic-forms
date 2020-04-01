@@ -1,7 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
-import pl.edu.agh.ki.covid19tablet.form.sign.Sign
+import pl.edu.agh.ki.covid19tablet.form.signature.Signature
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import pl.edu.agh.ki.covid19tablet.state.FormState
@@ -30,9 +30,9 @@ data class Form(
     val state: FormState,
 
     @OneToOne(cascade = [CascadeType.ALL])
-    val patientSign: Sign? = null,
+    val patientSignature: Signature? = null,
     @OneToOne(cascade = [CascadeType.ALL])
-    val employeeSign: Sign? = null
+    val employeeSignature: Signature? = null
 )
 
 fun Form.toDTO() = FormDTO(

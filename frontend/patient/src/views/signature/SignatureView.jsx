@@ -19,14 +19,14 @@ const InfoMessage = ({ message }) => (
   </Row>
 );
 
-const SubmitButton = ({ sendNewSign }) => (
+const SubmitButton = ({ sendNewSignature }) => (
   <Row>
     <div className="w-100 m-1 p-1 border-top">
       <Button
         className="btn float-right"
         variant="primary"
         type="submit"
-        onClick={(e) => { e.preventDefault(); sendNewSign(); }}
+        onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
       >
         Submit
       </Button>
@@ -63,15 +63,15 @@ const SignField = ({ setInput }) => {
   );
 };
 
-const SignView = ({
+const SignatureView = ({
   title, description,
-  sendSign,
+  sendSignature,
 }) => {
   const [input, setInput] = useState('');
 
-  const sendNewSign = () => {
+  const sendNewSignature = () => {
     const base64 = input.split(',')[1];
-    sendSign(base64);
+    sendSignature(base64);
   };
 
   return (
@@ -79,9 +79,9 @@ const SignView = ({
       <Header message={title} />
       <InfoMessage message={description} />
       <SignField setInput={setInput} />
-      <SubmitButton sendNewSign={sendNewSign} />
+      <SubmitButton sendNewSignature={sendNewSignature} />
     </Container>
   );
 };
 
-export default SignView;
+export default SignatureView;

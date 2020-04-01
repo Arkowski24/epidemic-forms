@@ -14,7 +14,7 @@ import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 
-import SignView from './sign/SignView';
+import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -24,8 +24,8 @@ const FormView = () => {
     formStreamService.sendMove('ACCEPTED');
   };
 
-  const sendSign = (sign) => {
-    formService.createSign(form.id, sign)
+  const sendSignature = (signature) => {
+    formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('CLOSED'));
   };
 
@@ -38,7 +38,7 @@ const FormView = () => {
 
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
-  if (form.status === 'SIGNED') { return <SignView title={form.employeeSign.title} description={form.employeeSign.description} sendSign={sendSign} />; }
+  if (form.status === 'SIGNED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {

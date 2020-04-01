@@ -1,6 +1,6 @@
-package pl.edu.agh.ki.covid19tablet.schema.sign
+package pl.edu.agh.ki.covid19tablet.schema.signature
 
-import pl.edu.agh.ki.covid19tablet.schema.sign.dto.SignFieldDTO
+import pl.edu.agh.ki.covid19tablet.schema.signature.dto.SignatureFieldDTO
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -8,7 +8,7 @@ import javax.persistence.Id
 typealias SignFieldId = Long
 
 @Entity
-data class SignField(
+data class SignatureField(
     @Id
     @GeneratedValue
     val id: SignFieldId? = null,
@@ -17,8 +17,8 @@ data class SignField(
     val description: String = ""
 )
 
-fun SignField.toDTO() =
-    SignFieldDTO(
+fun SignatureField.toDTO() =
+    SignatureFieldDTO(
         id = id!!,
         title = title,
         description = description
