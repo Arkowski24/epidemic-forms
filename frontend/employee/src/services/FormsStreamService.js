@@ -6,21 +6,21 @@ const webSocket = new Stomp.client(url);
 
 let token = null;
 let internalForms = null;
-let internalState = null;
 
 const setToken = (newToken) => {
   token = newToken;
 };
 
-const subscribe = (formHandler, stateHandler) => {
+const subscribe = (formHandler) => {
   const setFieldState = (newInput, index) => {
-    const oldState = internalState[index];
-    internalState[index] = { ...oldState, value: newInput };
-    const newState = internalState.slice();
-    stateHandler(newState);
+    const oldFieldState = internalForms.state[index];
+    internalForms.state[index] = { ...oldFieldState, value: newInput };
+
+    const newForm = { ...internalForms };
+    formHandler(newForm);
   };
 
-  const saveFields = (schema) => {
+  const buildSchema = (schema) => {
     const { fields } = schema;
 
     const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
@@ -31,12 +31,10 @@ const subscribe = (formHandler, stateHandler) => {
     const allFields = choice.concat(sign, simple, slider, text);
     allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
 
-    internalForms = allFields;
-    const newForm = internalForms.slice();
-    formHandler(newForm);
+    return allFields;
   };
 
-  const saveFieldState = (state, simpleFields) => {
+  const buildState = (state, simpleFields) => {
     const fields = state;
 
     const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
@@ -48,9 +46,7 @@ const subscribe = (formHandler, stateHandler) => {
     const allFields = choice.concat(sign, simple, slider, text);
     allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
 
-    internalState = allFields;
-    const newFormState = internalState.slice();
-    stateHandler(newFormState);
+    return allFields;
   };
 
   const handleResponse = (message) => {
@@ -58,8 +54,11 @@ const subscribe = (formHandler, stateHandler) => {
 
     if (response.responseType === 'STATE') {
       const responseForm = response.payload;
-      saveFieldState(responseForm.state, responseForm.schema.fields.simple);
-      saveFields(responseForm.schema);
+      const schema = buildSchema(responseForm.schema);
+      const state = buildState(responseForm.state, responseForm.schema.fields.simple);
+
+      internalForms = { schema, state };
+      formHandler(internalForms);
     } else {
       setFieldState(response.payload.value, response.payload.fieldNumber);
     }
@@ -72,9 +71,9 @@ const subscribe = (formHandler, stateHandler) => {
 };
 
 const sendInput = (newInput, index) => {
-  const field = internalForms[index];
+  const field = internalForms.schema[index];
   const fieldType = field.type.toUpperCase();
-  const stateId = internalState[index].id;
+  const stateId = internalForms.state[index].id;
 
   const requestType = `UPDATE_${fieldType}`;
   const payload = JSON.stringify({ id: stateId, newValue: newInput });

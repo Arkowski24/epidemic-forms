@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import formStreamService from '../../services/FormsStreamService';
 
@@ -16,10 +16,8 @@ import SliderView from './fields/SliderView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [inputsState, setInputsState] = useState(null);
   const [finished, setFinished] = useState(null);
 
-  const history = useHistory();
   const { token } = useParams();
 
   const sendFormResponse = async () => {
@@ -28,17 +26,16 @@ const FormView = () => {
 
   useEffect(() => {
     const setNewForm = (newForm) => setForm(newForm);
-    const setNewFormState = (newState) => setInputsState(newState);
 
     formStreamService.setToken(token);
-    formStreamService.subscribe(setNewForm, setNewFormState);
+    formStreamService.subscribe(setNewForm);
   }, [token]);
 
-  if (form === null || inputsState === null) { return (<LoadingView />); }
+  if (form === null) { return (<LoadingView />); }
   if (finished) { return (<EndView />); }
 
   const createField = (fieldSchema, index) => {
-    const input = inputsState[index].value;
+    const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
 
     if (fieldSchema.type === 'choice') {
@@ -101,7 +98,7 @@ const FormView = () => {
     </Row>
   );
 
-  const fields = form
+  const fields = form.schema
     // eslint-disable-next-line react/no-array-index-key
     .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 
