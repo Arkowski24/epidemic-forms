@@ -15,7 +15,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
 
 @Component
-@Profile("dev")
+@Profile("!prod")
 class DatabaseInitializer {
 
     @Bean
