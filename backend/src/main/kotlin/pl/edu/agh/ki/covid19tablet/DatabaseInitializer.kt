@@ -40,13 +40,13 @@ class DatabaseInitializer {
 
             val choiceField1 = ChoiceField(
                 fieldNumber = 1,
-                title = "Favourite authors",
+                title = "Ulubieni Autorzy:",
                 description = "Your favourite author is:",
                 choices = listOf("Kafka", "Prost", "Tolkien")
             )
             val choiceField2 = ChoiceField(
                 fieldNumber = 2,
-                title = "Favourite authors pt.2",
+                title = "Ulubieni Autorzy część 2:",
                 description = "Your favourite author is:",
                 choices = listOf("Kafka", "Prost", "Tolkien"),
                 isMultiChoice = true
@@ -59,7 +59,7 @@ class DatabaseInitializer {
             )
             val sliderField1 = SliderField(
                 fieldNumber = 3,
-                title = "Fancy slider",
+                title = "Jaka jest twoja ulubiona liczba rzeczywista?",
                 description = "Please slide freely.",
                 minValue = 0.0,
                 maxValue = 100.0,
@@ -67,12 +67,12 @@ class DatabaseInitializer {
             )
             val textField1 = TextField(
                 fieldNumber = 4,
-                title = "Easy question",
+                title = "Krótkie pytanie.",
                 description = "How tall are you?"
             )
             val textField2 = TextField(
                 fieldNumber = 5,
-                title = "Hard question",
+                title = "Długie pytanie.",
                 description = "What have you eaten today?",
                 isMultiline = true
             )
@@ -84,7 +84,7 @@ class DatabaseInitializer {
                         simple = listOf(
                             SimpleField(
                                 fieldNumber = 0,
-                                title = "Read document",
+                                title = "Przeczytaj dokument.",
                                 description = "This form is used by hospital."
                             )
                         ),
@@ -117,7 +117,7 @@ class DatabaseInitializer {
             formRepository.save(
                 Form(
                     schema = schema,
-                    formName = "Testowy Formularz Numer 1",
+                    formName = "Testowy Formularz",
                     state = FormState(
                         choice = listOf(
                             ChoiceFieldState(
