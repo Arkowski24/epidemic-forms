@@ -22,7 +22,7 @@ public class PDFGeneratorController {
         try {
             formDTO = pdfGeneratorService.getForm(id);
         } catch (FormNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         pdfGeneratorService.generatePDF(formDTO);
