@@ -146,11 +146,11 @@ class DatabaseInitializer {
                         text = listOf(
                             TextFieldState(
                                 field = textField1,
-                                value = "Odpowiedz krotka"
+                                value = "Odpowiedź krótka."
                             ),
                             TextFieldState(
                                 field = textField2,
-                                value = "Odpowiedz bardzo, ale to naprawde bardzo dluuugasna"
+                                value = "Odpowiedź bardzo, ale to naprawdę bardzo dluuugaśna"
                             )
                         )
                     ),

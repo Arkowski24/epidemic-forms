@@ -46,7 +46,8 @@ public class PDFBuilder {
             Document document
         ) throws DocumentException, IOException {
 
-        Font standardFont = createStandardFont(12);
+        Font questionFont = createQuestionFont(12);
+        Font answerFont = createAnswerFont(10);
         int fieldNumber = 0;
 
         while (true) {
@@ -58,7 +59,7 @@ public class PDFBuilder {
             if (currentField.getFieldType().equals(FieldType.CHOICE)) {
                 Paragraph title = new Paragraph(
                         (fieldNumber + 1) + ". " + currentField.getTitle(),
-                        standardFont
+                        questionFont
                 );
                 document.add(title);
 
@@ -81,15 +82,15 @@ public class PDFBuilder {
 
                 for (int i = 0; i < answers.size() && i < questions.size(); i++) {
                     String line = "    " + questions.get(i) + " " + answers.get(i);
-                    Paragraph paragraph = new Paragraph(line, standardFont);
+                    Paragraph paragraph = new Paragraph(line, questionFont);
                     document.add(paragraph);
                 }
             }
 
             if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
                 Paragraph title = new Paragraph(
-                        (fieldNumber + 1) + ". " +currentField.getTitle(),
-                        standardFont
+                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionFont
                 );
                 document.add(title);
             }
@@ -104,11 +105,17 @@ public class PDFBuilder {
                     }
                 }
 
-                Paragraph line = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle() + " " + value,
-                        standardFont
+                Paragraph question = new Paragraph(
+                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionFont
                 );
-                document.add(line);
+                Paragraph answer = new Paragraph(
+                        "    " + value,
+                        answerFont
+                );
+
+                document.add(question);
+                document.add(answer);
             }
 
             if (currentField.getFieldType().equals(FieldType.TEXT)) {
@@ -121,11 +128,17 @@ public class PDFBuilder {
                     }
                 }
 
-                Paragraph line = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle() + " " + value,
-                        standardFont
+                Paragraph question = new Paragraph(
+                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionFont
                 );
-                document.add(line);
+                Paragraph answer = new Paragraph(
+                        "    " + value,
+                        answerFont
+                );
+
+                document.add(question);
+                document.add(answer);
             }
 
             fieldNumber++;
@@ -173,8 +186,13 @@ public class PDFBuilder {
         return new Font(baseFont, size);
     }
 
-    private Font createStandardFont(int size) throws DocumentException, IOException {
+    private Font createQuestionFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        return new Font(baseFont, size);
+    }
+
+    private Font createAnswerFont(int size) throws DocumentException, IOException {
+        BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
 }
