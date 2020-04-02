@@ -4,6 +4,11 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
+import pl.edu.agh.ki.covid19tablet.form.Form
+import pl.edu.agh.ki.covid19tablet.form.FormRepository
+import pl.edu.agh.ki.covid19tablet.form.FormService
+import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField
@@ -14,6 +19,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
+import pl.edu.agh.ki.covid19tablet.schema.fields.*
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
 import pl.edu.agh.ki.covid19tablet.user.employee.Employee
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
@@ -23,12 +29,9 @@ import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
 class DatabaseInitializer {
 
     @Bean
-    fun initializeDatabase(
-        schemaRepository: SchemaRepository,
-        employeeRepository: EmployeeRepository
-    ) =
+    fun initializeDatabase(schemaRepository: SchemaRepository, formRepository: FormRepository) =
         CommandLineRunner {
-            schemaRepository.save(
+            val schema = schemaRepository.save(
                 Schema(
                     name = "My Schema",
                     fields = SchemaFields(
@@ -112,12 +115,5 @@ class DatabaseInitializer {
                     )
                 )
             )
-            employeeRepository.save(
-                Employee(
-                    username = "Admin",
-                    fullName = "Żanetka Letta",
-                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
-                )
-            )
-        }
+     }
 }
