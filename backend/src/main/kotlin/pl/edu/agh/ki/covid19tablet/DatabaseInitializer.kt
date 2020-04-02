@@ -117,7 +117,7 @@ class DatabaseInitializer {
             formRepository.save(
                 Form(
                     schema = schema,
-                    formName = "xD",
+                    formName = "Testowy Formularz Numer 1",
                     state = FormState(
                         choice = listOf(
                             ChoiceFieldState(
