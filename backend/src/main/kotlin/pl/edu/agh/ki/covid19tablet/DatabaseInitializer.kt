@@ -23,6 +23,12 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.*
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
 import pl.edu.agh.ki.covid19tablet.user.employee.Employee
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
+import pl.edu.agh.ki.covid19tablet.state.FormState
+import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState
+import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState
+import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState
+import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRole
+import pl.edu.agh.ki.covid19tablet.user.patient.Patient
 
 @Component
 @Profile("!prod")
@@ -31,6 +37,46 @@ class DatabaseInitializer {
     @Bean
     fun initializeDatabase(schemaRepository: SchemaRepository, formRepository: FormRepository) =
         CommandLineRunner {
+
+            val choiceField1 = ChoiceField(
+                fieldNumber = 1,
+                title = "Favourite authors",
+                description = "Your favourite author is:",
+                choices = listOf("Kafka", "Prost", "Tolkien")
+            )
+            val choiceField2 = ChoiceField(
+                fieldNumber = 2,
+                title = "Favourite authors pt.2",
+                description = "Your favourite author is:",
+                choices = listOf("Kafka", "Prost", "Tolkien"),
+                isMultiChoice = true
+            )
+            val derivedField1 = DerivedField(
+                fieldNumber = 3,
+                derivedType = DerivedType.BIRTHDAY_PESEL,
+                titles = listOf("PESEL", "Birthday"),
+                descriptions = listOf("Your PESEL: ", "Your birthay:")
+            )
+            val sliderField1 = SliderField(
+                fieldNumber = 3,
+                title = "Fancy slider",
+                description = "Please slide freely.",
+                minValue = 0.0,
+                maxValue = 100.0,
+                step = 5.0
+            )
+            val textField1 = TextField(
+                fieldNumber = 4,
+                title = "Easy question",
+                description = "How tall are you?"
+            )
+            val textField2 = TextField(
+                fieldNumber = 5,
+                title = "Hard question",
+                description = "What have you eaten today?",
+                isMultiline = true
+            )
+
             val schema = schemaRepository.save(
                 Schema(
                     name = "My Schema",
@@ -43,66 +89,18 @@ class DatabaseInitializer {
                             )
                         ),
                         choice = listOf(
-                            ChoiceField(
-                                fieldNumber = 1,
-                                title = "Favourite authors",
-                                description = "Your favourite author is:",
-                                choices = listOf("Kafka", "Prost", "Tolkien")
-                            ),
-                            ChoiceField(
-                                fieldNumber = 2,
-                                title = "Favourite authors pt.2",
-                                description = "Your favourite author is:",
-                                choices = listOf("Kafka", "Prost", "Tolkien"),
-                                isMultiChoice = true
-                            )
+                            choiceField1,
+                            choiceField2
                         ),
                         derived = listOf(
-                            DerivedField(
-                                fieldNumber = 3,
-                                derivedType = DerivedType.BIRTHDAY_PESEL,
-                                titles = listOf("PESEL", "Birthday"),
-                                descriptions = listOf("Your PESEL: ", "Your birthay:")
-                            )
+                            derivedField1
                         ),
                         slider = listOf(
-                            SliderField(
-                                fieldNumber = 4,
-                                title = "Fancy slider",
-                                description = "Please slide freely.",
-                                minValue = 0.0,
-                                maxValue = 100.0,
-                                step = 5.0
-                            ),
-                            SliderField(
-                                fieldNumber = 5,
-                                fieldType = FieldType.BLOCKED,
-                                title = "Fancy slider 2",
-                                description = "This slider is blocked.",
-                                minValue = 0.0,
-                                maxValue = 100.0,
-                                step = 5.0
-                            )
+                            sliderField1
                         ),
                         text = listOf(
-                            TextField(
-                                fieldNumber = 6,
-                                fieldType = FieldType.HIDDEN,
-                                title = "Hidden field",
-                                description = "Patient cannot read this."
-                            ),
-                            TextField(
-                                fieldNumber = 7,
-                                title = "Easy question",
-                                fieldType = FieldType.BLOCKED,
-                                description = "How tall are you? - only employee can answer"
-                            ),
-                            TextField(
-                                fieldNumber = 8,
-                                title = "Hard question",
-                                description = "What have you eaten today?",
-                                isMultiline = true
-                            )
+                            textField1,
+                            textField2
                         )
                     ),
                     patientSignature = SignatureField(
@@ -115,5 +113,57 @@ class DatabaseInitializer {
                     )
                 )
             )
-     }
+
+            formRepository.save(
+                Form(
+                    schema = schema,
+                    formName = "xD",
+                    state = FormState(
+                        choice = listOf(
+                            ChoiceFieldState(
+                                field = choiceField1,
+                                value = listOf(
+                                    false,
+                                    false,
+                                    true
+                                )
+                            ),
+                            ChoiceFieldState(
+                                field = choiceField2,
+                                value = listOf(
+                                    true,
+                                    false,
+                                    true
+                                )
+                            )
+                        ),
+                        slider = listOf(
+                            SliderFieldState(
+                                field = sliderField1,
+                                value = 9.3
+                            )
+                        ),
+                        text = listOf(
+                            TextFieldState(
+                                field = textField1,
+                                value = "Odpowiedz krotka"
+                            ),
+                            TextFieldState(
+                                field = textField2,
+                                value = "Odpowiedz bardzo, ale to naprawde bardzo dluuugasna"
+                            )
+                        )
+                    ),
+                    createdBy = Employee(
+                        username = "Janko",
+                        passwordHash = "tajnehasloxd",
+                        fullName = "Jan Kowalski",
+                        role = EmployeeRole.EMPLOYEE
+                    ),
+                    patient = Patient(
+                        loggedIn = true
+                    )
+                )
+            )
+        }
 }
