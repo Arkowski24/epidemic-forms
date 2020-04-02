@@ -10,13 +10,20 @@ import pl.edu.agh.ki.covid19tablet.form.FormRepository;
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
 public class PDFGeneratorService {
 
     @Autowired
-    FormRepository formRepository;
+    private FormRepository formRepository;
+
+    private static final String pdfName = "Covid19Form.pdf";
+
+
 
     public FormDTO getForm(long id) {
         Optional<Form> form = formRepository.findById(id);
@@ -29,8 +36,9 @@ public class PDFGeneratorService {
 
     public byte[] generatePDF(FormDTO formDTO) throws DocumentException, IOException {
         PDFBuilder pdfBuilder = new PDFBuilder();
-        pdfBuilder.build("Covid19Form.pdf", formDTO);
+        pdfBuilder.build(pdfName, formDTO);
 
-        return null;
+        Path pdfPath = Paths.get(pdfName);
+        return Files.readAllBytes(pdfPath);
     }
 }
