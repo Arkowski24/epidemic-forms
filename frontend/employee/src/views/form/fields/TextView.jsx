@@ -20,8 +20,9 @@ const TextView = ({
   title, description,
   isMultiline,
   input, setInput,
+  highlighted,
 }) => (
-  <SingleInput title={title} description={description}>
+  <SingleInput title={title} description={description} highlighted={highlighted}>
     <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
   </SingleInput>
 );

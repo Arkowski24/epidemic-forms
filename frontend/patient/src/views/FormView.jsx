@@ -56,12 +56,20 @@ const FormView = () => {
 
   const nextPage = (event) => {
     event.preventDefault();
-    if (currentPage === pageIndexMapping.length) sendFormResponse();
-    else setCurrentPage(currentPage + 1);
+    if (currentPage === pageIndexMapping.length) {
+      sendFormResponse();
+    } else {
+      formStreamService.sendPageChange(currentPage + 1);
+      setCurrentPage(currentPage + 1);
+    }
   };
+
   const prevPage = (event) => {
     event.preventDefault();
-    if (currentPage - 1 > 0) setCurrentPage(currentPage - 1);
+    if (currentPage - 1 > 0) {
+      formStreamService.sendPageChange(currentPage - 1);
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const createField = () => {

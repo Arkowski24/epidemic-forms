@@ -26,7 +26,7 @@ const TextView = ({
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
-  disabled
+  disabled,
 }) => (
   <SinglePageForm
     title={title}

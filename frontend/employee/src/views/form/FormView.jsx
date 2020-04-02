@@ -18,6 +18,7 @@ import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [patientPage, setPatientPage] = useState(0);
   const { token } = useParams();
 
   const sendFormResponse = () => {
@@ -33,7 +34,7 @@ const FormView = () => {
     const setNewForm = (newForm) => setForm(newForm);
 
     formStreamService.setToken(token);
-    formStreamService.subscribe(setNewForm);
+    formStreamService.subscribe(setNewForm, setPatientPage);
   }, [token]);
 
   if (form === null) { return (<LoadingView />); }
@@ -41,9 +42,14 @@ const FormView = () => {
   if (form.status === 'SIGNED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
+  const pageIndexMapping = form.schema
+    .map((f, i) => ({ type: f.fieldType, index: i }))
+    .filter((r) => r.type !== 'HIDDEN');
+
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -54,6 +60,7 @@ const FormView = () => {
           isMultiChoice={fieldSchema.isMultiChoice}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -68,6 +75,7 @@ const FormView = () => {
           step={fieldSchema.step}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -80,6 +88,7 @@ const FormView = () => {
           isMultiline={fieldSchema.isMultiline}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -88,6 +97,7 @@ const FormView = () => {
       <SimpleView
         title={fieldSchema.title}
         description={fieldSchema.description}
+        highlighted={highlighted}
       />
     );
   };

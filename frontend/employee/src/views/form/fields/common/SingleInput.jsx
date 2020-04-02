@@ -15,13 +15,13 @@ const InfoMessage = ({ message }) => (
 const SinglePageForm = ({
   title, description,
   children,
+  highlighted,
 }) => (
-  <div className="w-100 m-1 p-1 border rounded">
+  <div className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
     <Header message={title} />
     <InfoMessage message={description} />
     {children}
   </div>
 );
-
 
 export default SinglePageForm;

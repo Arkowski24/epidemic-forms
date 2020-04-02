@@ -115,6 +115,13 @@ const sendMove = (newStatus) => {
   webSocket.publish({ destination: `/app/requests/${token}`, body: request });
 };
 
+const sendPageChange = (newPage) => {
+  const requestType = 'NEW_PAGE';
+  const request = JSON.stringify({ requestType, newPage });
+
+  webSocket.publish({ destination: `/changes/${token}`, body: request });
+};
+
 export default {
-  setToken, subscribe, sendInput, sendMove,
+  setToken, subscribe, sendInput, sendMove, sendPageChange,
 };

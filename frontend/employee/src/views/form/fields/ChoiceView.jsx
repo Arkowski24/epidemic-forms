@@ -49,8 +49,9 @@ const ChoiceView = ({
   title, description,
   choices, isMultiChoice,
   input, setInput,
+  highlighted,
 }) => (
-  <SingleInput title={title} description={description}>
+  <SingleInput title={title} description={description} highlighted={highlighted}>
     <ChoiceForm
       choices={choices}
       isMultiChoice={isMultiChoice}

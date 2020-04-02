@@ -14,7 +14,7 @@ const setToken = (newToken) => {
   token = newToken;
 };
 
-const subscribe = (formHandler) => {
+const subscribe = (formHandler, setPatientPage) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
     formHandler(newForm);
@@ -89,9 +89,15 @@ const subscribe = (formHandler) => {
     }
   };
 
+  const handlePageChangeResponse = (message) => {
+    const response = JSON.parse(message.body);
+    setPatientPage(response.newPage);
+  };
+
   webSocket.connect({}, () => {
     internalForms = null;
     webSocket.subscribe(`/updates/${token}`, handleResponse);
+    webSocket.subscribe(`/changes/${token}`, handlePageChangeResponse);
     webSocket.publish(webSocketsHelper.buildInitialRequest(token));
   });
 };
