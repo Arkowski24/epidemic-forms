@@ -13,7 +13,7 @@ public class PDFGeneratorController {
     @Autowired
     private PDFGeneratorService pdfGeneratorService;
 
-    @GetMapping(path = "")
+    @GetMapping
     public ResponseEntity<byte[]> getPDF(
             @RequestParam int id
     ) {
@@ -21,7 +21,6 @@ public class PDFGeneratorController {
         try {
             formDTO = pdfGeneratorService.getForm(id);
         } catch (FormNotFoundException e) {
-            //TODO return jakiś błąd
             return null;
         }
 

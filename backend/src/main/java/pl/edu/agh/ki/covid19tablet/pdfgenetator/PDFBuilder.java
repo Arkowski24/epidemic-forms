@@ -68,7 +68,7 @@ public class PDFBuilder {
 
                 if (currentField.getFieldType().equals(FieldType.CHOICE)) {
                     Paragraph title = new Paragraph(
-                            fieldNumber + ". " + currentField.getDescription(),
+                            (fieldNumber + 1) + ". " + currentField.getDescription(),
                             standardFont
                     );
                     document.add(title);
@@ -99,7 +99,7 @@ public class PDFBuilder {
 
                 if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
                     Paragraph title = new Paragraph(
-                            fieldNumber + ". " +currentField.getDescription(),
+                            (fieldNumber + 1) + ". " +currentField.getDescription(),
                             standardFont
                     );
                     document.add(title);
@@ -116,7 +116,7 @@ public class PDFBuilder {
                     }
 
                     Paragraph line = new Paragraph(
-                            fieldNumber + ". " + currentField.getDescription() + " " + value,
+                            (fieldNumber + 1) + ". " + currentField.getDescription() + " " + value,
                             standardFont
                     );
                     document.add(line);
@@ -133,7 +133,7 @@ public class PDFBuilder {
                     }
 
                     Paragraph line = new Paragraph(
-                            fieldNumber + ". " + currentField.getDescription() + " " + value,
+                            (fieldNumber + 1) + ". " + currentField.getDescription() + " " + value,
                             standardFont
                     );
                     document.add(line);
