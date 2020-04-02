@@ -2,16 +2,16 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
 public class Field {
 
-    private String description;
+    private String title;
     private FieldType fieldType;
 
-    public Field(String description, FieldType fieldType) {
-        this.description = description;
+    public Field(String title, FieldType fieldType) {
+        this.title = title;
         this.fieldType = fieldType;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
     public FieldType getFieldType() {

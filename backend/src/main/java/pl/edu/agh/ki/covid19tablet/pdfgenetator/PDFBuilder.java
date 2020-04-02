@@ -57,7 +57,7 @@ public class PDFBuilder {
 
             if (currentField.getFieldType().equals(FieldType.CHOICE)) {
                 Paragraph title = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getDescription(),
+                        (fieldNumber + 1) + ". " + currentField.getTitle(),
                         standardFont
                 );
                 document.add(title);
@@ -88,7 +88,7 @@ public class PDFBuilder {
 
             if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
                 Paragraph title = new Paragraph(
-                        (fieldNumber + 1) + ". " +currentField.getDescription(),
+                        (fieldNumber + 1) + ". " +currentField.getTitle(),
                         standardFont
                 );
                 document.add(title);
@@ -105,7 +105,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph line = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getDescription() + " " + value,
+                        (fieldNumber + 1) + ". " + currentField.getTitle() + " " + value,
                         standardFont
                 );
                 document.add(line);
@@ -122,7 +122,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph line = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getDescription() + " " + value,
+                        (fieldNumber + 1) + ". " + currentField.getTitle() + " " + value,
                         standardFont
                 );
                 document.add(line);
@@ -139,28 +139,28 @@ public class PDFBuilder {
         for (ChoiceFieldDTO choiceField : schemaFields.getChoice()) {
             if (isFound) break;
             if (choiceField.getFieldNumber() == fieldNumber) {
-                currentField = new Field(choiceField.getDescription(), FieldType.CHOICE);
+                currentField = new Field(choiceField.getTitle(), FieldType.CHOICE);
                 isFound = true;
             }
         }
         for (SimpleFieldDTO simpleField : schemaFields.getSimple()) {
             if (isFound) break;
             if (simpleField.getFieldNumber() == fieldNumber) {
-                currentField = new Field(simpleField.getDescription(), FieldType.SIMPLE);
+                currentField = new Field(simpleField.getTitle(), FieldType.SIMPLE);
                 isFound = true;
             }
         }
         for (SliderFieldDTO sliderField : schemaFields.getSlider()) {
             if (isFound) break;
             if (sliderField.getFieldNumber() == fieldNumber) {
-                currentField = new Field(sliderField.getDescription(), FieldType.SLIDER);
+                currentField = new Field(sliderField.getTitle(), FieldType.SLIDER);
                 isFound = true;
             }
         }
         for (TextFieldDTO textField : schemaFields.getText()) {
             if (isFound) break;
             if (textField.getFieldNumber() == fieldNumber) {
-                currentField = new Field(textField.getDescription(), FieldType.TEXT);
+                currentField = new Field(textField.getTitle(), FieldType.TEXT);
                 isFound = true;
             }
         }
