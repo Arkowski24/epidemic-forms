@@ -65,8 +65,9 @@ const SliderView = ({
   title, description,
   minValue, maxValue, step,
   input, setInput,
+  highlighted,
 }) => (
-  <SingleInput title={title} description={description}>
+  <SingleInput title={title} description={description} highlighted={highlighted}>
     <RangeForm
       minValue={minValue}
       maxValue={maxValue}

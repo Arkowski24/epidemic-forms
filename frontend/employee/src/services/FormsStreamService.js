@@ -5,6 +5,7 @@ import { WS_URL } from '../config';
 const url = `${WS_URL}/requests`;
 const webSocket = new Stomp.client(url);
 webSocket.debug = () => {};
+webSocket.reconnect_delay = 1000;
 
 let token = null;
 let internalForms = null;
@@ -13,13 +14,14 @@ const setToken = (newToken) => {
   token = newToken;
 };
 
-const subscribe = (formHandler) => {
+const subscribe = (formHandler, setPatientPage) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
     formHandler(newForm);
   };
 
   const setFieldState = (newInput, index) => {
+    if (internalForms === null) return;
     const oldFieldState = internalForms.state[index];
     internalForms.state[index] = { ...oldFieldState, value: newInput };
 
@@ -87,8 +89,15 @@ const subscribe = (formHandler) => {
     }
   };
 
+  const handlePageChangeResponse = (message) => {
+    const response = JSON.parse(message.body);
+    setPatientPage(response.newPage);
+  };
+
   webSocket.connect({}, () => {
+    internalForms = null;
     webSocket.subscribe(`/updates/${token}`, handleResponse);
+    webSocket.subscribe(`/changes/${token}`, handlePageChangeResponse);
     webSocket.publish(webSocketsHelper.buildInitialRequest(token));
   });
 };

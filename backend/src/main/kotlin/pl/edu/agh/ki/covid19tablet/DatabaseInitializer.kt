@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField
+import pl.edu.agh.ki.covid19tablet.schema.fields.FieldType
 import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
 import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
@@ -54,16 +55,32 @@ class DatabaseInitializer {
                                 minValue = 0.0,
                                 maxValue = 100.0,
                                 step = 5.0
+                            ),
+                            SliderField(
+                                fieldNumber = 4,
+                                fieldType = FieldType.BLOCKED,
+                                title = "Fancy slider 2",
+                                description = "This slider is blocked.",
+                                minValue = 0.0,
+                                maxValue = 100.0,
+                                step = 5.0
                             )
                         ),
                         text = listOf(
                             TextField(
-                                fieldNumber = 4,
-                                title = "Easy question",
-                                description = "How tall are you?"
+                                fieldNumber = 5,
+                                fieldType = FieldType.HIDDEN,
+                                title = "Hidden field",
+                                description = "Patient cannot read this."
                             ),
                             TextField(
-                                fieldNumber = 5,
+                                fieldNumber = 6,
+                                title = "Easy question",
+                                fieldType = FieldType.BLOCKED,
+                                description = "How tall are you? - only employee can answer"
+                            ),
+                            TextField(
+                                fieldNumber = 7,
                                 title = "Hard question",
                                 description = "What have you eaten today?",
                                 isMultiline = true

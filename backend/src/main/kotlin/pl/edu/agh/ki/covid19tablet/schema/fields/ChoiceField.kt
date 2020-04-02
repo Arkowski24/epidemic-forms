@@ -15,6 +15,7 @@ data class ChoiceField(
     @GeneratedValue
     val id: ChoiceFieldId? = null,
     val fieldNumber: Int,
+    val fieldType: FieldType = FieldType.NORMAL,
 
     val title: String,
     val description: String = "",
@@ -28,6 +29,7 @@ fun ChoiceField.toDTO() =
     ChoiceFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        fieldType = fieldType,
         title = title,
         description = description,
         choices = choices,

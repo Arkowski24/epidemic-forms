@@ -14,6 +14,7 @@ data class SliderField(
     @GeneratedValue
     val id: SliderFieldId? = null,
     val fieldNumber: Int,
+    val fieldType: FieldType = FieldType.NORMAL,
 
     val title: String,
     val description: String = "",
@@ -27,6 +28,7 @@ fun SliderField.toDTO() =
     SliderFieldDTO(
         id = id!!,
         fieldNumber = fieldNumber,
+        fieldType = fieldType,
         title = title,
         description = description,
         minValue = minValue,

@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @ComponentScan
 class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
-        config.enableSimpleBroker("/updates/")
+        config.enableSimpleBroker("/updates/", "/changes/")
         config.setApplicationDestinationPrefixes("/app")
     }
 

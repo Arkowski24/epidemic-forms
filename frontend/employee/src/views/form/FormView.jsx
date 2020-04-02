@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Spinner } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [patientPage, setPatientPage] = useState(0);
   const { token } = useParams();
 
   const sendFormResponse = () => {
@@ -33,17 +34,22 @@ const FormView = () => {
     const setNewForm = (newForm) => setForm(newForm);
 
     formStreamService.setToken(token);
-    formStreamService.subscribe(setNewForm);
+    formStreamService.subscribe(setNewForm, setPatientPage);
   }, [token]);
 
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
-  if (form.status === 'SIGNED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
+  if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
+
+  const pageIndexMapping = form.schema
+    .map((f, i) => ({ type: f.fieldType, index: i }))
+    .filter((r) => r.type !== 'HIDDEN');
 
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -54,6 +60,7 @@ const FormView = () => {
           isMultiChoice={fieldSchema.isMultiChoice}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -68,6 +75,7 @@ const FormView = () => {
           step={fieldSchema.step}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -80,6 +88,7 @@ const FormView = () => {
           isMultiline={fieldSchema.isMultiline}
           input={input}
           setInput={setInput}
+          highlighted={highlighted}
         />
       );
     }
@@ -88,6 +97,7 @@ const FormView = () => {
       <SimpleView
         title={fieldSchema.title}
         description={fieldSchema.description}
+        highlighted={highlighted}
       />
     );
   };
@@ -105,26 +115,41 @@ const FormView = () => {
     // eslint-disable-next-line react/no-array-index-key
     .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 
-  const footer = (
-    <Row>
-      <div className="w-100 m-2 p-1 border-top">
-        <Button
-          className="btn float-right"
-          type="submit"
-          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
-          disabled={form.status !== 'FILLED'}
-        >
-          Submit
-        </Button>
-      </div>
-    </Row>
-  );
+  const footer = () => {
+    const spinner = (
+      <>
+        <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        {' Waiting for the patient...'}
+      </>
+    );
+
+    return (
+      <Row>
+        <div className="w-100 m-2 p-1 border-top">
+          <Button
+            className="btn float-right"
+            type="submit"
+            onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+            disabled={form.status !== 'FILLED'}
+          >
+            { form.status === 'NEW' ? spinner : 'Accept'}
+          </Button>
+        </div>
+      </Row>
+    );
+  };
 
   return (
     <Container>
       {header}
       {fields}
-      {footer}
+      {footer()}
     </Container>
   );
 };
