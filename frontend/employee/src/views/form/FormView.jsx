@@ -39,7 +39,7 @@ const FormView = () => {
 
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
-  if (form.status === 'SIGNED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
+  if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
   const pageIndexMapping = form.schema

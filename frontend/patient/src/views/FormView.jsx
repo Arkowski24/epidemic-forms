@@ -38,15 +38,7 @@ const FormView = () => {
   if (token === null) { return (<LoginView setToken={setToken} />); }
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
-  if (form.status === 'ACCEPTED') {
-    return (
-      <SignatureView
-        title={form.patientSignature.title}
-        description={form.patientSignature.description}
-        sendSignature={sendSignature}
-      />
-    );
-  }
+  if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'SIGNED') { return (<LoadingView message="Waiting for employee to sign." />); }
   if (form.status === 'CLOSED') { return (<EndView />); }
 
