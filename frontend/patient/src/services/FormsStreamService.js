@@ -3,6 +3,7 @@ import webSocketsHelper from '../helper/WebSocketsHelper';
 import { WS_URL } from '../config';
 
 const url = `${WS_URL}/requests`;
+
 const webSocket = new Stomp.client(url);
 webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;

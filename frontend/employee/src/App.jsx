@@ -7,10 +7,10 @@ import FormView from './views/form/FormView';
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/forms/:token">
+      <Route path="/employee/forms/:token">
         <FormView />
       </Route>
-      <Route path="/">
+      <Route path="/employee/">
         <FormsList />
       </Route>
     </Switch>

@@ -36,7 +36,7 @@ const FormsTable = ({ forms }) => {
     .map((h) => <th key={h}>{h}</th>);
 
   const buildFormRow = (form, index) => (
-    <tr key={form.id} onClick={() => history.push(`/forms/${form.id}`)}>
+    <tr key={form.id} onClick={() => history.push(`/employee/forms/${form.id}`)}>
       <td>{index}</td>
       <td>{form.formName}</td>
       <td>{form.schema.name}</td>
