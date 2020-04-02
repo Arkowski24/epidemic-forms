@@ -1,6 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException;
@@ -21,7 +22,7 @@ public class PDFGeneratorController {
         try {
             formDTO = pdfGeneratorService.getForm(id);
         } catch (FormNotFoundException e) {
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         pdfGeneratorService.generatePDF(formDTO);
