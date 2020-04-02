@@ -4,6 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.BooleanConverter;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.ConvertedBoolean;
 import pl.edu.agh.ki.covid19tablet.schema.fields.dto.*;
 import pl.edu.agh.ki.covid19tablet.state.dto.FormStateDTO;
 import pl.edu.agh.ki.covid19tablet.state.fields.dto.ChoiceFieldStateDTO;
@@ -71,12 +73,13 @@ public class PDFBuilder {
                     );
                     document.add(title);
 
-                    List<Boolean> answers = new ArrayList<>();
+                    List<ConvertedBoolean> answers = new ArrayList<>();
                     List<String> questions = new ArrayList<>();
 
                     for (ChoiceFieldStateDTO choiceFieldStateDTO : formState.getChoice()) {
                         if (choiceFieldStateDTO.getFieldNumber() == fieldNumber) {
-                            answers = choiceFieldStateDTO.getValue();
+                            BooleanConverter converter = new BooleanConverter();
+                            answers = converter.convert(choiceFieldStateDTO.getValue());
                             break;
                         }
                     }
