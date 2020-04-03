@@ -23,7 +23,8 @@ public class PDFGeneratorService {
 
     private static final String pdfDirPath = "/tmpformsdir";
     private static final String pdfNamePrefix = "Covid19Form";
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+    private static final SimpleDateFormat sdfFileSuffix = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
+    private static final SimpleDateFormat sdfPdfDateHeader = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
 
@@ -41,14 +42,8 @@ public class PDFGeneratorService {
 
         PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
         String pdfName = generatePDFName();
-        pdfBuilder.build(pdfName, form);
-    }
-
-    private String generatePDFName() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String currentTime = sdf.format(timestamp);
-
-        return pdfNamePrefix + "_" + currentTime + ".pdf";
+        String pdfCreationDate = generatePDFCreationDate();
+        pdfBuilder.build(pdfName, pdfCreationDate, form);
     }
 
     private void createPDFDirectory() throws IOException {
@@ -58,4 +53,17 @@ public class PDFGeneratorService {
             Files.createDirectories(pdfPath);
         }
     }
+
+    private String generatePDFName() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String currentTime = sdfFileSuffix.format(timestamp);
+
+        return pdfNamePrefix + "_" + currentTime + ".pdf";
+    }
+
+    private String generatePDFCreationDate() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        return sdfPdfDateHeader.format(timestamp);
+    }
+
 }
