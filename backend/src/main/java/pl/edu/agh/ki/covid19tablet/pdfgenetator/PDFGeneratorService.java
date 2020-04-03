@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @Service
@@ -21,7 +23,8 @@ public class PDFGeneratorService {
     @Autowired
     private FormRepository formRepository;
 
-    private static final String pdfName = "Covid19Form.pdf";
+    private static final String pdfNamePrefix = "Covid19Form";
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
 
 
 
@@ -36,9 +39,17 @@ public class PDFGeneratorService {
 
     public byte[] generatePDF(Form form) throws DocumentException, IOException {
         PDFBuilder pdfBuilder = new PDFBuilder();
+        String pdfName = generatePDFName();
         pdfBuilder.build(pdfName, form);
 
         Path pdfPath = Paths.get(pdfName);
         return Files.readAllBytes(pdfPath);
+    }
+
+    private String generatePDFName() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String currentTime = sdf.format(timestamp);
+
+        return pdfNamePrefix + "_" + currentTime + ".pdf";
     }
 }

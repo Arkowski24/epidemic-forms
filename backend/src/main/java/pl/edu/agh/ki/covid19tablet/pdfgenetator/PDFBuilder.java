@@ -36,6 +36,18 @@ public class PDFBuilder {
     private final static String signatureEmployeeName = "employeeSignature.jpg";
     private final static String signaturePatientName = "patientSignature.jpg";
 
+    private Font titleFont;
+    private Font questionFont;
+    private Font choiceQuestionFont;
+    private Font answerFont;
+
+    public PDFBuilder() throws DocumentException, IOException{
+        this.titleFont = createTitleFont(20);
+        this.questionFont = createQuestionFont(12);
+        this.choiceQuestionFont = createQuestionFont(10);
+        this.answerFont = createAnswerFont(10);
+    }
+
 
     public void build(String name, Form form) throws DocumentException, IOException {
         Document document = new Document();
@@ -44,7 +56,7 @@ public class PDFBuilder {
         document.open();
 
         document.addCreationDate();
-        addTitle(document, form);
+        addTitle(document, form.getFormName());
         addQuestions(document, form.getSchema().getFields(), form.getState());
         addSignatures(
                 document,
@@ -58,9 +70,8 @@ public class PDFBuilder {
         writer.close();
     }
 
-    private void addTitle(Document document, Form form) throws DocumentException, IOException {
-        Font titleFont = createTitleFont(20);
-        Paragraph title = new Paragraph(form.getFormName(), titleFont);
+    private void addTitle(Document document, String formName) throws DocumentException {
+        Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
     }
@@ -69,13 +80,9 @@ public class PDFBuilder {
             Document document,
             SchemaFields schemaFields,
             FormState formState
-        ) throws DocumentException, IOException {
+        ) throws DocumentException {
 
-        Font questionFont = createQuestionFont(12);
-        Font choiceQuestionFont = createQuestionFont(10);
-        Font answerFont = createAnswerFont(10);
         int fieldNumber = 0;
-
         while (true) {
             Field currentField = findCurrentField(schemaFields, fieldNumber);
             if (currentField == null) {
@@ -193,15 +200,15 @@ public class PDFBuilder {
         resizeSignature(patientSignature, signaturePatientName);
 
         PdfPTable imageTable = new PdfPTable(2);
-        imageTable.setTotalWidth(document.getPageSize().getWidth() + 100);
-        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployeeName), Element.ALIGN_CENTER));
-        imageTable.addCell(getImageCell(Image.getInstance(signaturePatientName), Element.ALIGN_CENTER));
+        imageTable.setTotalWidth(document.getPageSize().getWidth());
+        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployeeName)));
+        imageTable.addCell(getImageCell(Image.getInstance(signaturePatientName)));
         document.add(imageTable);
 
         PdfPTable titleTable = new PdfPTable(2);
         titleTable.setTotalWidth(document.getPageSize().getWidth());
-        titleTable.addCell(getTitleCell(new Phrase(employeeSignatureTitle), Element.ALIGN_CENTER));
-        titleTable.addCell(getTitleCell(new Phrase(patientSignatureTitle), Element.ALIGN_CENTER));
+        titleTable.addCell(getTitleCell(new Phrase(employeeSignatureTitle, questionFont)));
+        titleTable.addCell(getTitleCell(new Phrase(patientSignatureTitle, questionFont)));
         document.add(titleTable);
     }
 
@@ -218,16 +225,16 @@ public class PDFBuilder {
         ImageIO.write(signatureImageResized, "jpg", new File(name) );
     }
 
-    private PdfPCell getImageCell(Image image, int alignment) {
+    private PdfPCell getImageCell(Image image) {
         PdfPCell cell = new PdfPCell(image);
-        cell.setHorizontalAlignment(alignment);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
         return cell;
     }
 
-    private PdfPCell getTitleCell(Phrase phrase, int alignment) {
+    private PdfPCell getTitleCell(Phrase phrase) {
         PdfPCell cell = new PdfPCell(phrase);
-        cell.setHorizontalAlignment(alignment);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
         return cell;
     }
