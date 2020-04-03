@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetailsService
 
 
@@ -48,6 +50,17 @@ class SecurityConfig(
         auth.userDetailsService(employeeDetailsService)
             .passwordEncoder(passwordEncoder())
     }
+
+    @Bean
+    fun corsConfigurer(): WebMvcConfigurer =
+        object : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                registry
+                    .addMapping("/**")
+                    .allowedOrigins("*")
+                    .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
+            }
+        }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     override fun authenticationManagerBean(): AuthenticationManager {
