@@ -47,6 +47,7 @@ public class PDFBuilder {
         ) throws DocumentException, IOException {
 
         Font questionFont = createQuestionFont(12);
+        Font choiceQuestionFont = createQuestionFont(10);
         Font answerFont = createAnswerFont(10);
         int fieldNumber = 0;
 
@@ -81,8 +82,16 @@ public class PDFBuilder {
                 }
 
                 for (int i = 0; i < answers.size() && i < questions.size(); i++) {
-                    String line = "    " + questions.get(i) + " " + answers.get(i);
-                    Paragraph paragraph = new Paragraph(line, questionFont);
+                    String question = "    " + questions.get(i);
+                    String answer = " " + answers.get(i);
+
+                    Chunk chunkQuestion = new Chunk(question, choiceQuestionFont);
+                    Chunk chunkAnswer = new Chunk(answer, answerFont);
+
+                    Paragraph paragraph = new Paragraph();
+                    paragraph.add(chunkQuestion);
+                    paragraph.add(chunkAnswer);
+
                     document.add(paragraph);
                 }
             }
@@ -141,6 +150,8 @@ public class PDFBuilder {
                 document.add(answer);
             }
 
+            addEmptyLine(document, questionFont);
+
             fieldNumber++;
         }
     }
@@ -179,6 +190,11 @@ public class PDFBuilder {
         }
 
         return currentField;
+    }
+
+    private void addEmptyLine(Document document, Font font) throws DocumentException {
+        Paragraph emptyLine = new Paragraph(" ", font);
+        document.add(emptyLine);
     }
 
     private Font createTitleFont(int size) throws DocumentException, IOException {
