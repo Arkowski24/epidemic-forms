@@ -5,5 +5,3 @@ spring.jpa:
     hibernate.temp.use_jdbc_metadata_defaults: false
   hibernate:
     ddl-auto: update
-
-app.security.tokenSecretKey: MjM0Njc4OTY3ODkyMzQ2Nzg5MjM0MjM0Njc4OTIzNDY3ODkyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQ=
