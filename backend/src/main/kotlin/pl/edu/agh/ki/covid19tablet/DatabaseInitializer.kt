@@ -13,13 +13,18 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
+import pl.edu.agh.ki.covid19tablet.user.employee.Employee
+import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
 
 @Component
 @Profile("!prod")
 class DatabaseInitializer {
 
     @Bean
-    fun initializeDatabase(schemaRepository: SchemaRepository) =
+    fun initializeDatabase(
+        schemaRepository: SchemaRepository,
+        employeeRepository: EmployeeRepository
+    ) =
         CommandLineRunner {
             schemaRepository.save(
                 Schema(
@@ -95,6 +100,12 @@ class DatabaseInitializer {
                         title = "Sign field - Employee",
                         description = "I certify everything is all-right."
                     )
+                )
+            )
+            employeeRepository.save(
+                Employee(
+                    username = "Admin",
+                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
                 )
             )
         }

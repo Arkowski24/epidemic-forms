@@ -2,6 +2,7 @@ package pl.edu.agh.ki.covid19tablet.form
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,6 +14,7 @@ import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_CREATE
 import javax.validation.Valid
 
 @RestController
@@ -35,6 +37,7 @@ class FormController(
         }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('$FORM_CREATE')")
     fun createForm(@Valid @RequestBody request: CreateFormRequest): ResponseEntity<FormDTO> =
         try {
             val form = formService.createForm(request)
