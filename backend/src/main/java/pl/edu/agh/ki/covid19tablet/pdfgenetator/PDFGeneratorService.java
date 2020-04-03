@@ -25,18 +25,18 @@ public class PDFGeneratorService {
 
 
 
-    public FormDTO getForm(long id) {
+    public Form getForm(long id) {
         Optional<Form> form = formRepository.findById(id);
         if (form.isPresent()) {
-            return FormKt.toDTO(form.get());
+            return form.get();
         }
 
         throw new FormNotFoundException();
     }
 
-    public byte[] generatePDF(FormDTO formDTO) throws DocumentException, IOException {
+    public byte[] generatePDF(Form form) throws DocumentException, IOException {
         PDFBuilder pdfBuilder = new PDFBuilder();
-        pdfBuilder.build(pdfName, formDTO);
+        pdfBuilder.build(pdfName, form);
 
         Path pdfPath = Paths.get(pdfName);
         return Files.readAllBytes(pdfPath);

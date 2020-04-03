@@ -3,14 +3,14 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
-import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO;
+import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.BooleanConverter;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.ConvertedBoolean;
-import pl.edu.agh.ki.covid19tablet.schema.fields.dto.*;
-import pl.edu.agh.ki.covid19tablet.state.dto.FormStateDTO;
-import pl.edu.agh.ki.covid19tablet.state.fields.dto.ChoiceFieldStateDTO;
-import pl.edu.agh.ki.covid19tablet.state.fields.dto.SliderFieldStateDTO;
-import pl.edu.agh.ki.covid19tablet.state.fields.dto.TextFieldStateDTO;
+import pl.edu.agh.ki.covid19tablet.schema.fields.*;
+import pl.edu.agh.ki.covid19tablet.state.FormState;
+import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
+import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState;
+import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,30 +19,30 @@ import java.util.List;
 
 public class PDFBuilder {
 
-    public void build(String name, FormDTO formDTO) throws DocumentException, IOException {
+    public void build(String name, Form form) throws DocumentException, IOException {
         Document document = new Document();
 
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(name));
         document.open();
 
         document.addCreationDate();
-        addTitle(document, formDTO);
-        addQuestions(formDTO.getSchema().getFields(), formDTO.getState(), document);
+        addTitle(document, form);
+        addQuestions(form.getSchema().getFields(), form.getState(), document);
 
         document.close();
         writer.close();
     }
 
-    private void addTitle(Document document, FormDTO formDTO) throws DocumentException, IOException {
+    private void addTitle(Document document, Form form) throws DocumentException, IOException {
         Font titleFont = createTitleFont(20);
-        Paragraph title = new Paragraph(formDTO.getFormName(), titleFont);
+        Paragraph title = new Paragraph(form.getFormName(), titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
     }
 
     private void addQuestions(
-            SchemaFieldsDTO schemaFields,
-            FormStateDTO formState,
+            SchemaFields schemaFields,
+            FormState formState,
             Document document
         ) throws DocumentException, IOException {
 
@@ -67,16 +67,16 @@ public class PDFBuilder {
                 List<ConvertedBoolean> answers = new ArrayList<>();
                 List<String> questions = new ArrayList<>();
 
-                for (ChoiceFieldStateDTO choiceFieldStateDTO : formState.getChoice()) {
-                    if (choiceFieldStateDTO.getFieldNumber() == fieldNumber) {
+                for (ChoiceFieldState choiceFieldState : formState.getChoice()) {
+                    if (choiceFieldState.getField().getFieldNumber() == fieldNumber) {
                         BooleanConverter converter = new BooleanConverter();
-                        answers = converter.convert(choiceFieldStateDTO.getValue());
+                        answers = converter.convert(choiceFieldState.getValue());
                         break;
                     }
                 }
-                for (ChoiceFieldDTO choiceFieldDTO : schemaFields.getChoice()) {
-                    if (choiceFieldDTO.getFieldNumber() == fieldNumber) {
-                        questions = choiceFieldDTO.getChoices();
+                for (ChoiceField choiceField : schemaFields.getChoice()) {
+                    if (choiceField.getFieldNumber() == fieldNumber) {
+                        questions = choiceField.getChoices();
                         break;
                     }
                 }
@@ -107,9 +107,9 @@ public class PDFBuilder {
             if (currentField.getFieldType().equals(FieldType.SLIDER)) {
                 double value = 0.0;
 
-                for (SliderFieldStateDTO sliderFieldStateDTO : formState.getSlider()) {
-                    if (sliderFieldStateDTO.getFieldNumber() == fieldNumber) {
-                        value = sliderFieldStateDTO.getValue();
+                for (SliderFieldState sliderFieldState : formState.getSlider()) {
+                    if (sliderFieldState.getField().getFieldNumber() == fieldNumber) {
+                        value = sliderFieldState.getValue();
                         break;
                     }
                 }
@@ -130,9 +130,9 @@ public class PDFBuilder {
             if (currentField.getFieldType().equals(FieldType.TEXT)) {
                 String value = "";
 
-                for (TextFieldStateDTO textFieldStateDTO : formState.getText()) {
-                    if (textFieldStateDTO.getFieldNumber() == fieldNumber) {
-                        value = textFieldStateDTO.getValue();
+                for (TextFieldState textFieldState : formState.getText()) {
+                    if (textFieldState.getField().getFieldNumber() == fieldNumber) {
+                        value = textFieldState.getValue();
                         break;
                     }
                 }
@@ -156,32 +156,32 @@ public class PDFBuilder {
         }
     }
 
-    private Field findCurrentField(SchemaFieldsDTO schemaFields, int fieldNumber) {
+    private Field findCurrentField(SchemaFields schemaFields, int fieldNumber) {
         boolean isFound = false;
         Field currentField = null;
 
-        for (ChoiceFieldDTO choiceField : schemaFields.getChoice()) {
+        for (ChoiceField choiceField : schemaFields.getChoice()) {
             if (isFound) break;
             if (choiceField.getFieldNumber() == fieldNumber) {
                 currentField = new Field(choiceField.getTitle(), FieldType.CHOICE);
                 isFound = true;
             }
         }
-        for (SimpleFieldDTO simpleField : schemaFields.getSimple()) {
+        for (SimpleField simpleField : schemaFields.getSimple()) {
             if (isFound) break;
             if (simpleField.getFieldNumber() == fieldNumber) {
                 currentField = new Field(simpleField.getTitle(), FieldType.SIMPLE);
                 isFound = true;
             }
         }
-        for (SliderFieldDTO sliderField : schemaFields.getSlider()) {
+        for (SliderField sliderField : schemaFields.getSlider()) {
             if (isFound) break;
             if (sliderField.getFieldNumber() == fieldNumber) {
                 currentField = new Field(sliderField.getTitle(), FieldType.SLIDER);
                 isFound = true;
             }
         }
-        for (TextFieldDTO textField : schemaFields.getText()) {
+        for (TextField textField : schemaFields.getText()) {
             if (isFound) break;
             if (textField.getFieldNumber() == fieldNumber) {
                 currentField = new Field(textField.getTitle(), FieldType.TEXT);
