@@ -33,7 +33,7 @@ class SecurityConfig(
             .csrf()
                 .disable()
             .cors()
-                .disable()
+                .and()
             .sessionManagement()
                 .disable()
             .authorizeRequests()

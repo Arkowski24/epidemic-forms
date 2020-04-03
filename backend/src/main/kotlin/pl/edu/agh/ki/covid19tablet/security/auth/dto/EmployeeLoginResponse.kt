@@ -1,5 +1,5 @@
 package pl.edu.agh.ki.covid19tablet.security.auth.dto
 
-data class LoginResponse(
+data class EmployeeLoginResponse(
     val token: String
 )

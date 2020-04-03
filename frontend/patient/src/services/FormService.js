@@ -2,22 +2,19 @@ import axios from 'axios';
 import { API_URL } from '../config';
 
 const baseUrl = `${API_URL}/forms`;
+let credentials = null;
 
-const getForms = () => axios
-  .get(`${baseUrl}/`)
-  .then((res) => res.data);
-
-const getForm = (formId) => axios
-  .get(`${baseUrl}/${formId}`)
-  .then((res) => res.data);
-
-const createForm = (schemaId, formName) => axios
-  .post(`${baseUrl}/`, { schemaId, formName })
-  .then((res) => res.data);
+const setCredentials = (newCredentials) => {
+  credentials = newCredentials;
+};
 
 const createSignature = (formId, signature) => axios
-  .post(`${baseUrl}/${formId}/signature/patient`, { signature });
+  .post(
+    `${baseUrl}/${formId}/signature/patient`,
+    { signature },
+    { headers: { Authorization: `Bearer ${credentials.token}` } },
+  );
 
 export default {
-  getForms, getForm, createForm, createSignature,
+  setCredentials, createSignature,
 };

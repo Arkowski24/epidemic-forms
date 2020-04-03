@@ -15,7 +15,7 @@ import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [token, setToken] = useState(null);
+  const [credentials, setCredentials] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const sendFormResponse = () => {
@@ -28,14 +28,15 @@ const FormView = () => {
   };
 
   useEffect(() => {
-    if (token === null) return;
+    if (credentials === null) return;
     const setNewForm = (newForm) => setForm(newForm);
 
-    formStreamService.setToken(token);
+    formStreamService.setCredentials(credentials);
+    formService.setCredentials(credentials);
     formStreamService.subscribe(setNewForm);
-  }, [token]);
+  }, [credentials]);
 
-  if (token === null) { return (<LoginView setToken={setToken} />); }
+  if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
   if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }

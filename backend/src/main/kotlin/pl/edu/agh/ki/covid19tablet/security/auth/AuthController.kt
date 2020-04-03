@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.security.auth.dto.EmployeeLoginRequest
-import pl.edu.agh.ki.covid19tablet.security.auth.dto.LoginResponse
+import pl.edu.agh.ki.covid19tablet.security.auth.dto.EmployeeLoginResponse
 import pl.edu.agh.ki.covid19tablet.security.auth.dto.PatientLoginRequest
+import pl.edu.agh.ki.covid19tablet.security.auth.dto.PatientLoginResponse
 
 @RestController
 @RequestMapping("/login")
@@ -19,12 +20,12 @@ class AuthController(
 ) {
     @PostMapping("/employee")
     @PreAuthorize("isAnonymous()")
-    fun loginEmployee(@RequestBody request: EmployeeLoginRequest): LoginResponse =
+    fun loginEmployee(@RequestBody request: EmployeeLoginRequest): EmployeeLoginResponse =
         authService.loginEmployee(request)
 
     @PostMapping("/patient")
     @PreAuthorize("isAnonymous()")
-    fun loginPatient(@RequestBody request: PatientLoginRequest): ResponseEntity<LoginResponse> =
+    fun loginPatient(@RequestBody request: PatientLoginRequest): ResponseEntity<PatientLoginResponse> =
         try {
             val response = authService.loginPatient(request)
             ResponseEntity(response, HttpStatus.OK)

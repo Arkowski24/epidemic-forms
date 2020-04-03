@@ -8,11 +8,11 @@ const webSocket = new Stomp.client(url);
 webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;
 
-let token = null;
+let credentials = null;
 let internalForms = null;
 
-const setToken = (newToken) => {
-  token = newToken;
+const setCredentials = (newCredentials) => {
+  credentials = newCredentials;
 };
 
 const subscribe = (formHandler) => {
@@ -90,10 +90,10 @@ const subscribe = (formHandler) => {
     }
   };
 
-  webSocket.connect({}, () => {
+  webSocket.connect({ Authorization: `Bearer ${credentials.token}` }, () => {
     internalForms = null;
-    webSocket.subscribe(`/updates/${token}`, handleResponse);
-    webSocket.publish(webSocketsHelper.buildInitialRequest(token));
+    webSocket.subscribe(`/updates/${credentials.formId}`, handleResponse);
+    webSocket.publish(webSocketsHelper.buildInitialRequest(credentials.formId));
   });
 };
 
@@ -106,23 +106,23 @@ const sendInput = (newInput, index) => {
   const payload = JSON.stringify({ id: stateId, newValue: newInput });
   const request = JSON.stringify({ requestType, payload });
 
-  webSocket.publish({ destination: `/app/requests/${token}`, body: request });
+  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
 
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
 
-  webSocket.publish({ destination: `/app/requests/${token}`, body: request });
+  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
 
 const sendPageChange = (newPage) => {
   const requestType = 'NEW_PAGE';
   const request = JSON.stringify({ requestType, newPage });
 
-  webSocket.publish({ destination: `/changes/${token}`, body: request });
+  webSocket.publish({ destination: `/changes/${credentials.formId}`, body: request });
 };
 
 export default {
-  setToken, subscribe, sendInput, sendMove, sendPageChange,
+  setCredentials, subscribe, sendInput, sendMove, sendPageChange,
 };

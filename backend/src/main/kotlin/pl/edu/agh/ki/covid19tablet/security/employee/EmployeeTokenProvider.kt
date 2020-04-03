@@ -28,6 +28,14 @@ class EmployeeTokenProvider(
         }
             .getOrNull()
 
+    fun isEmployee(token: String): Boolean =
+        kotlin.runCatching {
+            tokenService
+                .parseToken(token)
+                .getValue("employee") as Boolean
+        }
+            .getOrDefault(false)
+
     companion object {
         private val TokenLifetime = Duration.ofDays(7)
     }

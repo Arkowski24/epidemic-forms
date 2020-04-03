@@ -14,6 +14,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.security.patient.PatientTokenProvider
 import pl.edu.agh.ki.covid19tablet.user.patient.Patient
+import pl.edu.agh.ki.covid19tablet.user.patient.PatientRepository
 import java.util.Base64
 
 interface FormService {
@@ -30,6 +31,7 @@ interface FormService {
 @Service
 class FormServiceImpl(
     private val formRepository: FormRepository,
+    private val patientRepository: PatientRepository,
     private val signatureRepository: SignatureRepository,
     private val schemaRepository: SchemaRepository,
     private val patientTokenProvider: PatientTokenProvider
@@ -51,15 +53,18 @@ class FormServiceImpl(
             .findById(request.schemaId)
             .orElseThrow { SchemaNotFoundException() }
 
+        val patient = Patient()
         val form = formRepository.save(
             Form(
                 schema = schema,
                 formName = request.formName,
-                patient = Patient(),
+                patient = patient,
                 createdBy = employeeDetails.employee,
                 state = schema.fields.buildInitialState()
             )
         )
+        patientRepository.save(patient.copy(form = form))
+
         return form.toDTO()
     }
 
