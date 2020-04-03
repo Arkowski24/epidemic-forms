@@ -107,11 +107,11 @@ class DatabaseInitializer {
                         )
                     ),
                     patientSignature = SignatureField(
-                        title = "Sign field - Patient",
+                        title = "Podpis Pacjenta",
                         description = "I hereby agree everything is alright."
                     ),
                     employeeSignature = SignatureField(
-                        title = "Sign field - Employee",
+                        title = "Podpis Lekarza",
                         description = "I certify everything is all-right."
                     )
                 )
