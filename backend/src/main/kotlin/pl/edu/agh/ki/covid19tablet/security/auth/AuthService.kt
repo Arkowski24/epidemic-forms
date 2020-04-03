@@ -12,11 +12,15 @@ import pl.edu.agh.ki.covid19tablet.security.auth.dto.PatientLoginResponse
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeTokenProvider
 import pl.edu.agh.ki.covid19tablet.security.patient.PatientTokenProvider
+import pl.edu.agh.ki.covid19tablet.user.dto.PatientDTO
 import pl.edu.agh.ki.covid19tablet.user.patient.PatientRepository
+import pl.edu.agh.ki.covid19tablet.user.patient.toDTO
 
 interface AuthService {
     fun loginEmployee(request: EmployeeLoginRequest): EmployeeLoginResponse
     fun loginPatient(request: PatientLoginRequest): PatientLoginResponse
+
+    fun getCurrentPatient(token: String): PatientDTO
 }
 
 @Service
@@ -50,4 +54,11 @@ class AuthServiceImpl(
             formId = patient.form?.id!!
         )
     }
+
+    override fun getCurrentPatient(token: String): PatientDTO =
+        patientTokenProvider
+            .parseToken(token)
+            ?.let { patientId -> patientRepository.findByIdOrNull(patientId) }
+            ?.toDTO()
+            ?: throw PatientUnauthorizedException()
 }
