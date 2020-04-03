@@ -57,12 +57,9 @@ public class PDFBuilder {
     public void build(String name, Form form) throws DocumentException, IOException {
         Document document = new Document();
 
-        Path path = Paths.get(dirPath, name);
-        System.out.println(path.toString());
+        Path savingPath = Paths.get(dirPath, name);
 
-        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dirPath.toString() + name)));
-        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dirPath.toString())));
-        PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(path));
+        PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(savingPath));
         document.open();
 
         document.addCreationDate();
