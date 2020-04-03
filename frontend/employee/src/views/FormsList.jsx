@@ -6,8 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 
-import formService from '../../services/FormService';
-import schemaService from '../../services/SchemaService';
+import formService from '../services/FormService';
+import schemaService from '../services/SchemaService';
 
 const Header = ({ setVisible }) => (
   <Row className="w-100 m-1 p-1 border-bottom">
@@ -32,7 +32,7 @@ const Header = ({ setVisible }) => (
 const FormsTable = ({ forms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Form Name', 'Schema', 'Token']
+  const headers = ['#', 'Form Name', 'Schema', 'Created by', 'Token']
     .map((h) => <th key={h}>{h}</th>);
 
   const buildFormRow = (form, index) => (
@@ -40,7 +40,8 @@ const FormsTable = ({ forms }) => {
       <td>{index}</td>
       <td>{form.formName}</td>
       <td>{form.schema.name}</td>
-      <td>{form.id}</td>
+      <td>{form.createdBy.fullName}</td>
+      <td>{form.patient.id}</td>
     </tr>
   );
   const patientForms = forms
@@ -127,9 +128,11 @@ const NewFormModal = ({
 };
 
 const FormsList = () => {
+  const [token, setToken] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
   const [schemas, setSchemas] = useState([]);
+  const history = useHistory();
 
   const createForm = async (schemaId, formName) => {
     const form = await formService.createForm(schemaId, formName);
@@ -146,8 +149,17 @@ const FormsList = () => {
       setSchemas(schemaResponse);
     }
 
+    if (token === null) {
+      const newToken = localStorage.getItem('token');
+      if (!newToken) history.push('/employee/login');
+      setToken(newToken);
+      return;
+    }
+
+    formService.setToken(token);
+    schemaService.setToken(token);
     fetchData();
-  }, []);
+  }, [history, token]);
 
   return (
     <Container>

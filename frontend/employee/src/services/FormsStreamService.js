@@ -3,15 +3,16 @@ import webSocketsHelper from '../helper/WebSocketsHelper';
 import { WS_URL } from '../config';
 
 const url = `${WS_URL}/requests`;
+
 const webSocket = new Stomp.client(url);
 webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;
 
-let token = null;
+let credentials = null;
 let internalForms = null;
 
-const setToken = (newToken) => {
-  token = newToken;
+const setCredentials = (newCredentials) => {
+  credentials = newCredentials;
 };
 
 const subscribe = (formHandler, setPatientPage) => {
@@ -94,11 +95,11 @@ const subscribe = (formHandler, setPatientPage) => {
     setPatientPage(response.newPage);
   };
 
-  webSocket.connect({}, () => {
+  webSocket.connect({ Authorization: `Bearer ${credentials.token}` }, () => {
     internalForms = null;
-    webSocket.subscribe(`/updates/${token}`, handleResponse);
-    webSocket.subscribe(`/changes/${token}`, handlePageChangeResponse);
-    webSocket.publish(webSocketsHelper.buildInitialRequest(token));
+    webSocket.subscribe(`/updates/${credentials.formId}`, handleResponse);
+    webSocket.subscribe(`/changes/${credentials.formId}`, handlePageChangeResponse);
+    webSocket.publish(webSocketsHelper.buildInitialRequest(credentials.formId));
   });
 };
 
@@ -111,16 +112,16 @@ const sendInput = (newInput, index) => {
   const payload = JSON.stringify({ id: stateId, newValue: newInput });
   const request = JSON.stringify({ requestType, payload });
 
-  webSocket.publish({ destination: `/app/requests/${token}`, body: request });
+  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
 
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
 
-  webSocket.publish({ destination: `/app/requests/${token}`, body: request });
+  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
 
 export default {
-  setToken, subscribe, sendInput, sendMove,
+  setCredentials, subscribe, sendInput, sendMove,
 };

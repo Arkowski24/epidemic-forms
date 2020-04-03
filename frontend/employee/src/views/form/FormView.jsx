@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container, Spinner } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
@@ -18,8 +18,10 @@ import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [token, setToken] = useState(null);
   const [patientPage, setPatientPage] = useState(0);
-  const { token } = useParams();
+  const { formId } = useParams();
+  const history = useHistory();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('ACCEPTED');
@@ -33,11 +35,21 @@ const FormView = () => {
   useEffect(() => {
     const setNewForm = (newForm) => setForm(newForm);
 
-    formStreamService.setToken(token);
-    formStreamService.subscribe(setNewForm, setPatientPage);
-  }, [token]);
+    if (token === null) {
+      const newToken = localStorage.getItem('token');
+      if (!newToken) history.push('/employee/login');
+      setToken(newToken);
+      return;
+    }
+    if (formId === null) history.push('/employee/');
 
-  if (form === null) { return (<LoadingView />); }
+
+    formService.setToken(token);
+    formStreamService.setCredentials({ token, formId });
+    formStreamService.subscribe(setNewForm, setPatientPage);
+  }, [formId, token, history]);
+
+  if (form === null || token === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
   if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }

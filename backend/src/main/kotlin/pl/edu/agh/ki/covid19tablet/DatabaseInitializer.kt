@@ -105,6 +105,7 @@ class DatabaseInitializer {
             employeeRepository.save(
                 Employee(
                     username = "Admin",
+                    fullName = "Żanetka Letta",
                     passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
                 )
             )
