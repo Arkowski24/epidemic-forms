@@ -24,8 +24,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,18 +43,26 @@ public class PDFBuilder {
     private Font choiceQuestionFont;
     private Font answerFont;
 
-    public PDFBuilder() throws DocumentException, IOException{
+    private String dirPath;
+
+    public PDFBuilder(String dirPath) throws DocumentException, IOException{
         this.titleFont = createTitleFont(20);
         this.questionFont = createQuestionFont(12);
         this.choiceQuestionFont = createQuestionFont(10);
         this.answerFont = createAnswerFont(10);
-    }
 
+        this.dirPath = dirPath;
+    }
 
     public void build(String name, Form form) throws DocumentException, IOException {
         Document document = new Document();
 
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(name));
+        Path path = Paths.get(dirPath, name);
+        System.out.println(path.toString());
+
+        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dirPath.toString() + name)));
+        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dirPath.toString())));
+        PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(path));
         document.open();
 
         document.addCreationDate();

@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException;
 import pl.edu.agh.ki.covid19tablet.form.Form;
-import pl.edu.agh.ki.covid19tablet.form.FormKt;
 import pl.edu.agh.ki.covid19tablet.form.FormRepository;
-import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,6 +21,7 @@ public class PDFGeneratorService {
     @Autowired
     private FormRepository formRepository;
 
+    private static final String pdfDirPath = "/tmpformsdir";
     private static final String pdfNamePrefix = "Covid19Form";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS");
 
@@ -37,13 +36,12 @@ public class PDFGeneratorService {
         throw new FormNotFoundException();
     }
 
-    public byte[] generatePDF(Form form) throws DocumentException, IOException {
-        PDFBuilder pdfBuilder = new PDFBuilder();
+    public void generatePDF(Form form) throws DocumentException, IOException {
+        createPDFDirectory();
+
+        PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
         String pdfName = generatePDFName();
         pdfBuilder.build(pdfName, form);
-
-        Path pdfPath = Paths.get(pdfName);
-        return Files.readAllBytes(pdfPath);
     }
 
     private String generatePDFName() {
@@ -51,5 +49,13 @@ public class PDFGeneratorService {
         String currentTime = sdf.format(timestamp);
 
         return pdfNamePrefix + "_" + currentTime + ".pdf";
+    }
+
+    private void createPDFDirectory() throws IOException {
+        Path pdfPath = Paths.get(pdfDirPath);
+        boolean pdfDirExists = Files.exists(pdfPath);
+        if (!pdfDirExists) {
+            Files.createDirectories(pdfPath);
+        }
     }
 }

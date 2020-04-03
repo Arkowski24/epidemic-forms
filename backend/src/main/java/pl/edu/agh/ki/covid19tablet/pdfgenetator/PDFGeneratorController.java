@@ -29,14 +29,13 @@ public class PDFGeneratorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        byte[] content;
         try {
-            content = pdfGeneratorService.generatePDF(form);
+            pdfGeneratorService.generatePDF(form);
         }
         catch (DocumentException | IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(content, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
