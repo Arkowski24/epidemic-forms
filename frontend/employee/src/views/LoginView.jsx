@@ -12,14 +12,22 @@ const LoginView = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) history.push('/employee/');
+    const fetchToken = async () => {
+      const newToken = localStorage.getItem('token');
+      if (!newToken) return;
+
+      authService.me(newToken)
+        .then(() => history.push('/employee/'))
+        .catch(() => { localStorage.removeItem('token'); });
+    };
+
+    fetchToken();
   },
   [history]);
 
   const handleLogin = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
       const credentials = await authService.login(username, password);
       localStorage.setItem('token', credentials.token);
       history.push('/employee/');
@@ -41,7 +49,6 @@ const LoginView = () => {
                   type="text"
                   value={username}
                   onChange={(event) => setUsername(event.target.value)}
-                  isInvalid={error}
                 />
               </Col>
             </Form.Row>

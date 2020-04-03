@@ -15,6 +15,7 @@ import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 
 import SignatureView from './signature/SignatureView';
+import authService from '../../services/AuthService';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -33,20 +34,25 @@ const FormView = () => {
   };
 
   useEffect(() => {
-    const setNewForm = (newForm) => setForm(newForm);
-
-    if (token === null) {
+    const fetchTokenAndData = async () => {
+      if (token !== null) return;
       const newToken = localStorage.getItem('token');
       if (!newToken) history.push('/employee/login');
-      setToken(newToken);
-      return;
-    }
-    if (formId === null) history.push('/employee/');
 
+      try {
+        await authService.me(newToken);
 
-    formService.setToken(token);
-    formStreamService.setCredentials({ token, formId });
-    formStreamService.subscribe(setNewForm, setPatientPage);
+        formService.setToken(newToken);
+        formStreamService.setCredentials({ token: newToken, formId });
+        const setNewForm = (newForm) => setForm(newForm);
+        formStreamService.subscribe(setNewForm, setPatientPage);
+        setToken(newToken);
+      } catch (e) {
+        localStorage.removeItem('token');
+        history.push('/employee/login');
+      }
+    };
+    fetchTokenAndData();
   }, [formId, token, history]);
 
   if (form === null || token === null) { return (<LoadingView />); }

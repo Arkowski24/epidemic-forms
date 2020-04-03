@@ -6,4 +6,4 @@ spring.jpa:
   hibernate:
     ddl-auto: update
 
-app.security.tokenSecretKey: ZpQFGmBsbZMSu9Ep8lsKn1Sd7h3HdxNhWJg6T3FUbnKarjTotesXDh3pGi59sLkHd894g9v9SSv4MghICfMJ2g==
+app.security.tokenSecretKey: MjM0Njc4OTY3ODkyMzQ2Nzg5MjM0MjM0Njc4OTIzNDY3ODkyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQ=

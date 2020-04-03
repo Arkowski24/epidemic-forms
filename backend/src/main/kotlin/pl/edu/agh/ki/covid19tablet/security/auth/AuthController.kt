@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -40,14 +41,14 @@ class AuthController(
             ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
 
-    @PostMapping("/me/employee")
+    @GetMapping("/me/employee")
     @PreAuthorize("isAuthenticated()")
     fun getCurrentEmployee(@AuthenticationPrincipal principal: EmployeeDetails): EmployeeDTO =
         principal
             .employee
             .toDTO()
 
-    @PostMapping("/me/patient")
+    @GetMapping("/me/patient")
     fun getCurrentPatient(
         @RequestHeader(HttpHeaders.AUTHORIZATION) authorization: String
     ): ResponseEntity<PatientDTO> =

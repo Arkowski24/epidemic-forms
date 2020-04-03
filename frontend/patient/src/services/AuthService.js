@@ -1,10 +1,17 @@
 import axios from 'axios';
 import { API_URL } from '../config';
 
-const baseUrl = `${API_URL}/login/patient`;
+const baseUrl = `${API_URL}/auth`;
 
 const login = (pinCode) => axios
-  .post(`${baseUrl}/`, { pinCode })
+  .post(`${baseUrl}/login/patient`, { pinCode })
   .then((res) => res.data);
 
-export default { login };
+const me = (token) => axios
+  .get(
+    `${baseUrl}/me/patient`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  .then((res) => res.data);
+
+export default { login, me };

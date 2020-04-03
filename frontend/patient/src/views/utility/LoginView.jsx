@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 
@@ -8,10 +8,21 @@ const LoginView = ({ setCredentials }) => {
   const [text, setText] = useState('');
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    const rawCredentials = localStorage.getItem('credentials');
+    if (!rawCredentials) return;
+    const credentials = JSON.parse(rawCredentials);
+
+    authService.me(credentials.token)
+      .then(() => setCredentials(credentials))
+      .catch(() => localStorage.removeItem('credentials'));
+  }, [setCredentials]);
+
   const handleLogin = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
       const credentials = await authService.login(text);
+      localStorage.setItem('credentials', JSON.stringify(credentials));
       setCredentials(credentials);
     } catch (e) {
       setError(true);

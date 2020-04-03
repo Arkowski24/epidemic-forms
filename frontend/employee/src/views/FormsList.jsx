@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 
+import authService from '../services/AuthService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
 
@@ -140,25 +141,36 @@ const FormsList = () => {
     setForms(newForms);
   };
 
+
   useEffect(() => {
-    async function fetchData() {
+    const fetchToken = async () => {
+      if (token !== null) return;
+      const newToken = localStorage.getItem('token');
+      if (!newToken) history.push('/employee/login');
+
+      authService.me(newToken)
+        .then(() => {
+          formService.setToken(newToken);
+          schemaService.setToken(newToken);
+          setToken(newToken);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+          history.push('/employee/login');
+        });
+    };
+
+    const fetchData = async () => {
+      if (token === null) return;
       const formsResponse = await formService.getForms();
       setForms(formsResponse);
 
       const schemaResponse = await schemaService.getSchemas();
       setSchemas(schemaResponse);
-    }
+    };
 
-    if (token === null) {
-      const newToken = localStorage.getItem('token');
-      if (!newToken) history.push('/employee/login');
-      setToken(newToken);
-      return;
-    }
-
-    formService.setToken(token);
-    schemaService.setToken(token);
-    fetchData();
+    fetchToken()
+      .then(() => fetchData());
   }, [history, token]);
 
   return (
