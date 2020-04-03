@@ -1,12 +1,16 @@
 package pl.edu.agh.ki.covid19tablet.security.auth
 
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pl.edu.agh.ki.covid19tablet.security.auth.dto.LoginRequest
+import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
+import pl.edu.agh.ki.covid19tablet.security.auth.dto.EmployeeLoginRequest
 import pl.edu.agh.ki.covid19tablet.security.auth.dto.LoginResponse
+import pl.edu.agh.ki.covid19tablet.security.auth.dto.PatientLoginRequest
 
 @RestController
 @RequestMapping("/login")
@@ -15,7 +19,17 @@ class AuthController(
 ) {
     @PostMapping("/employee")
     @PreAuthorize("isAnonymous()")
-    fun login(@RequestBody request: LoginRequest): LoginResponse =
-        authService.login(request)
+    fun loginEmployee(@RequestBody request: EmployeeLoginRequest): LoginResponse =
+        authService.loginEmployee(request)
+
+    @PostMapping("/patient")
+    @PreAuthorize("isAnonymous()")
+    fun loginPatient(@RequestBody request: PatientLoginRequest): ResponseEntity<LoginResponse> =
+        try {
+            val response = authService.loginPatient(request)
+            ResponseEntity(response, HttpStatus.OK)
+        } catch (ex: PatientUnauthorizedException) {
+            ResponseEntity(HttpStatus.UNAUTHORIZED)
+        }
 
 }

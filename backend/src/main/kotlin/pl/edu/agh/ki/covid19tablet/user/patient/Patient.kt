@@ -12,5 +12,5 @@ data class Patient(
     @GeneratedValue
     val id: PatientId? = null,
 
-    val pinCode: String
+    val loggedIn: Boolean = false
 )

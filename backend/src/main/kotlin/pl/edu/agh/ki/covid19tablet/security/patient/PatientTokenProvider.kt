@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.security.employee
+package pl.edu.agh.ki.covid19tablet.security.patient
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.ki.covid19tablet.security.TokenService
@@ -8,7 +8,7 @@ import java.time.Duration
 import java.time.Instant
 
 @Component
-class EmployeeTokenProvider(
+class PatientTokenProvider(
     private val tokenService: TokenService
 ) {
     fun createToken(employeeId: EmployeeId) =
@@ -16,7 +16,7 @@ class EmployeeTokenProvider(
             .createToken {
                 setExpiration(Instant.now() + TokenLifetime)
                 setSubject(employeeId.toString())
-                addClaims(mapOf("employee" to true))
+                addClaims(mapOf("employee" to false))
             }
 
     fun parseToken(token: String) =
@@ -29,6 +29,6 @@ class EmployeeTokenProvider(
             .getOrNull()
 
     companion object {
-        private val TokenLifetime = Duration.ofDays(7)
+        private val TokenLifetime = Duration.ofMinutes(30)
     }
 }
