@@ -5,4 +5,4 @@ spring.datasource:
 
 spring.jpa.hibernate.ddl-auto: create
 
-app.security.tokenSecretKey: ${tokenSecretKey}
+app.security.tokenSecretKey: ${TOKEN_SECRET_KEY}
