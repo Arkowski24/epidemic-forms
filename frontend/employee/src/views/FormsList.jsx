@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button, Container, Form, Row, Table,
+  Button, Container, Dropdown, Form, Row, Table,
 } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
@@ -9,25 +9,39 @@ import { useHistory } from 'react-router-dom';
 import authService from '../services/AuthService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
+import LoadingView from './form/utility/LoadingView';
 
-const Header = ({ setVisible }) => (
-  <Row className="w-100 m-1 p-1 border-bottom">
-    <Col>
-      <h1>List of filled forms</h1>
-    </Col>
-    <Col md="auto">
-      <Button
-        variant="primary"
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          setVisible(true);
-        }}
-      >
-        Create
-      </Button>
-    </Col>
-  </Row>
+const Header = ({ setVisible, employeeName, handleLogout }) => (
+  <>
+    <Row className="w-100 m-1 p-1 border-bottom">
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          {`${employeeName}`}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </Row>
+    <Row className="w-100 m-1 p-1 border-bottom">
+      <Col>
+        <h1>List of filled forms</h1>
+      </Col>
+      <Col md="auto">
+        <Button
+          variant="primary"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setVisible(true);
+          }}
+        >
+          Create
+        </Button>
+      </Col>
+    </Row>
+  </>
 );
 
 const FormsTable = ({ forms }) => {
@@ -129,7 +143,7 @@ const NewFormModal = ({
 };
 
 const FormsList = () => {
-  const [token, setToken] = useState(null);
+  const [credentials, setCredentials] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
   const [schemas, setSchemas] = useState([]);
@@ -141,18 +155,24 @@ const FormsList = () => {
     setForms(newForms);
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    history.push('/employee/login');
+    setCredentials(null);
+  };
 
   useEffect(() => {
     const fetchToken = async () => {
-      if (token !== null) return;
+      if (credentials !== null) return;
       const newToken = localStorage.getItem('token');
       if (!newToken) history.push('/employee/login');
 
       authService.me(newToken)
-        .then(() => {
+        .then((employee) => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);
-          setToken(newToken);
+          setCredentials({ employee, token: newToken });
         })
         .catch(() => {
           localStorage.removeItem('token');
@@ -161,7 +181,7 @@ const FormsList = () => {
     };
 
     const fetchData = async () => {
-      if (token === null) return;
+      if (credentials === null) return;
       const formsResponse = await formService.getForms();
       setForms(formsResponse);
 
@@ -171,11 +191,17 @@ const FormsList = () => {
 
     fetchToken()
       .then(() => fetchData());
-  }, [history, token]);
+  }, [history, credentials]);
+
+  if (credentials === null) { return (<LoadingView />); }
 
   return (
     <Container>
-      <Header setVisible={setModalVisible} />
+      <Header
+        setVisible={setModalVisible}
+        employeeName={credentials.employee.fullName}
+        handleLogout={handleLogout}
+      />
       <FormsTable forms={forms} />
       <NewFormModal
         visible={modalVisible}
