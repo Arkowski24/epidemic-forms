@@ -60,6 +60,7 @@ const FormsTable = ({ forms }) => {
     </tr>
   );
   const patientForms = forms
+    .filter((f) => f.status !== 'CLOSED')
     .map((f, i) => buildFormRow(f, i));
 
   return (
