@@ -26,7 +26,7 @@ data class DerivedField(
     val titles: List<String>,
     @ElementCollection
     val descriptions: List<String> = listOf(),
-    val inline: Boolean = false
+    val inline: Boolean = true
 )
 
 fun DerivedField.toDTO() =

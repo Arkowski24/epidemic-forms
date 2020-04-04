@@ -18,7 +18,7 @@ data class SliderField(
 
     val title: String,
     val description: String = "",
-    val inline: Boolean = false,
+    val inline: Boolean = true,
 
     val minValue: Double,
     val maxValue: Double,

@@ -18,7 +18,7 @@ data class TextField(
 
     val title: String,
     val description: String = "",
-    val inline: Boolean = false,
+    val inline: Boolean = true,
 
     val multiLine: Boolean = false
 )

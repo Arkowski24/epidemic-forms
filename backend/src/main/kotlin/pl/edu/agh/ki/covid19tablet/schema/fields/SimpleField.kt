@@ -17,7 +17,7 @@ data class SimpleField(
 
     val title: String,
     val description: String = "",
-    val inline: Boolean = false
+    val inline: Boolean = true
 )
 
 fun SimpleField.toDTO() =
