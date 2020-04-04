@@ -39,6 +39,8 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:'
 
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
     runtimeOnly 'org.postgresql:postgresql'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
