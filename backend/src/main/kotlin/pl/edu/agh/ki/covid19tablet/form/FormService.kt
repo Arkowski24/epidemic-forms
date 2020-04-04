@@ -9,6 +9,7 @@ import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature
 import pl.edu.agh.ki.covid19tablet.form.signature.SignatureRepository
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.PDFGeneratorService
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
@@ -34,7 +35,8 @@ class FormServiceImpl(
     private val patientRepository: PatientRepository,
     private val signatureRepository: SignatureRepository,
     private val schemaRepository: SchemaRepository,
-    private val patientTokenProvider: PatientTokenProvider
+    private val patientTokenProvider: PatientTokenProvider,
+    private val pdfGeneratorService: PDFGeneratorService
 ) : FormService {
     override fun getAllForms(): List<FormDTO> =
         formRepository
@@ -108,6 +110,7 @@ class FormServiceImpl(
             .copy(employeeSignature = signature)
 
         formRepository.save(form)
+        kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
     }
 
     private fun serializeImage(image: String): ByteArray =
