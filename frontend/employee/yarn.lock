@@ -10925,6 +10925,11 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+validate-polish@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/validate-polish/-/validate-polish-1.1.1.tgz#f65d8610f0a7875fce115e70dd88e70b1a70519b"
+  integrity sha512-/v0iJf/RBq4IojRaCoSCHwKJn0EtCNDj72MqwuR4cWC4g0GLU9M3kCLWDq+IbuiDO3zicDDmPphaXPcTCVc9lw==
+
 value-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
