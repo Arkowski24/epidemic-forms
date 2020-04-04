@@ -31,6 +31,7 @@ class DatabaseInitializer {
             schemaRepository.save(
                 Schema(
                     name = "My Schema",
+                    multiPage = true,
                     fields = SchemaFields(
                         simple = listOf(
                             SimpleField(

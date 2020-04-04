@@ -23,6 +23,7 @@ class Schema(
 
     @Embedded
     val fields: SchemaFields,
+    val multiPage: Boolean = false,
 
     @OneToOne(cascade = [CascadeType.ALL])
     val patientSignature: SignatureField,
@@ -34,6 +35,7 @@ fun Schema.toDTO() = SchemaDTO(
     id = id!!,
     name = name,
     fields = fields.toDTO(),
+    multiPage = multiPage,
     patientSignature = patientSignature.toDTO(),
     employeeSignature = employeeSignature.toDTO()
 )
