@@ -10,6 +10,7 @@ data class SliderFieldDTO(
 
     val title: String,
     val description: String,
+    val inline: Boolean,
 
     val minValue: Double,
     val maxValue: Double,

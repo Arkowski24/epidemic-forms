@@ -14,6 +14,7 @@ data class FormDTO(
 
     val patient: PatientDTO,
     val createdBy: EmployeeDTO,
+    val multiPage: Boolean,
 
     val schema: SchemaDTO,
     val state: FormStateDTO

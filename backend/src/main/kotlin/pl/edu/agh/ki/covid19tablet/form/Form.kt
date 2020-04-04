@@ -32,6 +32,7 @@ data class Form(
     val schema: Schema,
     @Embedded
     val state: FormState,
+    val multiPage: Boolean = false,
 
     @OneToOne(cascade = [CascadeType.ALL])
     val patient: Patient,
@@ -50,6 +51,7 @@ fun Form.toDTO() = FormDTO(
     status = status,
     schema = schema.toDTO(),
     state = state.toDTO(),
+    multiPage = multiPage,
     patient = patient.toDTO(),
     createdBy = createdBy.toDTO()
 )

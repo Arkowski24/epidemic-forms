@@ -51,7 +51,7 @@ class DatabaseInitializer {
                                 title = "Favourite authors pt.2",
                                 description = "Your favourite author is:",
                                 choices = listOf("Kafka", "Prost", "Tolkien"),
-                                isMultiChoice = true
+                                multiChoice = true
                             )
                         ),
                         derived = listOf(
@@ -98,7 +98,7 @@ class DatabaseInitializer {
                                 fieldNumber = 8,
                                 title = "Hard question",
                                 description = "What have you eaten today?",
-                                isMultiline = true
+                                multiLine = true
                             )
                         )
                     ),
