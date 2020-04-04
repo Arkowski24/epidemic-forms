@@ -16,6 +16,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.*;
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
 import pl.edu.agh.ki.covid19tablet.state.FormState;
 import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
+import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
@@ -59,10 +60,13 @@ public class PDFBuilder {
 
         Path savingPath = Paths.get(dirPath, name);
 
+        System.out.println(dirPath + " " + name);
+
         PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(savingPath));
         document.open();
 
         addCreationDate(document, creationDate);
+        addDerivedData(document, form.getSchema().getFields().getDerived(), form.getState().getDerived());
         addTitle(document, form.getFormName());
         addQuestions(document, form.getSchema().getFields(), form.getState());
         addSignatures(
@@ -85,10 +89,32 @@ public class PDFBuilder {
         document.add(creationDateParagraph);
     }
 
+    private void addDerivedData(
+            Document document,
+            List<DerivedField> derivedFields,
+            List<DerivedFieldState> derivedFieldStates
+    ) throws DocumentException {
+
+        addEmptyLine(document, questionFont);
+
+        for (int i = 0 ; i < derivedFields.size() && i < derivedFieldStates.size(); i++) {
+            List<String> derivedTitles = derivedFields.get(i).getTitles();
+            List<String> derivedValues = derivedFieldStates.get(i).getValue();
+
+            for (int j = 0; j < derivedTitles.size() && j < derivedValues.size(); j++) {
+                String line = derivedTitles.get(j) + ": " + derivedValues.get(j);
+                Paragraph derivedParagraph = new Paragraph(line, questionFont);
+                derivedParagraph.setAlignment(Element.ALIGN_RIGHT);
+                document.add(derivedParagraph);
+            }
+
+            addEmptyLine(document, questionFont);
+        }
+    }
+
     private void addTitle(Document document, String formName) throws DocumentException {
         Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
-        title.setSpacingBefore(15);
         title.setSpacingAfter(15);
         document.add(title);
     }

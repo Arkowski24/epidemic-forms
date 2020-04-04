@@ -32,6 +32,7 @@ import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRole
 import pl.edu.agh.ki.covid19tablet.user.patient.Patient
+import pl.edu.agh.ki.covid19tablet.user.patient.PatientRepository
 import java.util.*
 
 @Component
@@ -39,7 +40,12 @@ import java.util.*
 class DatabaseInitializer {
 
     @Bean
-    fun initializeDatabase(schemaRepository: SchemaRepository, formRepository: FormRepository) =
+    fun initializeDatabase(
+        schemaRepository: SchemaRepository,
+        formRepository: FormRepository,
+        employeeRepository: EmployeeRepository,
+        patientRepository: PatientRepository
+    ) =
         CommandLineRunner {
 
             val choiceField1 = ChoiceField(
@@ -79,6 +85,23 @@ class DatabaseInitializer {
                 title = "Długie pytanie.",
                 description = "What have you eaten today?",
                 isMultiline = true
+            )
+
+            val employee1 = Employee(
+                username = "Janko",
+                passwordHash = "tajnehasloxd",
+                fullName = "Jan Kowalski",
+                role = EmployeeRole.EMPLOYEE
+            )
+
+            employeeRepository.save(employee1)
+
+            employeeRepository.save(
+                Employee(
+                    username = "Admin",
+                    fullName = "Żanetka Letta",
+                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
+                )
             )
 
             val schema = schemaRepository.save(
@@ -168,12 +191,7 @@ class DatabaseInitializer {
                             )
                         )
                     ),
-                    createdBy = Employee(
-                        username = "Janko",
-                        passwordHash = "tajnehasloxd",
-                        fullName = "Jan Kowalski",
-                        role = EmployeeRole.EMPLOYEE
-                    ),
+                    createdBy = employee1,
                     patient = Patient(
                         loggedIn = true
                     ),
