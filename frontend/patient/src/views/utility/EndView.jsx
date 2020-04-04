@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 
-const EndView = ({ setCredentials }) => {
+const EndView = ({ setForm, setCredentials, setCurrentPage }) => {
   useEffect(() => {
     setTimeout(() => {
       localStorage.removeItem('credentials');
+      setForm(null);
+      setCurrentPage(1);
       setCredentials(null);
     }, 5000);
   }, [setCredentials]);

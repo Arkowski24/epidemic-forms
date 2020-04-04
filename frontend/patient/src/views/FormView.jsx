@@ -42,7 +42,7 @@ const FormView = () => {
   if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
   if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'SIGNED') { return (<LoadingView message="Waiting for employee to sign." />); }
-  if (form.status === 'CLOSED') { return (<EndView setCredentials={setCredentials} />); }
+  if (form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))
