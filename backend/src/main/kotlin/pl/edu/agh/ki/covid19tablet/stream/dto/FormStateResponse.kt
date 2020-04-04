@@ -6,6 +6,7 @@ enum class FormStateResponseType {
     STATE,
 
     UPDATE_CHOICE,
+    UPDATE_DERIVED,
     UPDATE_SLIDER,
     UPDATE_TEXT,
 
