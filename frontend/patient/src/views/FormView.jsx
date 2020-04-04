@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Row } from 'react-bootstrap';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -48,28 +49,9 @@ const FormView = () => {
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
 
-  const nextPage = (event) => {
-    event.preventDefault();
-    if (currentPage === pageIndexMapping.length) {
-      sendFormResponse();
-    } else {
-      formStreamService.sendPageChange(currentPage + 1);
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = (event) => {
-    event.preventDefault();
-    if (currentPage - 1 > 0) {
-      formStreamService.sendPageChange(currentPage - 1);
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const createField = () => {
-    const { index } = pageIndexMapping[currentPage - 1];
-    const fieldSchema = form.schema[index];
+  const createField = (fieldSchema, index, prevPage, nextPage) => {
     const input = form.state[index].value;
+    const { multiPage } = form;
 
     const totalPages = pageIndexMapping.length;
     const disabled = form.schema[index].fieldType === 'BLOCKED';
@@ -80,6 +62,7 @@ const FormView = () => {
         <ChoiceView
           title={fieldSchema.title}
           description={fieldSchema.description}
+          isInline={fieldSchema.inline}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.multiChoice}
           currentPage={currentPage}
@@ -89,6 +72,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
+          isMultipage={multiPage}
         />
       );
     }
@@ -99,6 +83,7 @@ const FormView = () => {
           derivedType={fieldSchema.derivedType}
           titles={fieldSchema.titles}
           descriptions={fieldSchema.descriptions}
+          isInline={fieldSchema.inline}
           currentPage={currentPage}
           totalPages={totalPages}
           onClickPrev={prevPage}
@@ -106,6 +91,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
+          isMultipage={multiPage}
         />
       );
     }
@@ -115,6 +101,7 @@ const FormView = () => {
         <SliderView
           title={fieldSchema.title}
           description={fieldSchema.description}
+          isInline={fieldSchema.inline}
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
@@ -125,6 +112,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
+          isMultipage={multiPage}
         />
       );
     }
@@ -135,6 +123,7 @@ const FormView = () => {
           title={fieldSchema.title}
           description={fieldSchema.description}
           isMultiline={fieldSchema.multiline}
+          isInline={fieldSchema.inline}
           currentPage={currentPage}
           totalPages={totalPages}
           onClickPrev={prevPage}
@@ -142,6 +131,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
+          isMultipage={multiPage}
         />
       );
     }
@@ -150,6 +140,7 @@ const FormView = () => {
       <SimpleView
         title={fieldSchema.title}
         description={fieldSchema.description}
+        isInline={fieldSchema.inline}
         currentPage={currentPage}
         totalPages={totalPages}
         onClickPrev={prevPage}
@@ -157,13 +148,42 @@ const FormView = () => {
         input={input}
         setInput={setInput}
         disabled={disabled}
+        isMultipage={multiPage}
       />
     );
   };
 
+  const buildFieldsSinglePage = () => form.schema
+  // eslint-disable-next-line react/no-array-index-key
+    .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
+
+  const buildFieldsMultiPage = () => {
+    const { index } = pageIndexMapping[currentPage - 1];
+    const fieldSchema = form.schema[index];
+
+    const nextPage = (event) => {
+      event.preventDefault();
+      if (currentPage === pageIndexMapping.length) {
+        sendFormResponse();
+      } else {
+        formStreamService.sendPageChange(currentPage + 1);
+        setCurrentPage(currentPage + 1);
+      }
+    };
+    const prevPage = (event) => {
+      event.preventDefault();
+      if (currentPage - 1 > 0) {
+        formStreamService.sendPageChange(currentPage - 1);
+        setCurrentPage(currentPage - 1);
+      }
+    };
+
+    return createField(fieldSchema, index, prevPage, nextPage);
+  };
+
   return (
     <>
-      {createField()}
+      {form.multiPage ? buildFieldsMultiPage() : buildFieldsSinglePage()}
     </>
   );
 };
