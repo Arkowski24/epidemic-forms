@@ -43,7 +43,7 @@ const LoginView = () => {
         <Form onSubmit={handleLogin}>
           <Form.Group>
             <Form.Row>
-              <Form.Label column>Username</Form.Label>
+              <Form.Label column>Login</Form.Label>
               <Col sm={10}>
                 <Form.Control
                   type="text"
@@ -55,7 +55,7 @@ const LoginView = () => {
           </Form.Group>
           <Form.Group>
             <Form.Row>
-              <Form.Label column>Password</Form.Label>
+              <Form.Label column>Hasło</Form.Label>
               <Col sm={10}>
                 <Form.Control
                   type="password"
@@ -67,7 +67,7 @@ const LoginView = () => {
             </Form.Row>
           </Form.Group>
           <Button className="btn float-right" variant="primary" type="submit">
-            Submit
+            Prześlij
           </Button>
         </Form>
       </div>

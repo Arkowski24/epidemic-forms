@@ -20,13 +20,13 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout}>Wyloguj się</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Row>
     <Row className="w-100 m-1 p-1 border-bottom">
       <Col>
-        <h1>List of filled forms</h1>
+        <h1>Lista formularzy</h1>
       </Col>
       <Col md="auto">
         <Button
@@ -37,7 +37,7 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
             setVisible(true);
           }}
         >
-          Create
+          Stwórz nowy
         </Button>
       </Col>
     </Row>
@@ -47,7 +47,7 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
 const FormsTable = ({ forms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Form Name', 'Schema', 'Created by', 'Token']
+  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Kod jednorazowy']
     .map((h) => <th key={h}>{h}</th>);
 
   const buildFormRow = (form, index) => (
@@ -107,20 +107,20 @@ const NewFormModal = ({
     <Modal show={visible} onHide={handleClose}>
       <Form onSubmit={createNewForm}>
         <Modal.Header closeButton>
-          <Modal.Title>Create new form</Modal.Title>
+          <Modal.Title>Utwórz nowy formularz</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="inputFormName">
-            <Form.Label>Form Name</Form.Label>
+            <Form.Label>Nazwa formularza</Form.Label>
             <Form.Control
               type="text"
-              placeholder="My form"
+              placeholder="Mój formularz"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
             />
           </Form.Group>
           <Form.Group controlId="inputFormSchema">
-            <Form.Label>Schema</Form.Label>
+            <Form.Label>Schemat</Form.Label>
             <Form.Control
               as="select"
               value={schemaId}
@@ -132,10 +132,10 @@ const NewFormModal = ({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" type="button" onClick={handleClose}>
-            Close
+            Zamknij
           </Button>
           <Button variant="primary" type="submit">
-            Create
+            Stwórz
           </Button>
         </Modal.Footer>
       </Form>

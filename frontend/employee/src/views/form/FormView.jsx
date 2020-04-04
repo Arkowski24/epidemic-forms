@@ -57,7 +57,7 @@ const FormView = () => {
   }, [formId, token, history]);
 
   if (form === null || token === null) { return (<LoadingView />); }
-  if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
+  if (form.status === 'ACCEPTED') { return (<LoadingView message="Oczekiwanie na podpis pacjenta." />); }
   if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView history={history} />); }
 
@@ -137,8 +137,7 @@ const FormView = () => {
   const header = (
     <Row>
       <div className="w-100 m-2 p-1 border-bottom">
-        <h1>Patient Form</h1>
-        <p>This form is filled by patient.</p>
+        <h1>{form.formName}</h1>
       </div>
     </Row>
   );
@@ -157,7 +156,7 @@ const FormView = () => {
           role="status"
           aria-hidden="true"
         />
-        {' Waiting for the patient...'}
+        {' Oczekiwanie na pacjenta...'}
       </>
     );
 
@@ -170,7 +169,7 @@ const FormView = () => {
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
             disabled={form.status !== 'FILLED'}
           >
-            { form.status === 'NEW' ? spinner : 'Accept'}
+            { form.status === 'NEW' ? spinner : 'Akceptuj'}
           </Button>
         </div>
       </Row>
