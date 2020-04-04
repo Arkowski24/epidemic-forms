@@ -1,11 +1,14 @@
 package pl.edu.agh.ki.covid19tablet.form.dto
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import pl.edu.agh.ki.covid19tablet.form.FormId
 import pl.edu.agh.ki.covid19tablet.form.FormStatus
 import pl.edu.agh.ki.covid19tablet.schema.dto.SchemaDTO
 import pl.edu.agh.ki.covid19tablet.state.dto.FormStateDTO
 import pl.edu.agh.ki.covid19tablet.user.dto.EmployeeDTO
 import pl.edu.agh.ki.covid19tablet.user.dto.PatientDTO
+import java.time.Instant
 
 data class FormDTO(
     val id: FormId,
@@ -14,6 +17,8 @@ data class FormDTO(
 
     val patient: PatientDTO,
     val createdBy: EmployeeDTO,
+    @JsonSerialize(using = ToStringSerializer::class)
+    val createdAt: Instant,
 
     val schema: SchemaDTO,
     val state: FormStateDTO
