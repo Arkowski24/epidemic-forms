@@ -27,6 +27,7 @@ import pl.edu.agh.ki.covid19tablet.user.employee.Employee
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
 import pl.edu.agh.ki.covid19tablet.state.FormState
 import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState
+import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState
 import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRole
@@ -57,7 +58,7 @@ class DatabaseInitializer {
             val derivedField1 = DerivedField(
                 fieldNumber = 3,
                 derivedType = DerivedType.BIRTHDAY_PESEL,
-                titles = listOf("PESEL", "Birthday"),
+                titles = listOf("PESEL", "Data urodzin"),
                 descriptions = listOf("Your PESEL: ", "Your birthay:")
             )
             val sliderField1 = SliderField(
@@ -138,6 +139,15 @@ class DatabaseInitializer {
                                     true,
                                     false,
                                     true
+                                )
+                            )
+                        ),
+                        derived = listOf(
+                            DerivedFieldState(
+                                field = derivedField1,
+                                value = listOf(
+                                    "89121212345",
+                                    "12-12-1989"
                                 )
                             )
                         ),
