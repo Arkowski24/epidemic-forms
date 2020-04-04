@@ -22,6 +22,7 @@ data class SliderField(
 
     val minValue: Double,
     val maxValue: Double,
+    val defaultValue: Double = minValue,
     val step: Double
 )
 
@@ -41,5 +42,5 @@ fun SliderField.toDTO() =
 fun SliderField.buildInitialState() =
     SliderFieldState(
         field = this,
-        value = minValue
+        value = defaultValue
     )
