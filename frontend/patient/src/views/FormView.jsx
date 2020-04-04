@@ -81,7 +81,7 @@ const FormView = () => {
           title={fieldSchema.title}
           description={fieldSchema.description}
           choices={fieldSchema.choices}
-          isMultiChoice={fieldSchema.isMultiChoice}
+          isMultiChoice={fieldSchema.multiChoice}
           currentPage={currentPage}
           totalPages={totalPages}
           onClickPrev={prevPage}
@@ -134,7 +134,7 @@ const FormView = () => {
         <TextView
           title={fieldSchema.title}
           description={fieldSchema.description}
-          isMultiline={fieldSchema.isMultiline}
+          isMultiline={fieldSchema.multiline}
           currentPage={currentPage}
           totalPages={totalPages}
           onClickPrev={prevPage}

@@ -76,7 +76,7 @@ const FormView = () => {
           title={fieldSchema.title}
           description={fieldSchema.description}
           choices={fieldSchema.choices}
-          isMultiChoice={fieldSchema.isMultiChoice}
+          isMultiChoice={fieldSchema.multiChoice}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
@@ -117,7 +117,7 @@ const FormView = () => {
         <TextView
           title={fieldSchema.title}
           description={fieldSchema.description}
-          isMultiline={fieldSchema.isMultiline}
+          isMultiline={fieldSchema.multiline}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
