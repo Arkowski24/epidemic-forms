@@ -11,7 +11,7 @@ const InputForm = ({
   <div className="p-1">
     <Form>
       <Form.Control
-        as="textarea"
+        as={isMultiline ? 'textarea' : 'input'}
         size="lg"
         rows={isMultiline ? 3 : 1}
         value={text}

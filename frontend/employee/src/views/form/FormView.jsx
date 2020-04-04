@@ -142,8 +142,7 @@ const FormView = () => {
   const header = (
     <Row>
       <div className="w-100 m-2 p-1 border-bottom">
-        <h1>Patient Form</h1>
-        <p>This form is filled by patient.</p>
+        <h1>{form.formName}</h1>
       </div>
     </Row>
   );

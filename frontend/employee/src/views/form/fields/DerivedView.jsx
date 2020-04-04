@@ -38,14 +38,17 @@ const OneField = ({
     const newInput = input.slice();
     newInput[index] = value;
     const newValues = derivedHelper.calculateDerived(derivedType, index, newInput);
+    newValues[index] = JSON.stringify({ type: 'PESEL', value });
     setInput(newValues);
   };
+
+  const text = (derivedType === 'BIRTHDAY_PESEL' && index === 0) ? JSON.parse(input[index]).value : input[index];
 
   return (
     <div className="w-100 m-1 p-1">
       <Header message={title} />
       <InfoMessage message={description} />
-      <InputForm text={input[index]} setText={setNewInput} />
+      <InputForm text={text} setText={setNewInput} />
     </div>
   );
 };
