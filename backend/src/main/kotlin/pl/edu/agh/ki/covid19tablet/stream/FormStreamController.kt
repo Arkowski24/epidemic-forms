@@ -1,13 +1,16 @@
 package pl.edu.agh.ki.covid19tablet.stream
 
 import org.springframework.messaging.handler.annotation.DestinationVariable
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.simp.annotation.SendToUser
 import org.springframework.stereotype.Controller
 import pl.edu.agh.ki.covid19tablet.form.FormId
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequest
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponse
 import javax.transaction.Transactional
+
 
 @Controller
 class FormStreamController(
@@ -18,4 +21,11 @@ class FormStreamController(
     @Transactional
     fun handleRequest(@DestinationVariable formId: FormId, request: FormStateRequest): FormStateResponse =
         formStreamService.handleRequest(formId, request)
+
+
+    @MessageExceptionHandler
+    @SendToUser("/queue/errors")
+    fun handleException(exception: Throwable): String? {
+        return exception.message
+    }
 }

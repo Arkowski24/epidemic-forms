@@ -1,38 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button, Container, Form, Row, Table,
+  Button, Container, Dropdown, Form, Row, Table,
 } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 
-import formService from '../../services/FormService';
-import schemaService from '../../services/SchemaService';
+import authService from '../services/AuthService';
+import formService from '../services/FormService';
+import schemaService from '../services/SchemaService';
+import LoadingView from './form/utility/LoadingView';
 
-const Header = ({ setVisible }) => (
-  <Row className="w-100 m-1 p-1 border-bottom">
-    <Col>
-      <h1>List of filled forms</h1>
-    </Col>
-    <Col md="auto">
-      <Button
-        variant="primary"
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          setVisible(true);
-        }}
-      >
-        Create
-      </Button>
-    </Col>
-  </Row>
+const Header = ({ setVisible, employeeName, handleLogout }) => (
+  <>
+    <Row className="w-100 m-1 p-1 border-bottom">
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          {`${employeeName}`}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </Row>
+    <Row className="w-100 m-1 p-1 border-bottom">
+      <Col>
+        <h1>List of filled forms</h1>
+      </Col>
+      <Col md="auto">
+        <Button
+          variant="primary"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setVisible(true);
+          }}
+        >
+          Create
+        </Button>
+      </Col>
+    </Row>
+  </>
 );
 
 const FormsTable = ({ forms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Form Name', 'Schema', 'Token']
+  const headers = ['#', 'Form Name', 'Schema', 'Created by', 'Token']
     .map((h) => <th key={h}>{h}</th>);
 
   const buildFormRow = (form, index) => (
@@ -40,7 +55,8 @@ const FormsTable = ({ forms }) => {
       <td>{index}</td>
       <td>{form.formName}</td>
       <td>{form.schema.name}</td>
-      <td>{form.id}</td>
+      <td>{form.createdBy.fullName}</td>
+      <td>{form.patient.id}</td>
     </tr>
   );
   const patientForms = forms
@@ -127,9 +143,11 @@ const NewFormModal = ({
 };
 
 const FormsList = () => {
+  const [credentials, setCredentials] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
   const [schemas, setSchemas] = useState([]);
+  const history = useHistory();
 
   const createForm = async (schemaId, formName) => {
     const form = await formService.createForm(schemaId, formName);
@@ -137,21 +155,53 @@ const FormsList = () => {
     setForms(newForms);
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    history.push('/employee/login');
+    setCredentials(null);
+  };
+
   useEffect(() => {
-    async function fetchData() {
+    const fetchToken = async () => {
+      if (credentials !== null) return;
+      const newToken = localStorage.getItem('token');
+      if (!newToken) history.push('/employee/login');
+
+      authService.me(newToken)
+        .then((employee) => {
+          formService.setToken(newToken);
+          schemaService.setToken(newToken);
+          setCredentials({ employee, token: newToken });
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+          history.push('/employee/login');
+        });
+    };
+
+    const fetchData = async () => {
+      if (credentials === null) return;
       const formsResponse = await formService.getForms();
       setForms(formsResponse);
 
       const schemaResponse = await schemaService.getSchemas();
       setSchemas(schemaResponse);
-    }
+    };
 
-    fetchData();
-  }, []);
+    fetchToken()
+      .then(() => fetchData());
+  }, [history, credentials]);
+
+  if (credentials === null) { return (<LoadingView />); }
 
   return (
     <Container>
-      <Header setVisible={setModalVisible} />
+      <Header
+        setVisible={setModalVisible}
+        employeeName={credentials.employee.fullName}
+        handleLogout={handleLogout}
+      />
       <FormsTable forms={forms} />
       <NewFormModal
         visible={modalVisible}

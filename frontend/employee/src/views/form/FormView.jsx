@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Container, Spinner } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
@@ -15,11 +15,14 @@ import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
 
 import SignatureView from './signature/SignatureView';
+import authService from '../../services/AuthService';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [token, setToken] = useState(null);
   const [patientPage, setPatientPage] = useState(0);
-  const { token } = useParams();
+  const { formId } = useParams();
+  const history = useHistory();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('ACCEPTED');
@@ -31,13 +34,28 @@ const FormView = () => {
   };
 
   useEffect(() => {
-    const setNewForm = (newForm) => setForm(newForm);
+    const fetchTokenAndData = async () => {
+      if (token !== null) return;
+      const newToken = localStorage.getItem('token');
+      if (!newToken) history.push('/employee/login');
 
-    formStreamService.setToken(token);
-    formStreamService.subscribe(setNewForm, setPatientPage);
-  }, [token]);
+      try {
+        await authService.me(newToken);
 
-  if (form === null) { return (<LoadingView />); }
+        formService.setToken(newToken);
+        formStreamService.setCredentials({ token: newToken, formId });
+        const setNewForm = (newForm) => setForm(newForm);
+        formStreamService.subscribe(setNewForm, setPatientPage);
+        setToken(newToken);
+      } catch (e) {
+        localStorage.removeItem('token');
+        history.push('/employee/login');
+      }
+    };
+    fetchTokenAndData();
+  }, [formId, token, history]);
+
+  if (form === null || token === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
   if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView />); }

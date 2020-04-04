@@ -4,3 +4,5 @@ spring.datasource:
   password: ${DB_PASSWORD}
 
 spring.jpa.hibernate.ddl-auto: create
+
+app.security.tokenSecretKey: ${TOKEN_SECRET_KEY}

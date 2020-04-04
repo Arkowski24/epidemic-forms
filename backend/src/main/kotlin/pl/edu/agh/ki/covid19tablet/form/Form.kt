@@ -6,6 +6,10 @@ import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.toDTO
 import pl.edu.agh.ki.covid19tablet.state.FormState
 import pl.edu.agh.ki.covid19tablet.state.toDTO
+import pl.edu.agh.ki.covid19tablet.user.employee.Employee
+import pl.edu.agh.ki.covid19tablet.user.employee.toDTO
+import pl.edu.agh.ki.covid19tablet.user.patient.Patient
+import pl.edu.agh.ki.covid19tablet.user.patient.toDTO
 import javax.persistence.CascadeType
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -30,6 +34,11 @@ data class Form(
     val state: FormState,
 
     @OneToOne(cascade = [CascadeType.ALL])
+    val patient: Patient,
+    @ManyToOne
+    val createdBy: Employee,
+
+    @OneToOne(cascade = [CascadeType.ALL])
     val patientSignature: Signature? = null,
     @OneToOne(cascade = [CascadeType.ALL])
     val employeeSignature: Signature? = null
@@ -40,5 +49,7 @@ fun Form.toDTO() = FormDTO(
     formName = formName,
     status = status,
     schema = schema.toDTO(),
-    state = state.toDTO()
+    state = state.toDTO(),
+    patient = patient.toDTO(),
+    createdBy = createdBy.toDTO()
 )

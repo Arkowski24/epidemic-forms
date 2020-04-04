@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 
-const LoginView = ({ setToken }) => {
-  const [text, setText] = useState('');
+import authService from '../../services/AuthService';
 
-  const handleLogin = (event) => {
+const LoginView = ({ setCredentials }) => {
+  const [text, setText] = useState('');
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const rawCredentials = localStorage.getItem('credentials');
+    if (!rawCredentials) return;
+    const credentials = JSON.parse(rawCredentials);
+
+    authService.me(credentials.token)
+      .then(() => setCredentials(credentials))
+      .catch(() => localStorage.removeItem('credentials'));
+  }, [setCredentials]);
+
+  const handleLogin = async (event) => {
     event.preventDefault();
-    setToken(text);
+    try {
+      const credentials = await authService.login(text);
+      localStorage.setItem('credentials', JSON.stringify(credentials));
+      setCredentials(credentials);
+    } catch (e) {
+      setError(true);
+      setTimeout(() => setError(false), 1000);
+    }
   };
 
   return (
@@ -18,7 +38,12 @@ const LoginView = ({ setToken }) => {
             <Form.Row>
               <Form.Label column>Token</Form.Label>
               <Col sm={10}>
-                <Form.Control type="text" value={text} onChange={(event) => setText(event.target.value)} />
+                <Form.Control
+                  type="text"
+                  value={text}
+                  onChange={(event) => setText(event.target.value)}
+                  isInvalid={error}
+                />
               </Col>
             </Form.Row>
           </Form.Group>
