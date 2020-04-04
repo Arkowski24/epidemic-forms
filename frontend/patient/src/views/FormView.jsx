@@ -72,7 +72,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
-          isMultipage={multiPage}
+          isMultiPage={multiPage}
         />
       );
     }
@@ -91,7 +91,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
-          isMultipage={multiPage}
+          isMultiPage={multiPage}
         />
       );
     }
@@ -112,7 +112,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
-          isMultipage={multiPage}
+          isMultiPage={multiPage}
         />
       );
     }
@@ -131,7 +131,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           disabled={disabled}
-          isMultipage={multiPage}
+          isMultiPage={multiPage}
         />
       );
     }
@@ -148,7 +148,7 @@ const FormView = () => {
         input={input}
         setInput={setInput}
         disabled={disabled}
-        isMultipage={multiPage}
+        isMultiPage={multiPage}
       />
     );
   };

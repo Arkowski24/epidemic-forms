@@ -3,6 +3,7 @@ import { Container, Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../helper/DerivedHelper';
 import SinglePage from './common/SinglePage';
+import DerivedViewInline from './inline/DerivedViewInline';
 
 const Header = ({ message }) => (
   <div className="m-2 p-1 border-bottom">
@@ -39,14 +40,16 @@ const OneField = ({
     const newInput = input.slice();
     newInput[index] = value;
     const newValues = derivedHelper.calculateDerived(derivedType, index, newInput);
+    newValues[index] = JSON.stringify({ type: 'PESEL', value });
     setInput(newValues);
   };
+  const text = input[index] ? JSON.parse(input[index]).value : input[index];
 
   return (
     <div className="w-100 m-1 p-1">
       <Header message={title} />
       <InfoMessage message={description} />
-      <InputForm text={input[index]} setText={setNewInput} disabled={disabled} />
+      <InputForm text={text} setText={setNewInput} disabled={disabled} />
     </div>
   );
 };
@@ -54,12 +57,24 @@ const OneField = ({
 const DerivedView = ({
   derivedType,
   titles, descriptions,
+  isInline,
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
   isMultiPage,
 }) => {
+  if (!isMultiPage && isInline) {
+    return (
+      <DerivedViewInline
+        derivedType={derivedType}
+        titles={titles}
+        input={input}
+        setInput={setInput}
+      />
+    );
+  }
+
   const fields = titles.map((t, i) => (
     <Row key={i}>
       <OneField

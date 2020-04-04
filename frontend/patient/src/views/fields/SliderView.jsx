@@ -3,8 +3,8 @@ import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
 
-import SinglePageForm from './common/SinglePageForm';
 import PageForm from './common/PageForm';
+import SliderViewInline from './inline/SliderViewInline';
 
 const RangeForm = ({
   minValue, maxValue, step,
@@ -67,31 +67,47 @@ const RangeForm = ({
 
 const SliderView = ({
   title, description,
+  isInline,
   minValue, maxValue, step,
   currentPage, totalPages,
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
   isMultiPage,
-}) => (
-  <PageForm
-    title={title}
-    description={description}
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onClickPrev={onClickPrev}
-    onClickNext={onClickNext}
-    isMultiPage={isMultiPage}
-  >
-    <RangeForm
-      minValue={minValue}
-      maxValue={maxValue}
-      step={step}
-      value={input}
-      setValue={setInput}
-      disabled={disabled}
-    />
-  </PageForm>
-);
+}) => {
+  if (!isMultiPage && isInline) {
+    return (
+      <SliderViewInline
+        title={title}
+        minValue={minValue}
+        maxValue={maxValue}
+        step={step}
+        input={input}
+        setInput={setInput}
+      />
+    );
+  }
+
+  return (
+    <PageForm
+      title={title}
+      description={description}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onClickPrev={onClickPrev}
+      onClickNext={onClickNext}
+      isMultiPage={isMultiPage}
+    >
+      <RangeForm
+        minValue={minValue}
+        maxValue={maxValue}
+        step={step}
+        value={input}
+        setValue={setInput}
+        disabled={disabled}
+      />
+    </PageForm>
+  );
+};
 
 export default SliderView;

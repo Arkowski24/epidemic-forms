@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 
 import { validatePolish } from 'validate-polish';
-import derivedHelper from '../../../../helper/DerivedHelper';
+import derivedHelper from '../../../helper/DerivedHelper';
 
 const InputForm = ({
   title, text, setText, isInvalid,
@@ -48,7 +48,7 @@ const OneField = ({
       if (fieldValidator === 'NIP') { return validatePolish.nip(text); }
       if (fieldValidator === 'ID') {
         return validatePolish.identityCard(text)
-        || validatePolish.identityCardWithSeparator(text);
+          || validatePolish.identityCardWithSeparator(text);
       }
       if (fieldValidator === 'REGON') { return validatePolish.regon(text); }
       return true;

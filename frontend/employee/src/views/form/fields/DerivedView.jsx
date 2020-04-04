@@ -41,8 +41,7 @@ const OneField = ({
     newValues[index] = JSON.stringify({ type: 'PESEL', value });
     setInput(newValues);
   };
-
-  const text = (derivedType === 'BIRTHDAY_PESEL' && index === 0) ? JSON.parse(input[index]).value : input[index];
+  const text = input[index] ? JSON.parse(input[index]).value : input[index];
 
   return (
     <div className="w-100 m-1 p-1">
