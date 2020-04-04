@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
+import PageForm from './common/PageForm';
 
 const ChoiceForm = ({
   choices, isMultiple,
@@ -53,14 +54,16 @@ const ChoiceView = ({
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
+  isMultiPage,
 }) => (
-  <SinglePageForm
+  <PageForm
     currentPage={currentPage}
     totalPages={totalPages}
     title={title}
     description={description}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
+    isMultiPage={isMultiPage}
   >
     <ChoiceForm
       choices={choices}
@@ -69,7 +72,7 @@ const ChoiceView = ({
       setInput={setInput}
       disabled={disabled}
     />
-  </SinglePageForm>
+  </PageForm>
 );
 
 export default ChoiceView;

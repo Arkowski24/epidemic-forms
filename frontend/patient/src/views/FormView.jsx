@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Row } from 'react-bootstrap';
+import { Button, Container, Row } from 'react-bootstrap';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -153,9 +153,43 @@ const FormView = () => {
     );
   };
 
-  const buildFieldsSinglePage = () => form.schema
-  // eslint-disable-next-line react/no-array-index-key
-    .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
+
+  const buildFieldsSinglePage = () => {
+    const header = (
+      <Row>
+        <div className="w-100 m-2 p-1 border-bottom">
+          <h1>Patient Form</h1>
+          <p>This form is filled by patient.</p>
+        </div>
+      </Row>
+    );
+
+    const fields = form.schema
+      // eslint-disable-next-line react/no-array-index-key
+      .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
+
+    const footer = (
+      <Row>
+        <div className="w-100 m-2 p-1 border-top">
+          <Button
+            className="btn float-right"
+            type="submit"
+            onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          >
+            Send
+          </Button>
+        </div>
+      </Row>
+    );
+
+    return (
+      <Container>
+        {header}
+        {fields}
+        {footer}
+      </Container>
+    );
+  };
 
   const buildFieldsMultiPage = () => {
     const { index } = pageIndexMapping[currentPage - 1];

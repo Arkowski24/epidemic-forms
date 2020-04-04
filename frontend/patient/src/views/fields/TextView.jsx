@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
+import PageForm from './common/PageForm';
 
 const InputForm = ({
   text, setText,
@@ -27,14 +28,16 @@ const TextView = ({
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
+  isMultiPage,
 }) => (
-  <SinglePageForm
+  <PageForm
     title={title}
     description={description}
     currentPage={currentPage}
     totalPages={totalPages}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
+    isMultiPage={isMultiPage}
   >
     <InputForm
       text={input}
@@ -42,7 +45,7 @@ const TextView = ({
       isMultiline={isMultiline}
       disabled={disabled}
     />
-  </SinglePageForm>
+  </PageForm>
 );
 
 export default TextView;

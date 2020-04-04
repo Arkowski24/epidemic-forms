@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row } from 'react-bootstrap';
+import { Container, Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../helper/DerivedHelper';
 import SinglePage from './common/SinglePage';
@@ -58,6 +58,7 @@ const DerivedView = ({
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
+  isMultiPage,
 }) => {
   const fields = titles.map((t, i) => (
     <Row key={i}>
@@ -74,15 +75,22 @@ const DerivedView = ({
     </Row>
   ));
 
+  if (isMultiPage) {
+    return (
+      <SinglePage
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onClickPrev={onClickPrev}
+        onClickNext={onClickNext}
+      >
+        {fields}
+      </SinglePage>
+    );
+  }
   return (
-    <SinglePage
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-    >
+    <Container className="w-100 m-1 p-1 rounded border">
       {fields}
-    </SinglePage>
+    </Container>
   );
 };
 

@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 
 import SinglePageForm from './common/SinglePageForm';
+import PageForm from './common/PageForm';
 
 const RangeForm = ({
   minValue, maxValue, step,
@@ -71,14 +72,16 @@ const SliderView = ({
   onClickPrev, onClickNext,
   input, setInput,
   disabled,
+  isMultiPage,
 }) => (
-  <SinglePageForm
+  <PageForm
     title={title}
     description={description}
     currentPage={currentPage}
     totalPages={totalPages}
     onClickPrev={onClickPrev}
     onClickNext={onClickNext}
+    isMultiPage={isMultiPage}
   >
     <RangeForm
       minValue={minValue}
@@ -88,7 +91,7 @@ const SliderView = ({
       setValue={setInput}
       disabled={disabled}
     />
-  </SinglePageForm>
+  </PageForm>
 );
 
 export default SliderView;
