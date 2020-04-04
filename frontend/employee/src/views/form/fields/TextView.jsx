@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import SingleInput from './common/SingleInput';
+import TextViewInline from './inline/TextViewInline';
 
 const InputForm = ({ text, setText, isMultiline }) => (
   <div className="p-1">
@@ -18,13 +19,28 @@ const InputForm = ({ text, setText, isMultiline }) => (
 
 const TextView = ({
   title, description,
+  isInline,
   isMultiline,
   input, setInput,
   highlighted,
-}) => (
-  <SingleInput title={title} description={description} highlighted={highlighted}>
-    <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
-  </SingleInput>
-);
+}) => {
+  if (isInline) {
+    return (
+      <TextViewInline
+        title={title}
+        input={input}
+        setInput={setInput}
+        isMultiline={isMultiline}
+        highlighted={highlighted}
+      />
+    );
+  }
+
+  return (
+    <SingleInput title={title} description={description} highlighted={highlighted}>
+      <InputForm text={input} setText={setInput} isMultiline={isMultiline} />
+    </SingleInput>
+  );
+};
 
 export default TextView;

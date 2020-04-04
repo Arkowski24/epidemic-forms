@@ -3,6 +3,7 @@ import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
 import SingleInput from './common/SingleInput';
+import SliderViewInline from './inline/SliderViewInline';
 
 const RangeForm = ({
   minValue, maxValue, step,
@@ -63,19 +64,36 @@ const RangeForm = ({
 
 const SliderView = ({
   title, description,
+  isInline,
   minValue, maxValue, step,
   input, setInput,
   highlighted,
-}) => (
-  <SingleInput title={title} description={description} highlighted={highlighted}>
-    <RangeForm
-      minValue={minValue}
-      maxValue={maxValue}
-      step={step}
-      value={input}
-      setValue={setInput}
-    />
-  </SingleInput>
-);
+}) => {
+  if (isInline) {
+    return (
+      <SliderViewInline
+        title={title}
+        minValue={minValue}
+        maxValue={maxValue}
+        step={step}
+        input={input}
+        setInput={setInput}
+        highlighted={highlighted}
+      />
+    );
+  }
+
+  return (
+    <SingleInput title={title} description={description} highlighted={highlighted}>
+      <RangeForm
+        minValue={minValue}
+        maxValue={maxValue}
+        step={step}
+        value={input}
+        setValue={setInput}
+      />
+    </SingleInput>
+  );
+};
 
 export default SliderView;

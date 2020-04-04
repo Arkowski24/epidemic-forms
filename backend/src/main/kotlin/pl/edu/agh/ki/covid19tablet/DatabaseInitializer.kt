@@ -45,7 +45,7 @@ class DatabaseInitializer {
                                 fieldNumber = 1,
                                 title = "Favourite authors",
                                 description = "Your favourite author is:",
-                                choices = listOf("Kafka", "Prost", "Tolkien")
+                                choices = listOf("Kafka", "Prost")
                             ),
                             ChoiceField(
                                 fieldNumber = 2,

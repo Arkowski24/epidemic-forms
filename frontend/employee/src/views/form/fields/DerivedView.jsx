@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../../helper/DerivedHelper';
+import DerivedViewInline from './inline/DerivedViewInline';
 
 const Header = ({ message }) => (
   <div className="m-2 p-1 border-bottom">
@@ -52,9 +53,22 @@ const OneField = ({
 const DerivedView = ({
   derivedType,
   titles, descriptions,
+  isInline,
   input, setInput,
   highlighted,
 }) => {
+  if (isInline) {
+    return (
+      <DerivedViewInline
+        derivedType={derivedType}
+        titles={titles}
+        input={input}
+        setInput={setInput}
+        highlighted={highlighted}
+      />
+    );
+  }
+
   const fields = titles.map((t, i) => (
     <Row key={i}>
       <OneField
