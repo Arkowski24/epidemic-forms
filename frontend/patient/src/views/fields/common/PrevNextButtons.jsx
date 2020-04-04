@@ -14,7 +14,7 @@ const PrevNextButtons = ({
           onClick={onClickPrev}
           disabled={isFirst}
         >
-          Previous
+          Poprzedni
         </Button>
       </Col>
       <Col>
@@ -24,7 +24,7 @@ const PrevNextButtons = ({
           type={isFinal ? 'submit' : 'button'}
           onClick={onClickNext}
         >
-          {isFinal ? 'Submit' : 'Next'}
+          {isFinal ? 'Prześlij' : 'Następny'}
         </Button>
       </Col>
     </Row>

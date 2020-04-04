@@ -13,8 +13,8 @@ const EndView = ({ setForm, setCredentials, setCurrentPage }) => {
   return (
     <Container className="d-flex justify-content-center align-items-center">
       <div className="w-50 m-5 p-5 border rounded">
-        <h1 className="text-center border-bottom p-1">Thank you for your time!</h1>
-        <p className="text-center">We will forward your form to the designated person.</p>
+        <h1 className="text-center border-bottom p-1">Dziękujemy!</h1>
+        <p className="text-center">Twoja ankieta została przyjęta.</p>
       </div>
     </Container>
   );

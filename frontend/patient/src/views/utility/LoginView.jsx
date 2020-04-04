@@ -36,7 +36,7 @@ const LoginView = ({ setCredentials }) => {
         <Form onSubmit={handleLogin}>
           <Form.Group>
             <Form.Row>
-              <Form.Label column>Token</Form.Label>
+              <Form.Label column>Kod jednorazowy</Form.Label>
               <Col sm={10}>
                 <Form.Control
                   type="text"
@@ -48,7 +48,7 @@ const LoginView = ({ setCredentials }) => {
             </Form.Row>
           </Form.Group>
           <Button className="btn float-right" variant="primary" type="submit">
-            Submit
+            Prześlij
           </Button>
         </Form>
       </div>

@@ -39,9 +39,9 @@ const FormView = () => {
 
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
+  if (form.status === 'FILLED') { return (<LoadingView message="Oczekiwanie na akceptację przez pracownika." />); }
   if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
-  if (form.status === 'SIGNED') { return (<LoadingView message="Waiting for employee to sign." />); }
+  if (form.status === 'SIGNED') { return (<LoadingView message="Oczekiwanie na podpis pracownika." />); }
   if (form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema

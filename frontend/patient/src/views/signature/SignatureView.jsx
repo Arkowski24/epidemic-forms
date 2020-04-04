@@ -28,7 +28,7 @@ const SubmitButton = ({ sendNewSignature }) => (
         type="submit"
         onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
       >
-        Submit
+        Prześlij
       </Button>
     </div>
   </Row>
@@ -44,7 +44,7 @@ const SignField = ({ setInput }) => {
         <Row>
           <div className="w-100 border-bottom rounded">
             <Button className="btn float-right" variant="dark" onClick={handleClear}>
-              Clear
+              Wyczyść
             </Button>
           </div>
         </Row>
