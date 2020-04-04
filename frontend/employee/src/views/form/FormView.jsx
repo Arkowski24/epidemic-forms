@@ -16,7 +16,7 @@ import SliderView from './fields/SliderView';
 
 import SignatureView from './signature/SignatureView';
 import authService from '../../services/AuthService';
-import DerivedView from './fields/DerivedView'
+import DerivedView from './fields/DerivedView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -59,7 +59,7 @@ const FormView = () => {
   if (form === null || token === null) { return (<LoadingView />); }
   if (form.status === 'ACCEPTED') { return (<LoadingView message="Waiting for patient to sign." />); }
   if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
-  if (form.status === 'CLOSED') { return (<EndView />); }
+  if (form.status === 'CLOSED') { return (<EndView history={history} />); }
 
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../helper/DerivedHelper';
-import SinglePageForm from './common/SinglePageForm';
+import SinglePage from './common/SinglePage';
 
 const Header = ({ message }) => (
   <div className="m-2 p-1 border-bottom">
@@ -75,14 +75,14 @@ const DerivedView = ({
   ));
 
   return (
-    <SinglePageForm
+    <SinglePage
       currentPage={currentPage}
       totalPages={totalPages}
       onClickPrev={onClickPrev}
       onClickNext={onClickNext}
     >
       {fields}
-    </SinglePageForm>
+    </SinglePage>
   );
 };
 
