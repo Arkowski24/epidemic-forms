@@ -34,10 +34,11 @@ const subscribe = (formHandler, setPatientPage) => {
     const { fields } = schema;
 
     const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
+    const derived = fields.derived.map((c) => ({ ...c, type: 'derived' }));
     const simple = fields.simple.map((s) => ({ ...s, type: 'simple' }));
     const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
     const text = fields.text.map((t) => ({ ...t, type: 'text' }));
-    const allFields = choice.concat(simple, slider, text);
+    const allFields = choice.concat(derived, simple, slider, text);
     allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
 
     return allFields;
@@ -47,11 +48,12 @@ const subscribe = (formHandler, setPatientPage) => {
     const fields = state;
 
     const choice = fields.choice.map((c) => ({ ...c, type: 'choice' }));
+    const derived = fields.derived.map((c) => ({ ...c, type: 'derived' }));
     const slider = fields.slider.map((s) => ({ ...s, type: 'slider' }));
     const text = fields.text.map((t) => ({ ...t, type: 'text' }));
 
     const simple = simpleFields.map((s) => ({ type: 'simple', fieldNumber: s.fieldNumber, value: '' }));
-    const allFields = choice.concat(simple, slider, text);
+    const allFields = choice.concat(derived, simple, slider, text);
     allFields.sort((a, b) => a.fieldNumber - b.fieldNumber);
 
     return allFields;

@@ -12,6 +12,7 @@ import SliderView from './fields/SliderView';
 import LoginView from './utility/LoginView';
 
 import SignatureView from './signature/SignatureView';
+import DerivedView from './fields/DerivedView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -81,6 +82,23 @@ const FormView = () => {
           description={fieldSchema.description}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.isMultiChoice}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onClickPrev={prevPage}
+          onClickNext={nextPage}
+          input={input}
+          setInput={setInput}
+          disabled={disabled}
+        />
+      );
+    }
+
+    if (fieldSchema.type === 'derived') {
+      return (
+        <DerivedView
+          derivedType={fieldSchema.derivedType}
+          titles={fieldSchema.titles}
+          descriptions={fieldSchema.descriptions}
           currentPage={currentPage}
           totalPages={totalPages}
           onClickPrev={prevPage}

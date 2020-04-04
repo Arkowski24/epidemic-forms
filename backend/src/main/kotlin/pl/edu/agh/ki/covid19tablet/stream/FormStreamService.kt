@@ -11,6 +11,7 @@ import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateRequestType
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponse
 import pl.edu.agh.ki.covid19tablet.stream.dto.FormStateResponseType
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.ChoiceFieldStateUpdate
+import pl.edu.agh.ki.covid19tablet.stream.dto.update.DerivedFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.SliderFieldStateUpdate
 import pl.edu.agh.ki.covid19tablet.stream.dto.update.TextFieldStateUpdate
 
@@ -42,6 +43,15 @@ class FormStreamServiceImpl(
 
                 return FormStateResponse(
                     responseType = FormStateResponseType.UPDATE_CHOICE,
+                    payload = objectMapper.writeValueAsString(response)
+                )
+            }
+            FormStateRequestType.UPDATE_DERIVED -> {
+                val updatePayload = objectMapper.readValue(request.payload, DerivedFieldStateUpdate::class.java)
+                val response = formStateService.modifyDerivedFieldState(updatePayload.id, updatePayload.newValue)
+
+                return FormStateResponse(
+                    responseType = FormStateResponseType.UPDATE_DERIVED,
                     payload = objectMapper.writeValueAsString(response)
                 )
             }
