@@ -60,8 +60,6 @@ public class PDFBuilder {
 
         Path savingPath = Paths.get(dirPath, name);
 
-        System.out.println(dirPath + " " + name);
-
         PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(savingPath));
         document.open();
 
@@ -126,15 +124,20 @@ public class PDFBuilder {
         ) throws DocumentException {
 
         int fieldNumber = 0;
+        int questionNumber = 1;
+        boolean isWritten;
+
         while (true) {
             Field currentField = findCurrentField(schemaFields, fieldNumber);
             if (currentField == null) {
                 return;
             }
 
+            isWritten = true;
+
             if (currentField.getFieldType().equals(FieldType.CHOICE)) {
                 Paragraph title = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionNumber + ". " + currentField.getTitle(),
                         questionFont
                 );
                 document.add(title);
@@ -172,11 +175,8 @@ public class PDFBuilder {
             }
 
             if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
-                Paragraph title = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle(),
-                        questionFont
-                );
-                document.add(title);
+                questionNumber--;
+                isWritten = false;
             }
 
             if (currentField.getFieldType().equals(FieldType.SLIDER)) {
@@ -190,7 +190,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph question = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionNumber + ". " + currentField.getTitle(),
                         questionFont
                 );
                 Paragraph answer = new Paragraph(
@@ -213,7 +213,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph question = new Paragraph(
-                        (fieldNumber + 1) + ". " + currentField.getTitle(),
+                        questionNumber + ". " + currentField.getTitle(),
                         questionFont
                 );
                 Paragraph answer = new Paragraph(
@@ -225,9 +225,10 @@ public class PDFBuilder {
                 document.add(answer);
             }
 
-            addEmptyLine(document, questionFont);
+            if (isWritten) addEmptyLine(document, questionFont);
 
             fieldNumber++;
+            questionNumber++;
         }
     }
 
