@@ -16,6 +16,7 @@ public class PDFData {
     public PDFData(Form form, String creationDate) {
         this.creationDate = creationDate;
         this.title = form.getFormName();
+        this.personalData = new PersonalDataContener(form);
         this.questions = new QuestionContener(form);
         this.signatures = new SignaturesContener(form);
     }
@@ -23,17 +24,16 @@ public class PDFData {
     public String getCreationDate() {
         return creationDate;
     }
-
     public String getTitle() {
         return title;
     }
-
+    public PersonalDataContener getPersonalData() {
+        return personalData;
+    }
     public QuestionContener getQuestions() {
         return questions;
     }
-
     public SignaturesContener getSignatures() {
         return signatures;
     }
-
 }
