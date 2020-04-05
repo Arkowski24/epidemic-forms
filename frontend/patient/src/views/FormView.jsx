@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Button, Container, Row } from 'react-bootstrap';
+import {
+  Button, Container, Row, Spinner,
+} from 'react-bootstrap';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -53,7 +55,6 @@ const FormView = () => {
 
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'FILLED') { return (<LoadingView message="Oczekiwanie na akceptację przez pracownika." />); }
   if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema
@@ -178,15 +179,29 @@ const FormView = () => {
       .filter((r) => r.fieldType !== 'HIDDEN')
       .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
 
+    const spinner = (
+      <>
+        <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        {' Oczekiwanie na akceptację...'}
+      </>
+    );
+
     const footer = (
       <Row>
-        <div className="w-100 m-2 p-1 pt-0 border-top">
+        <div className="w-100 m-2 p-1 border-top">
           <Button
             className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+            disabled={form.status !== 'NEW'}
           >
-            Prześlij
+            { form.status === 'NEW' ? 'Prześlij' : spinner}
           </Button>
         </div>
       </Row>
