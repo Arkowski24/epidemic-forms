@@ -156,9 +156,7 @@ const FormView = () => {
   const buildFieldsSinglePage = () => {
     const header = (
       <Row>
-        <div className="w-100 m-2 p-1 border-bottom">
-          <h4>Patient Form</h4>
-        </div>
+        <div className="w-100 m-2 border-bottom"/>
       </Row>
     );
 
@@ -169,13 +167,13 @@ const FormView = () => {
 
     const footer = (
       <Row>
-        <div className="w-100 m-2 p-1 border-top">
+        <div className="w-100 m-2 p-1 pt-0 border-top">
           <Button
             className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
           >
-            Send
+            Prześlij
           </Button>
         </div>
       </Row>
