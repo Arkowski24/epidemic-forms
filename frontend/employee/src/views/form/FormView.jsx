@@ -80,6 +80,7 @@ const FormView = () => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
     const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
+    const blocked = true;
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -92,6 +93,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -106,6 +108,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -122,6 +125,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -132,10 +136,11 @@ const FormView = () => {
           title={fieldSchema.title}
           description={fieldSchema.description}
           isInline={fieldSchema.inline}
-          isMultiline={fieldSchema.multiline}
+          isMultiline={fieldSchema.multiLine}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }

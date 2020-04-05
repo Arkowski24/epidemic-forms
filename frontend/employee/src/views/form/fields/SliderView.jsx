@@ -9,6 +9,7 @@ import SliderViewInline from './inline/SliderViewInline';
 const RangeForm = ({
   minValue, maxValue, step,
   value, setValue,
+  isBlocked
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -21,7 +22,7 @@ const RangeForm = ({
             <Button
               onClick={decValue}
               variant="danger"
-              disabled={value - step < minValue}
+              disabled={isBlocked || value - step < minValue}
             >
               <FaMinus />
             </Button>
@@ -38,7 +39,7 @@ const RangeForm = ({
               className="btn float-right"
               onClick={incValue}
               variant="success"
-              disabled={value + step > maxValue}
+              disabled={isBlocked || value + step > maxValue}
             >
               <FaPlus />
             </Button>
@@ -55,6 +56,7 @@ const RangeForm = ({
               step={step}
               value={value}
               onChange={(event) => setValue(Number(event.target.value))}
+              disabled={isBlocked}
             />
           </Form.Group>
         </Form>
@@ -69,6 +71,7 @@ const SliderView = ({
   minValue, maxValue, step,
   input, setInput,
   highlighted,
+  isBlocked
 }) => {
   if (isInline) {
     return (
@@ -80,6 +83,7 @@ const SliderView = ({
         input={input}
         setInput={setInput}
         highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
@@ -92,6 +96,7 @@ const SliderView = ({
         step={step}
         value={input}
         setValue={setInput}
+        isBlocked={isBlocked}
       />
     </SingleInput>
   );
