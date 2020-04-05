@@ -39,14 +39,7 @@ fun ChoiceField.toDTO() =
     )
 
 fun ChoiceField.buildInitialState() =
-    if (!this.multiChoice && choices.size == 2)
-        ChoiceFieldState(
-            field = this,
-            value = listOf(false, true)
-        )
-    else
-        ChoiceFieldState(
-            field = this,
-            value = choices.map { false }
-        )
-
+    ChoiceFieldState(
+        field = this,
+        value = choices.map { false }
+    )

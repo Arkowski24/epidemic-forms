@@ -17,6 +17,8 @@ const ChoiceFormTwoValues = ({
     setInput(newInput);
   };
 
+  const firstInteraction = !input[0] && !input[1];
+  const checked = input[0];
   return (
     <div className="m-1">
       <Row>
@@ -27,13 +29,25 @@ const ChoiceFormTwoValues = ({
         </Col>
         <Col sm="3">
           <div className="pt-1">
-            <BootstrapSwitchButton
-              checked={input[0]}
-              onlabel={choices[0]}
-              offlabel={choices[1]}
-              style="w-100 float-right"
-              onChange={(checked) => { setChecked(checked); }}
-            />
+            {firstInteraction && (
+              <BootstrapSwitchButton
+                checked={checked}
+                onlabel={choices[0]}
+                offlabel="B.D."
+                style="w-100 float-right"
+                onChange={(c) => { setChecked(c); }}
+              />
+            )}
+            {!firstInteraction && (
+              <BootstrapSwitchButton
+                checked={checked}
+                onlabel={choices[0]}
+                offlabel={choices[1]}
+                style="w-100 float-right"
+                offstyle="secondary"
+                onChange={(c) => { setChecked(c); }}
+              />
+            )}
           </div>
         </Col>
       </Row>
