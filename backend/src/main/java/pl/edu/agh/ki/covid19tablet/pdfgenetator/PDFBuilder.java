@@ -294,6 +294,13 @@ public class PDFBuilder {
                 isFound = true;
             }
         }
+        for (DerivedField derivedField : schemaFields.getDerived()) {
+            if (isFound) break;
+            if (derivedField.getFieldNumber() == fieldNumber) {
+                currentField = new Field("", FieldType.DERIVED);
+                isFound = true;
+            }
+        }
         for (SimpleField simpleField : schemaFields.getSimple()) {
             if (isFound) break;
             if (simpleField.getFieldNumber() == fieldNumber) {
