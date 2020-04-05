@@ -32,7 +32,7 @@ const RangeForm = ({
       </Col>
       <Col>
         <div className="w-100 pt-1">
-          <h4 className="text-center">{value}</h4>
+          <h4 className="text-center">{Math.round(value * 100) / 100}</h4>
         </div>
       </Col>
       <Col>
