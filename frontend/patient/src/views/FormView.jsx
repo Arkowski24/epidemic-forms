@@ -40,7 +40,7 @@ const FormView = () => {
 
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'FILLED') { return (<LoadingView message="Waiting for employee to accept." />); }
+  if (form.status === 'FILLED') { return (<LoadingView message="Oczekiwanie na akceptację przez pracownika." />); }
   if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
 
@@ -48,7 +48,8 @@ const FormView = () => {
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
 
-  const createField = (fieldSchema, index, prevPage, nextPage) => {
+  const createField = (fieldSchema, pageIndex, prevPage, nextPage) => {
+    const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
     const { multiPage } = form;
 
@@ -156,26 +157,24 @@ const FormView = () => {
   const buildFieldsSinglePage = () => {
     const header = (
       <Row>
-        <div className="w-100 m-2 p-1 border-bottom">
-          <h1>Patient Form</h1>
-          <p>This form is filled by patient.</p>
-        </div>
+        <div className="w-100 m-2 border-bottom" />
       </Row>
     );
 
     const fields = form.schema
       // eslint-disable-next-line react/no-array-index-key
+      .filter((r) => r.fieldType !== 'HIDDEN')
       .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
 
     const footer = (
       <Row>
-        <div className="w-100 m-2 p-1 border-top">
+        <div className="w-100 m-2 p-1 pt-0 border-top">
           <Button
-            className="btn float-right"
+            className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
           >
-            Send
+            Prześlij
           </Button>
         </div>
       </Row>

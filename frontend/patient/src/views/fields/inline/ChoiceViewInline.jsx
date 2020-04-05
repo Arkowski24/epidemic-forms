@@ -20,18 +20,18 @@ const ChoiceFormTwoValues = ({
   return (
     <div className="m-1">
       <Row>
-        <Col sm="auto">
+        <Col>
           <div className="ml-0 pt-1">
             <h4>{title}</h4>
           </div>
         </Col>
-        <Col>
+        <Col sm="3">
           <div className="pt-1">
             <BootstrapSwitchButton
               checked={input[0]}
               onlabel={choices[0]}
               offlabel={choices[1]}
-              style="w-25 float-right"
+              style="w-100 float-right"
               onChange={(checked) => { setChecked(checked); }}
             />
           </div>

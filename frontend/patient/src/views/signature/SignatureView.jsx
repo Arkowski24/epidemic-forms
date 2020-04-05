@@ -29,7 +29,7 @@ const SubmitButton = ({ sendNewSignature, isBlocked }) => (
         onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
         disabled={isBlocked}
       >
-        Submit
+        Prześlij
       </Button>
     </div>
   </Row>
@@ -45,7 +45,7 @@ const SignField = ({ setInput, setIsEmpty }) => {
         <Row>
           <div className="w-100 border-bottom rounded">
             <Button className="btn float-right" variant="dark" onClick={handleClear}>
-              Clear
+              Wyczyść
             </Button>
           </div>
         </Row>

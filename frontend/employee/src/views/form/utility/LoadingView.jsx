@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 
 const LoadingView = (
-  { message = 'Your form will load shortly.' },
+  { message = 'Formularz zaraz się załaduje.' },
 ) => (
   <Container className="d-flex justify-content-center align-items-center">
     <div className="w-50 m-5 p-2 border rounded">
