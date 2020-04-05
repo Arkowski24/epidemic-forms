@@ -30,8 +30,8 @@ const OneField = ({
   const [fieldValidator, setFieldValidator] = useState('PESEL');
 
   if (derivedType === 'BIRTHDAY_PESEL' && index === 0) {
-    const validators = ['PESEL', 'NIP', 'ID', 'REGON', 'NONE'];
-    const options = ['PESEL', 'NIP', 'ID', 'REGON', 'NONE']
+    const validators = ['PESEL', 'NIP', 'Nr dow. os.', 'REGON', 'Inne'];
+    const options = ['PESEL', 'NIP', 'Nr dow. os.', 'REGON', 'Inne']
       .map((o, i) => (<option key={o} value={validators[i]}>{o}</option>));
 
     const setNewInput = (value) => {
@@ -46,7 +46,7 @@ const OneField = ({
     const validateInput = () => {
       if (fieldValidator === 'PESEL') { return validatePolish.pesel(text); }
       if (fieldValidator === 'NIP') { return validatePolish.nip(text); }
-      if (fieldValidator === 'ID') {
+      if (fieldValidator === 'Nr dow. os.') {
         return validatePolish.identityCard(text)
         || validatePolish.identityCardWithSeparator(text);
       }
