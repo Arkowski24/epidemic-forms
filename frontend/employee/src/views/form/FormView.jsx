@@ -142,7 +142,7 @@ const FormView = () => {
   const header = (
     <Row>
       <div className="w-100 m-2 p-1 border-bottom">
-        <h1>{form.formName}</h1>
+        <h4>{form.formName}</h4>
       </div>
     </Row>
   );

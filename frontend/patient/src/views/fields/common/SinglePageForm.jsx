@@ -34,7 +34,7 @@ const SinglePageForm = ({
     <Container style={{ padding: '30px' }}>
       <ProgressBar now={progress} label={progressLabel} />
       <Header message={title} />
-      <InfoMessage message={description} />
+      {description && (<InfoMessage message={description} />)}
       {children}
       <PrevNextButtons
         onClickPrev={onClickPrev}

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 import SingleInput from './common/SingleInput';
 import SliderViewInline from './inline/SliderViewInline';
 
@@ -22,7 +23,7 @@ const RangeForm = ({
               variant="danger"
               disabled={value - step < minValue}
             >
-              -
+              <FaMinus />
             </Button>
           </div>
         </Col>
@@ -39,7 +40,7 @@ const RangeForm = ({
               variant="success"
               disabled={value + step > maxValue}
             >
-              +
+              <FaPlus />
             </Button>
           </div>
         </Col>

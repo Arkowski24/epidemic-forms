@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
-
+import { FaPlus, FaMinus } from 'react-icons/fa';
 import PageForm from './common/PageForm';
 import SliderViewInline from './inline/SliderViewInline';
 
@@ -24,7 +24,7 @@ const RangeForm = ({
               variant="danger"
               disabled={disabled || (value - step < minValue)}
             >
-              -
+              <FaMinus />
             </Button>
           </div>
         </Col>
@@ -41,7 +41,7 @@ const RangeForm = ({
               variant="success"
               disabled={disabled || (value + step > maxValue)}
             >
-              +
+              <FaPlus />
             </Button>
           </div>
         </Col>

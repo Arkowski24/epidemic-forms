@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = ({ message }) => (
   <div className="m-2 border-bottom">
-    <h1>{message}</h1>
+    <h4>{message}</h4>
   </div>
 );
 
@@ -19,7 +19,7 @@ const SinglePageForm = ({
 }) => (
   <div className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
     <Header message={title} />
-    <InfoMessage message={description} />
+    {description && (<InfoMessage message={description} />)}
     {children}
   </div>
 );
