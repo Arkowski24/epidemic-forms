@@ -27,9 +27,11 @@ const OneField = ({
   title,
   input, setInput,
 }) => {
-  const [fieldValidator, setFieldValidator] = useState('PESEL');
-
   if (derivedType === 'BIRTHDAY_PESEL' && index === 0) {
+    const textAndValidator = input[index] ? JSON.parse(input[index]) : { type: 'PESEL', value: input[index] };
+    const text = textAndValidator.value;
+    const fieldValidator = textAndValidator.type;
+
     const validators = ['PESEL', 'NIP', 'Nr dow. os.', 'REGON', 'Inne'];
     const options = ['PESEL', 'NIP', 'Nr dow. os.', 'REGON', 'Inne']
       .map((o, i) => (<option key={o} value={validators[i]}>{o}</option>));
@@ -42,7 +44,13 @@ const OneField = ({
       setInput(newValues);
     };
 
-    const text = input[index] ? JSON.parse(input[index]).value : input[index];
+    const setValidator = (validator) => {
+      const newInput = input.slice();
+      const newValues = validator === 'PESEL' ? derivedHelper.calculateDerived(derivedType, index, newInput) : newInput;
+      newValues[index] = JSON.stringify({ type: validator, value: text });
+      setInput(newValues);
+    };
+
     const validateInput = () => {
       if (fieldValidator === 'PESEL') { return validatePolish.pesel(text); }
       if (fieldValidator === 'NIP') { return validatePolish.nip(text); }
@@ -74,7 +82,7 @@ const OneField = ({
                 <Form.Control
                   as="select"
                   size="lg"
-                  onChange={(event) => setFieldValidator(event.target.value)}
+                  onChange={(event) => setValidator(event.target.value)}
                   value={fieldValidator}
                 >
                   {options}
