@@ -2,12 +2,14 @@ import React from 'react';
 import {
   Button, Col, Row,
 } from 'react-bootstrap';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 import InlineView from '../common/InlineView';
 
 const RangeForm = ({
   title,
   minValue, maxValue, step,
   value, setValue,
+  isBlocked,
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -24,9 +26,9 @@ const RangeForm = ({
           <Button
             onClick={decValue}
             variant="danger"
-            disabled={value - step < minValue}
+            disabled={isBlocked || value - step < minValue}
           >
-            -
+            <FaMinus />
           </Button>
         </div>
       </Col>
@@ -41,9 +43,9 @@ const RangeForm = ({
             className="btn float-right"
             onClick={incValue}
             variant="success"
-            disabled={value + step > maxValue}
+            disabled={isBlocked || value + step > maxValue}
           >
-            +
+            <FaPlus />
           </Button>
         </div>
       </Col>
@@ -56,6 +58,7 @@ const SliderViewInline = ({
   minValue, maxValue, step,
   input, setInput,
   highlighted,
+  isBlocked,
 }) => (
   <InlineView highlighted={highlighted}>
     <RangeForm
@@ -65,6 +68,7 @@ const SliderViewInline = ({
       step={step}
       value={input}
       setValue={setInput}
+      isBlocked={isBlocked}
     />
   </InlineView>
 );

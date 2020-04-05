@@ -8,6 +8,7 @@ import derivedHelper from '../../../../helper/DerivedHelper';
 
 const InputForm = ({
   title, text, setText, isInvalid,
+  isBlocked,
 }) => (
   <Form>
     <Form.Control
@@ -18,6 +19,7 @@ const InputForm = ({
       placeholder={title}
       onChange={(event) => setText(event.target.value)}
       isInvalid={isInvalid}
+      disabled={isBlocked}
     />
   </Form>
 );
@@ -26,6 +28,7 @@ const OneField = ({
   derivedType, index,
   title,
   input, setInput,
+  isBlocked,
 }) => {
   if (derivedType === 'BIRTHDAY_PESEL' && index === 0) {
     const textAndValidator = input[index] ? JSON.parse(input[index]) : { type: 'PESEL', value: input[index] };
@@ -88,6 +91,7 @@ const OneField = ({
               text={text}
               setText={setNewInput}
               isInvalid={!isValid}
+              isBlocked={isBlocked}
             />
           </div>
         </Col>
@@ -100,6 +104,8 @@ const OneField = ({
                   size="lg"
                   onChange={(event) => setValidator(event.target.value)}
                   value={fieldValidator}
+                  readOnly={isBlocked}
+                  disabled={isBlocked}
                 >
                   {options}
                 </Form.Control>
@@ -120,7 +126,7 @@ const OneField = ({
 
   return (
     <div className="w-100 ml-2 mr-2 pl-2 pr-2 pb-1">
-      <InputForm title={title} text={input[index]} setText={setNewInput} />
+      <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlocked} />
     </div>
   );
 };
@@ -130,6 +136,7 @@ const DerivedViewInline = ({
   titles,
   input, setInput,
   highlighted,
+  isBlocked,
 }) => {
   const fields = titles.map((t, i) => (
     <Row key={i}>
@@ -140,6 +147,7 @@ const DerivedViewInline = ({
         title={t}
         input={input}
         setInput={setInput}
+        isBlocked={isBlocked}
       />
     </Row>
   ));
