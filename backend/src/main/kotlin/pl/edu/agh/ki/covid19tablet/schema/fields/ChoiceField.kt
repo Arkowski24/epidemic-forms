@@ -19,10 +19,11 @@ data class ChoiceField(
 
     val title: String,
     val description: String = "",
+    val inline: Boolean = true,
 
     @ElementCollection
     val choices: List<String> = listOf(),
-    val isMultiChoice: Boolean = false
+    val multiChoice: Boolean = false
 )
 
 fun ChoiceField.toDTO() =
@@ -32,12 +33,20 @@ fun ChoiceField.toDTO() =
         fieldType = fieldType,
         title = title,
         description = description,
+        inline = inline,
         choices = choices,
-        isMultiChoice = isMultiChoice
+        multiChoice = multiChoice
     )
 
 fun ChoiceField.buildInitialState() =
-    ChoiceFieldState(
-        field = this,
-        value = choices.map { false }
-    )
+    if (!this.multiChoice && choices.size == 2)
+        ChoiceFieldState(
+            field = this,
+            value = listOf(false, true)
+        )
+    else
+        ChoiceFieldState(
+            field = this,
+            value = choices.map { false }
+        )
+

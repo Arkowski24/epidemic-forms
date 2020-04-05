@@ -16,7 +16,8 @@ data class SimpleField(
     val fieldType: FieldType = FieldType.NORMAL,
 
     val title: String,
-    val description: String = ""
+    val description: String = "",
+    val inline: Boolean = true
 )
 
 fun SimpleField.toDTO() =
@@ -25,5 +26,6 @@ fun SimpleField.toDTO() =
         fieldNumber = fieldNumber,
         fieldType = fieldType,
         title = title,
-        description = description
+        description = description,
+        inline = inline
     )

@@ -31,6 +31,7 @@ class DatabaseInitializer {
             schemaRepository.save(
                 Schema(
                     name = "My Schema",
+                    multiPage = false,
                     fields = SchemaFields(
                         simple = listOf(
                             SimpleField(
@@ -44,14 +45,14 @@ class DatabaseInitializer {
                                 fieldNumber = 1,
                                 title = "Favourite authors",
                                 description = "Your favourite author is:",
-                                choices = listOf("Kafka", "Prost", "Tolkien")
+                                choices = listOf("Kafka", "Prost")
                             ),
                             ChoiceField(
                                 fieldNumber = 2,
                                 title = "Favourite authors pt.2",
                                 description = "Your favourite author is:",
                                 choices = listOf("Kafka", "Prost", "Tolkien"),
-                                isMultiChoice = true
+                                multiChoice = true
                             )
                         ),
                         derived = listOf(
@@ -98,7 +99,7 @@ class DatabaseInitializer {
                                 fieldNumber = 8,
                                 title = "Hard question",
                                 description = "What have you eaten today?",
-                                isMultiline = true
+                                multiLine = true
                             )
                         )
                     ),

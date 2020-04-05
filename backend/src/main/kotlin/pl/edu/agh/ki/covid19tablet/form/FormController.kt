@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,6 +21,7 @@ import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_CREATE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_DELETE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_MODIFY
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_READ
 import javax.validation.Valid
@@ -82,6 +84,18 @@ class FormController(
     ): ResponseEntity<Nothing> =
         try {
             formService.createEmployeeSignature(formId, request)
+            ResponseEntity(HttpStatus.NO_CONTENT)
+        } catch (ex: FormNotFoundException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+
+    @DeleteMapping("{formId}")
+    @PreAuthorize("hasAuthority('$FORM_DELETE')")
+    fun deleteForm(
+        @PathVariable formId: FormId
+    ): ResponseEntity<Nothing> =
+        try {
+            formService.deleteForm(formId)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)

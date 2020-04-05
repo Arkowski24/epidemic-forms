@@ -2,6 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import SingleInput from './common/SingleInput';
+import ChoiceViewInline from './inline/ChoiceViewInline';
 
 const ChoiceForm = ({
   choices,
@@ -47,18 +48,34 @@ const ChoiceForm = ({
 
 const ChoiceView = ({
   title, description,
+  isInline,
   choices, isMultiChoice,
   input, setInput,
   highlighted,
-}) => (
-  <SingleInput title={title} description={description} highlighted={highlighted}>
-    <ChoiceForm
-      choices={choices}
-      isMultiChoice={isMultiChoice}
-      input={input}
-      setInput={setInput}
-    />
-  </SingleInput>
-);
+}) => {
+  if (isInline) {
+    return (
+      <ChoiceViewInline
+        title={title}
+        choices={choices}
+        isMultiChoice={isMultiChoice}
+        input={input}
+        setInput={setInput}
+        highlighted={highlighted}
+      />
+    );
+  }
+
+  return (
+    <SingleInput title={title} description={description} highlighted={highlighted}>
+      <ChoiceForm
+        choices={choices}
+        isMultiChoice={isMultiChoice}
+        input={input}
+        setInput={setInput}
+      />
+    </SingleInput>
+  );
+};
 
 export default ChoiceView;

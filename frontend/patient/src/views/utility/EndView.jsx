@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 
-const EndView = ({ setCredentials }) => {
+const EndView = ({ setForm, setCredentials, setCurrentPage }) => {
   useEffect(() => {
     setTimeout(() => {
       localStorage.removeItem('credentials');
+      setForm(null);
+      setCurrentPage(1);
       setCredentials(null);
-    }, 5000);
+    }, 2000);
   }, [setCredentials]);
   return (
     <Container className="d-flex justify-content-center align-items-center">

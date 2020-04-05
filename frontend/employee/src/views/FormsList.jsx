@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 
+import { FaTrash } from 'react-icons/fa';
 import authService from '../services/AuthService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
@@ -44,19 +45,37 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
   </>
 );
 
-const FormsTable = ({ forms }) => {
+const FormsTable = ({ forms, setForms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Form Name', 'Schema', 'Created by', 'Token']
+  const headers = ['#', 'Form Name', 'Schema', 'Created by', 'Token', '']
     .map((h) => <th key={h}>{h}</th>);
 
+  const deleteForm = async (formId) => {
+    await formService.deleteForm(formId);
+    const newForms = forms.filter((f) => f.id !== formId);
+    setForms(newForms);
+  };
+
+  const moveToForm = (formId) => {
+    history.push(`/employee/forms/${formId}`);
+  };
+
   const buildFormRow = (form, index) => (
-    <tr key={form.id} onClick={() => history.push(`/employee/forms/${form.id}`)}>
+    <tr key={form.id} onClick={() => moveToForm(form.id)}>
       <td>{index}</td>
       <td>{form.formName}</td>
       <td>{form.schema.name}</td>
       <td>{form.createdBy.fullName}</td>
       <td>{form.patient.id}</td>
+      <td style={{ width: '5%' }}>
+        <Button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteForm(form.id); }}
+        >
+          <FaTrash />
+        </Button>
+      </td>
     </tr>
   );
   const patientForms = forms
@@ -203,7 +222,7 @@ const FormsList = () => {
         employeeName={credentials.employee.fullName}
         handleLogout={handleLogout}
       />
-      <FormsTable forms={forms} />
+      <FormsTable forms={forms} setForms={setForms} />
       <NewFormModal
         visible={modalVisible}
         setVisible={setModalVisible}

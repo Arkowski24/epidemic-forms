@@ -30,6 +30,12 @@ const createForm = (schemaId, formName) => axios
   )
   .then((res) => res.data);
 
+const deleteForm = (formId) => axios
+  .delete(
+    `${baseUrl}/${formId}`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+
 const createSignature = (formId, signature) => axios
   .post(
     `${baseUrl}/${formId}/signature/employee`,
@@ -38,5 +44,5 @@ const createSignature = (formId, signature) => axios
   );
 
 export default {
-  setToken, getForms, getForm, createForm, createSignature,
+  setToken, getForms, getForm, createForm, deleteForm, createSignature,
 };
