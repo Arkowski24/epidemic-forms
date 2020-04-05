@@ -165,6 +165,7 @@ const FormView = () => {
 
     const fields = form.schema
       // eslint-disable-next-line react/no-array-index-key
+      .filter((r) => r.fieldType !== 'HIDDEN')
       .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
 
     const footer = (
