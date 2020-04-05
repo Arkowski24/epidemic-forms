@@ -48,7 +48,8 @@ const FormView = () => {
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
 
-  const createField = (fieldSchema, index, prevPage, nextPage) => {
+  const createField = (fieldSchema, pageIndex, prevPage, nextPage) => {
+    const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
     const { multiPage } = form;
 
@@ -156,7 +157,7 @@ const FormView = () => {
   const buildFieldsSinglePage = () => {
     const header = (
       <Row>
-        <div className="w-100 m-2 border-bottom"/>
+        <div className="w-100 m-2 border-bottom" />
       </Row>
     );
 
