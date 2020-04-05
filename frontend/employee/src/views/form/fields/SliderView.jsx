@@ -9,7 +9,7 @@ import SliderViewInline from './inline/SliderViewInline';
 const RangeForm = ({
   minValue, maxValue, step,
   value, setValue,
-  isBlocked
+  isBlocked,
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -71,7 +71,7 @@ const SliderView = ({
   minValue, maxValue, step,
   input, setInput,
   highlighted,
-  isBlocked
+  isBlocked,
 }) => {
   if (isInline) {
     return (

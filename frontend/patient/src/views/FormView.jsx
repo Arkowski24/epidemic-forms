@@ -61,14 +61,11 @@ const FormView = () => {
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
 
-  const createField = (fieldSchema, pageIndex, prevPage, nextPage) => {
+  const createField = (fieldSchema, pageIndex) => {
     const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
-    const { multiPage } = form;
-
-    const totalPages = pageIndexMapping.length;
-    const disabled = form.schema[index].fieldType === 'BLOCKED';
-    const setInput = (newInput) => { if (!disabled) formStreamService.sendInput(newInput, index); };
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const blocked = form.state[index].blocked || !(form.status === 'NEW');
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -78,14 +75,9 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.multiChoice}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -97,14 +89,9 @@ const FormView = () => {
           titles={fieldSchema.titles}
           descriptions={fieldSchema.descriptions}
           isInline={fieldSchema.inline}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -118,14 +105,9 @@ const FormView = () => {
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -135,16 +117,11 @@ const FormView = () => {
         <TextView
           title={fieldSchema.title}
           description={fieldSchema.description}
-          isMultiline={fieldSchema.multiline}
           isInline={fieldSchema.inline}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
+          isMultiline={fieldSchema.multiLine}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -154,18 +131,9 @@ const FormView = () => {
         title={fieldSchema.title}
         description={fieldSchema.description}
         isInline={fieldSchema.inline}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onClickPrev={prevPage}
-        onClickNext={nextPage}
-        input={input}
-        setInput={setInput}
-        disabled={disabled}
-        isMultiPage={multiPage}
       />
     );
   };
-
 
   const buildFieldsSinglePage = () => {
     const header = (

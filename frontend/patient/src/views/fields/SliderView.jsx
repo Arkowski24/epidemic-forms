@@ -3,13 +3,13 @@ import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import PageForm from './common/PageForm';
+import SingleInput from './common/SingleInput';
 import SliderViewInline from './inline/SliderViewInline';
 
 const RangeForm = ({
   minValue, maxValue, step,
   value, setValue,
-  disabled,
+  isBlocked,
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -22,7 +22,7 @@ const RangeForm = ({
             <Button
               onClick={decValue}
               variant="danger"
-              disabled={disabled || (value - step < minValue)}
+              disabled={isBlocked || value - step < minValue}
             >
               <FaMinus />
             </Button>
@@ -39,7 +39,7 @@ const RangeForm = ({
               className="btn float-right"
               onClick={incValue}
               variant="success"
-              disabled={disabled || (value + step > maxValue)}
+              disabled={isBlocked || value + step > maxValue}
             >
               <FaPlus />
             </Button>
@@ -56,7 +56,7 @@ const RangeForm = ({
               step={step}
               value={value}
               onChange={(event) => setValue(Number(event.target.value))}
-              disabled={disabled}
+              disabled={isBlocked}
             />
           </Form.Group>
         </Form>
@@ -69,13 +69,11 @@ const SliderView = ({
   title, description,
   isInline,
   minValue, maxValue, step,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
   input, setInput,
-  disabled,
-  isMultiPage,
+  highlighted,
+  isBlocked,
 }) => {
-  if (!isMultiPage && isInline) {
+  if (isInline) {
     return (
       <SliderViewInline
         title={title}
@@ -84,29 +82,23 @@ const SliderView = ({
         step={step}
         input={input}
         setInput={setInput}
+        highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
 
   return (
-    <PageForm
-      title={title}
-      description={description}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-      isMultiPage={isMultiPage}
-    >
+    <SingleInput title={title} description={description} highlighted={highlighted}>
       <RangeForm
         minValue={minValue}
         maxValue={maxValue}
         step={step}
         value={input}
         setValue={setInput}
-        disabled={disabled}
+        isBlocked={isBlocked}
       />
-    </PageForm>
+    </SingleInput>
   );
 };
 

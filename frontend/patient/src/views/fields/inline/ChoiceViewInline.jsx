@@ -1,4 +1,5 @@
 import {
+  Button,
   Col,
   Container, Form, Row,
 } from 'react-bootstrap';
@@ -9,6 +10,7 @@ import InlineView from '../common/InlineView';
 const ChoiceFormTwoValues = ({
   title, choices,
   input, setInput,
+  isBlocked,
 }) => {
   const setChecked = (checked) => {
     const newInput = input.map(() => false);
@@ -18,6 +20,22 @@ const ChoiceFormTwoValues = ({
   };
 
   const firstInteraction = !input[0] && !input[1];
+  const getFieldValue = () => {
+    if (firstInteraction) return 'B.D.';
+    return input[0] ? choices[0] : choices[1];
+  };
+  const getButtonVariant = () => {
+    if (firstInteraction) return 'light';
+    return input[0] ? 'primary' : 'secondary';
+  };
+
+
+  const blockedField = (
+    <div className="w-100">
+      <Button disabled className="w-100 border" variant={getButtonVariant()}>{getFieldValue()}</Button>
+    </div>
+  );
+
   const checked = input[0];
   return (
     <div className="m-1">
@@ -29,7 +47,8 @@ const ChoiceFormTwoValues = ({
         </Col>
         <Col sm="3">
           <div className="pt-1">
-            {firstInteraction && (
+            {isBlocked && blockedField}
+            {!isBlocked && firstInteraction && (
               <BootstrapSwitchButton
                 checked={checked}
                 onlabel={choices[0]}
@@ -38,7 +57,7 @@ const ChoiceFormTwoValues = ({
                 onChange={(c) => { setChecked(c); }}
               />
             )}
-            {!firstInteraction && (
+            {!isBlocked && !firstInteraction && (
               <BootstrapSwitchButton
                 checked={checked}
                 onlabel={choices[0]}
@@ -58,6 +77,7 @@ const ChoiceFormTwoValues = ({
 const ChoiceFormSingleChoice = ({
   title, choices,
   input, setInput,
+  isBlocked,
 }) => {
   const options = choices.map((c, i) => (<option value={i} key={i}>{c}</option>));
   const setChecked = (index) => {
@@ -81,6 +101,8 @@ const ChoiceFormSingleChoice = ({
                 size="lg"
                 onChange={(event) => setChecked(Number(event.target.value))}
                 value={value >= 0 ? value : 0}
+                readonly={isBlocked}
+                disabled={isBlocked}
               >
                 {options}
               </Form.Control>
@@ -96,9 +118,11 @@ const ChoiceFormMultiChoice = ({
   title, choices,
   isMultiChoice,
   input, setInput,
+  isBlocked,
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
+      if (isBlocked) return;
       const newInput = isMultiChoice ? input.slice() : input.map(() => false);
       newInput[i] = !input[i];
       setInput(newInput);
@@ -116,6 +140,7 @@ const ChoiceFormMultiChoice = ({
           label={c}
           checked={input[i]}
           readOnly
+          disabled={isBlocked}
         />
       </div>
     );
@@ -140,6 +165,7 @@ const ChoiceViewInline = ({
   isMultiChoice,
   input, setInput,
   highlighted,
+  isBlocked,
 }) => (
   <InlineView highlighted={highlighted}>
     {isMultiChoice && (
@@ -149,6 +175,7 @@ const ChoiceViewInline = ({
         isMultiChoice={isMultiChoice}
         input={input}
         setInput={setInput}
+        isBlocked={isBlocked}
       />
     )}
     {!isMultiChoice && (choices.length === 2) && (
@@ -158,6 +185,7 @@ const ChoiceViewInline = ({
         isMultiChoice={isMultiChoice}
         input={input}
         setInput={setInput}
+        isBlocked={isBlocked}
       />
     )}
     {!isMultiChoice && !(choices.length === 2) && (
@@ -167,6 +195,7 @@ const ChoiceViewInline = ({
         isMultiChoice={isMultiChoice}
         input={input}
         setInput={setInput}
+        isBlocked={isBlocked}
       />
     )}
   </InlineView>

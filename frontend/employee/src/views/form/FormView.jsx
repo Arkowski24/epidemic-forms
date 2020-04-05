@@ -80,7 +80,7 @@ const FormView = () => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
     const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
-    const blocked = true;
+    const blocked = !(form.status === 'NEW' || form.status === 'FILLED');
 
     if (fieldSchema.type === 'choice') {
       return (

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-import PageForm from './common/PageForm';
+import SingleInput from './common/SingleInput';
 import ChoiceViewInline from './inline/ChoiceViewInline';
 
 const ChoiceForm = ({
-  choices, isMultiChoice,
+  choices,
+  isMultiChoice,
   input, setInput,
-  disabled,
+  isBlocked,
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
@@ -28,7 +29,7 @@ const ChoiceForm = ({
           label={c}
           checked={input[i]}
           readOnly
-          disabled={disabled}
+          disabled={isBlocked}
         />
       </div>
     );
@@ -51,13 +52,11 @@ const ChoiceView = ({
   title, description,
   isInline,
   choices, isMultiChoice,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
   input, setInput,
-  disabled,
-  isMultiPage,
+  highlighted,
+  isBlocked,
 }) => {
-  if (!isMultiPage && isInline) {
+  if (isInline) {
     return (
       <ChoiceViewInline
         title={title}
@@ -65,28 +64,22 @@ const ChoiceView = ({
         isMultiChoice={isMultiChoice}
         input={input}
         setInput={setInput}
+        highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
 
   return (
-    <PageForm
-      currentPage={currentPage}
-      totalPages={totalPages}
-      title={title}
-      description={description}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-      isMultiPage={isMultiPage}
-    >
+    <SingleInput title={title} description={description} highlighted={highlighted}>
       <ChoiceForm
         choices={choices}
         isMultiChoice={isMultiChoice}
         input={input}
         setInput={setInput}
-        disabled={disabled}
+        isBlocked={isBlocked}
       />
-    </PageForm>
+    </SingleInput>
   );
 };
 

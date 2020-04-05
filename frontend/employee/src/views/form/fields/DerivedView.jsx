@@ -34,7 +34,7 @@ const OneField = ({
   derivedType, index,
   title, description,
   input, setInput,
-  isBlocked
+  isBlocked,
 }) => {
   const setNewInput = (value) => {
     const newInput = input.slice();
@@ -49,7 +49,7 @@ const OneField = ({
     <div className="w-100 m-1 p-1">
       <Header message={title} />
       <InfoMessage message={description} />
-      <InputForm text={text} setText={setNewInput} isBlocked={isBlocked}/>
+      <InputForm text={text} setText={setNewInput} isBlocked={isBlocked} />
     </div>
   );
 };
@@ -60,7 +60,7 @@ const DerivedView = ({
   isInline,
   input, setInput,
   highlighted,
-  isBlocked
+  isBlocked,
 }) => {
   if (isInline) {
     return (

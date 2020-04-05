@@ -12,7 +12,7 @@ const InfoMessage = ({ message }) => (
   </div>
 );
 
-const SingleInput = ({
+const SinglePageForm = ({
   title, description,
   children,
   highlighted,
@@ -24,4 +24,4 @@ const SingleInput = ({
   </div>
 );
 
-export default SingleInput;
+export default SinglePageForm;

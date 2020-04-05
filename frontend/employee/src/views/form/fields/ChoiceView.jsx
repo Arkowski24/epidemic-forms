@@ -8,7 +8,7 @@ const ChoiceForm = ({
   choices,
   isMultiChoice,
   input, setInput,
-  isBlocked
+  isBlocked,
 }) => {
   const buttons = choices.map((c, i) => {
     const setChecked = () => {
@@ -54,7 +54,7 @@ const ChoiceView = ({
   choices, isMultiChoice,
   input, setInput,
   highlighted,
-  isBlocked
+  isBlocked,
 }) => {
   if (isInline) {
     return (
