@@ -36,76 +36,66 @@ class DatabaseInitializer {
                         simple = listOf(
                             SimpleField(
                                 fieldNumber = 0,
-                                title = "Proszę przeczytaj dokładnie.",
-                                description = "Ten formularz jest używany przez Szpital, w celu zapewnienia bezpieczeństwa Tobie i nam."
+                                title = "Dane osobowe.",
+                                fieldType = FieldType.HIDDEN
                             ),
                             SimpleField(
                                 fieldNumber = 9,
                                 title = "Pytania epidemiczne",
-                                description = "Ta część zawiera pytania dotyczące potencjalnej ekspozycji na wirusa powodującego chorobę COVID-19. " +
-                                        "Udzielenie odpowiedzi zgodnie z prawdą jest kluczowe do zapewnienia bezpieczeństwa Tobie i Personelowi Szpitala."
+                                fieldType = FieldType.HIDDEN
                             )
                         ),
                         choice = listOf(
                             ChoiceField(
                                 fieldNumber = 7,
-                                fieldType = FieldType.BLOCKED,
+                                fieldType = FieldType.HIDDEN,
                                 title = "Częstość oddechu",
                                 description = "Częstość oddechu pacjenta:",
                                 choices = listOf("10-20", "20-30", "30-40", ">40")
                             ),
                             ChoiceField(
                                 fieldNumber = 10,
-                                title = "Pytanie 1",
-                                description = "Czy miał Pan(i) kontakt z osoba zakażoną koronawirusem?",
+                                title = "Czy miał Pan(i) kontakt z osoba zakażoną koronawirusem?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 11,
-                                title = "Pytanie 2",
-                                description = "Czy miał Pan(i) kontakt z osobą w trakcie kwarantanny?",
+                                title = "Czy miał Pan(i) kontakt z osobą w trakcie kwarantanny?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 12,
-                                title = "Pytanie 3",
-                                description = "Czy w ciągu ostatnich dwóch tygodni przebywał Pan(i) za granicą?",
+                                title = "Czy w ciągu ostatnich dwóch tygodni przebywał Pan(i) za granicą?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 13,
-                                title = "Pytanie 4",
-                                description = "Czy w ciągu ostatnich dwóch tygodni miał Pan(i) jakikolwiek kontakt z osobą, która powróciła z innego kraju?",
+                                title = "Czy w ciągu ostatnich dwóch tygodni miał Pan(i) jakikolwiek kontakt z osobą, która powróciła z innego kraju?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 14,
-                                title = "Pytanie 5",
-                                description = "Czy miał Pan(i) kontakt z osobą z objawami infekcji dróg oddechowych?",
+                                title = "Czy miał Pan(i) kontakt z osobą z objawami infekcji dróg oddechowych?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 15,
-                                title = "Pytanie 6",
-                                description = "Czy pracuje Pan(i) w szpitalu lub przychodni lub zakładzie opiekuńczym?",
+                                title = "Czy pracuje Pan(i) w szpitalu lub przychodni lub zakładzie opiekuńczym?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 16,
-                                title = "Pytanie 7",
-                                description = "Czy ma Pan(i) podwyższona temperaturę?",
+                                title = "Czy ma Pan(i) podwyższona temperaturę?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 17,
-                                title = "Pytanie 8",
-                                description = "Czy ma Pan(i) kaszel?",
+                                title = "Czy ma Pan(i) kaszel?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
                                 fieldNumber = 18,
-                                title = "Pytanie 9",
-                                description = "Czy odczuwa Pan(i) duszność, brak tchu?",
+                                title = "Czy odczuwa Pan(i) duszność, brak tchu?",
                                 choices = listOf("TAK", "NIE")
                             )
                         ),
@@ -120,57 +110,59 @@ class DatabaseInitializer {
                         slider = listOf(
                             SliderField(
                                 fieldNumber = 4,
-                                fieldType = FieldType.BLOCKED,
+                                fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Temperatura",
-                                description = "Temperatura zmierzona pacjentowi:",
-                                minValue = 30.0,
-                                maxValue = 45.0,
-                                step = 0.01
+                                minValue = 34.0,
+                                maxValue = 43.0,
+                                defaultValue = 36.6,
+                                step = 0.1
                             ),
                             SliderField(
                                 fieldNumber = 5,
-                                fieldType = FieldType.BLOCKED,
+                                fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Ciśnienie skurczowe",
-                                description = "Ciśnienie skurczowe zmierzone pacjentowi:",
                                 minValue = 50.0,
                                 maxValue = 300.0,
+                                defaultValue = 120.0,
                                 step = 10.0
                             ),
                             SliderField(
                                 fieldNumber = 6,
-                                fieldType = FieldType.BLOCKED,
+                                fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Tętno",
-                                description = "Tętno zmierzone pacjentowi:",
                                 minValue = 20.0,
                                 maxValue = 200.0,
+                                defaultValue = 70.0,
                                 step = 10.0
                             ),
                             SliderField(
                                 fieldNumber = 8,
-                                fieldType = FieldType.BLOCKED,
+                                fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Saturacja",
-                                description = "Saturacja krwii pacjenta:",
-                                minValue = 50.0,
+                                minValue = 80.0,
                                 maxValue = 100.0,
+                                defaultValue = 95.0,
                                 step = 5.0
                             )
                         ),
                         text = listOf(
                             TextField(
                                 fieldNumber = 1,
-                                title = "Nazwisko",
-                                description = "Nazwisko pacjenta:"
+                                title = "Nazwisko"
                             ),
                             TextField(
                                 fieldNumber = 2,
-                                title = "Imiona",
-                                description = "Imiona pacjenta:"
+                                title = "Imiona"
                             ),
                             TextField(
                                 fieldNumber = 19,
                                 fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Dodatkowe objawy",
-                                description = "Miejsce na wprowadzenie zaobserwowanych objawów: (pacjent nie widzi tego pola)",
                                 multiLine = true
                             )
                         )

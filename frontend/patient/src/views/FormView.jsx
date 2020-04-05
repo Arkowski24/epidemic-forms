@@ -157,8 +157,7 @@ const FormView = () => {
     const header = (
       <Row>
         <div className="w-100 m-2 p-1 border-bottom">
-          <h1>Patient Form</h1>
-          <p>This form is filled by patient.</p>
+          <h4>Patient Form</h4>
         </div>
       </Row>
     );
@@ -172,7 +171,7 @@ const FormView = () => {
       <Row>
         <div className="w-100 m-2 p-1 border-top">
           <Button
-            className="btn float-right"
+            className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
           >
