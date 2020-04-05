@@ -56,7 +56,6 @@ class DatabaseInitializer {
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Częstość oddechu",
-                                description = "Częstość oddechu pacjenta:",
                                 choices = listOf("10-20", "20-30", "30-40", ">40")
                             ),
                             ChoiceField(
