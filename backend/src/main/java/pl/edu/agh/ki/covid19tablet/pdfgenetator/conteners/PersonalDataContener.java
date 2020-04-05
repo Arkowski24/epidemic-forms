@@ -21,6 +21,16 @@ public class PersonalDataContener {
         return personalDatas;
     }
 
+    public String getSurname() {
+        for (PersonalData personalData : personalDatas) {
+            if (personalData.getTitle().startsWith("Nazwis")) {
+                return personalData.getValue();
+            }
+        }
+
+        return "";
+    }
+
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
