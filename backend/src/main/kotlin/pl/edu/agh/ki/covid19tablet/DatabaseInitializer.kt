@@ -36,65 +36,71 @@ class DatabaseInitializer {
                         simple = listOf(
                             SimpleField(
                                 fieldNumber = 0,
-                                title = "Dane osobowe.",
+                                title = "Dane osobowe",
                                 fieldType = FieldType.HIDDEN
                             ),
                             SimpleField(
-                                fieldNumber = 9,
+                                fieldNumber = 4,
+                                title = "Parametry życiowe",
+                                fieldType = FieldType.HIDDEN
+                            ),
+                            SimpleField(
+                                fieldNumber = 10,
                                 title = "Pytania epidemiczne",
                                 fieldType = FieldType.HIDDEN
                             )
                         ),
                         choice = listOf(
                             ChoiceField(
-                                fieldNumber = 7,
+                                fieldNumber = 8,
                                 fieldType = FieldType.HIDDEN,
+                                inline = false,
                                 title = "Częstość oddechu",
                                 description = "Częstość oddechu pacjenta:",
                                 choices = listOf("10-20", "20-30", "30-40", ">40")
                             ),
                             ChoiceField(
-                                fieldNumber = 10,
+                                fieldNumber = 11,
                                 title = "Czy miał Pan(i) kontakt z osoba zakażoną koronawirusem?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 11,
+                                fieldNumber = 12,
                                 title = "Czy miał Pan(i) kontakt z osobą w trakcie kwarantanny?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 12,
+                                fieldNumber = 13,
                                 title = "Czy w ciągu ostatnich dwóch tygodni przebywał Pan(i) za granicą?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 13,
+                                fieldNumber = 14,
                                 title = "Czy w ciągu ostatnich dwóch tygodni miał Pan(i) jakikolwiek kontakt z osobą, która powróciła z innego kraju?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 14,
+                                fieldNumber = 15,
                                 title = "Czy miał Pan(i) kontakt z osobą z objawami infekcji dróg oddechowych?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 15,
+                                fieldNumber = 16,
                                 title = "Czy pracuje Pan(i) w szpitalu lub przychodni lub zakładzie opiekuńczym?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 16,
+                                fieldNumber = 17,
                                 title = "Czy ma Pan(i) podwyższona temperaturę?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 17,
+                                fieldNumber = 18,
                                 title = "Czy ma Pan(i) kaszel?",
                                 choices = listOf("TAK", "NIE")
                             ),
                             ChoiceField(
-                                fieldNumber = 18,
+                                fieldNumber = 19,
                                 title = "Czy odczuwa Pan(i) duszność, brak tchu?",
                                 choices = listOf("TAK", "NIE")
                             )
@@ -109,7 +115,7 @@ class DatabaseInitializer {
                         ),
                         slider = listOf(
                             SliderField(
-                                fieldNumber = 4,
+                                fieldNumber = 5,
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Temperatura",
@@ -119,7 +125,7 @@ class DatabaseInitializer {
                                 step = 0.1
                             ),
                             SliderField(
-                                fieldNumber = 5,
+                                fieldNumber = 6,
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Ciśnienie skurczowe",
@@ -129,7 +135,7 @@ class DatabaseInitializer {
                                 step = 10.0
                             ),
                             SliderField(
-                                fieldNumber = 6,
+                                fieldNumber = 7,
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Tętno",
@@ -139,7 +145,7 @@ class DatabaseInitializer {
                                 step = 10.0
                             ),
                             SliderField(
-                                fieldNumber = 8,
+                                fieldNumber = 9,
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Saturacja",
@@ -159,7 +165,7 @@ class DatabaseInitializer {
                                 title = "Imiona"
                             ),
                             TextField(
-                                fieldNumber = 19,
+                                fieldNumber = 20,
                                 fieldType = FieldType.HIDDEN,
                                 inline = false,
                                 title = "Dodatkowe objawy",
