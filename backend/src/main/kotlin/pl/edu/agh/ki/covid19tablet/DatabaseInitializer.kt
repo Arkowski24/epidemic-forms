@@ -228,15 +228,15 @@ class DatabaseInitializer {
                             ),
                             ChoiceField(
                                 fieldNumber = 8,
-                                fieldType = FieldType.NORMAL,
-                                title = "Multi-choice",
+                                fieldType = FieldType.BLOCKED,
+                                title = "Multi-choice - Blocked",
                                 description = "Multi-choice - Blocked",
                                 choices = listOf("A", "B", "C"),
                                 inline = false
                             ),
                             ChoiceField(
                                 fieldNumber = 9,
-                                fieldType = FieldType.NORMAL,
+                                fieldType = FieldType.BLOCKED,
                                 title = "Multi-choice - Inline - Blocked",
                                 choices = listOf("A", "B", "C"),
                                 inline = true

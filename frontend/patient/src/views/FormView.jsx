@@ -20,7 +20,6 @@ import DerivedView from './fields/DerivedView';
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [credentials, setCredentials] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const signatureViewRef = useRef();
 
   const sendFormResponse = () => {
@@ -55,7 +54,7 @@ const FormView = () => {
 
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
+  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))
@@ -65,7 +64,7 @@ const FormView = () => {
     const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index);
-    const blocked = form.state[index].blocked || !(form.status === 'NEW');
+    const blocked = fieldSchema.fieldType === 'BLOCKED' || !(form.status === 'NEW');
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -145,7 +144,7 @@ const FormView = () => {
     const fields = form.schema
       // eslint-disable-next-line react/no-array-index-key
       .filter((r) => r.fieldType !== 'HIDDEN')
-      .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
+      .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 
     const spinner = (
       <>
@@ -197,33 +196,9 @@ const FormView = () => {
     );
   };
 
-  const buildFieldsMultiPage = () => {
-    const { index } = pageIndexMapping[currentPage - 1];
-    const fieldSchema = form.schema[index];
-
-    const nextPage = (event) => {
-      event.preventDefault();
-      if (currentPage === pageIndexMapping.length) {
-        sendFormResponse();
-      } else {
-        formStreamService.sendPageChange(currentPage + 1);
-        setCurrentPage(currentPage + 1);
-      }
-    };
-    const prevPage = (event) => {
-      event.preventDefault();
-      if (currentPage - 1 > 0) {
-        formStreamService.sendPageChange(currentPage - 1);
-        setCurrentPage(currentPage - 1);
-      }
-    };
-
-    return createField(fieldSchema, index, prevPage, nextPage);
-  };
-
   return (
     <>
-      {form.multiPage ? buildFieldsMultiPage() : buildFieldsSinglePage()}
+      {buildFieldsSinglePage()}
     </>
   );
 };
