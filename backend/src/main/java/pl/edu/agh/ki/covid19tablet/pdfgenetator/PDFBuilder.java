@@ -142,32 +142,25 @@ public class PDFBuilder {
                 );
                 document.add(title);
 
-                List<ConvertedBoolean> answers = new ArrayList<>();
-                List<String> questions = new ArrayList<>();
+                List<String> answers = new ArrayList<>();
 
                 for (ChoiceFieldState choiceFieldState : formState.getChoice()) {
                     if (choiceFieldState.getField().getFieldNumber() == fieldNumber) {
-                        BooleanConverter converter = new BooleanConverter();
-                        answers = converter.convert(choiceFieldState.getValue());
-                        break;
-                    }
-                }
-                for (ChoiceField choiceField : schemaFields.getChoice()) {
-                    if (choiceField.getFieldNumber() == fieldNumber) {
-                        questions = choiceField.getChoices();
-                        break;
+                        List<Boolean> fieldAnwsers = choiceFieldState.getValue();
+                        for (int j = 0; j < fieldAnwsers.size(); j++) {
+                            if (fieldAnwsers.get(j)) {
+                                answers.add(choiceFieldState.getField().getChoices().get(j));
+                                break;
+                            }
+                        }
                     }
                 }
 
-                for (int i = 0; i < answers.size() && i < questions.size(); i++) {
-                    String question = "    " + questions.get(i);
-                    String answer = " " + answers.get(i);
+                for (int i = 0; i < answers.size(); i++) {
+                    String answer = "    " + answers.get(i);
 
-                    Chunk chunkQuestion = new Chunk(question, choiceQuestionFont);
                     Chunk chunkAnswer = new Chunk(answer, answerFont);
-
                     Paragraph paragraph = new Paragraph();
-                    paragraph.add(chunkQuestion);
                     paragraph.add(chunkAnswer);
 
                     document.add(paragraph);
