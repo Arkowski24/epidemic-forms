@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Button, Container, Row } from 'react-bootstrap';
 import formService from '../services/FormService';
@@ -19,6 +19,7 @@ const FormView = () => {
   const [form, setForm] = useState(null);
   const [credentials, setCredentials] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const signatureViewRef = useRef();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('FILLED');
@@ -28,6 +29,18 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
+
+  useEffect(
+    () => {
+      if (signatureViewRef.current && form.status === 'ACCEPTED') {
+        window.scrollTo({
+          behavior: 'smooth',
+          top: signatureViewRef.current.offsetTop,
+        });
+      }
+    },
+    [form],
+  );
 
   useEffect(() => {
     if (credentials === null) return;
@@ -41,7 +54,6 @@ const FormView = () => {
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'FILLED') { return (<LoadingView message="Oczekiwanie na akceptację przez pracownika." />); }
-  if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema
@@ -180,11 +192,24 @@ const FormView = () => {
       </Row>
     );
 
+    const signatureField = (
+      <Row>
+        <div className="w-100 mt-1 ml-1 p-1 border rounded" ref={signatureViewRef}>
+          <SignatureView
+            title={form.patientSignature.title}
+            description={form.patientSignature.description}
+            sendSignature={sendSignature}
+          />
+        </div>
+      </Row>
+    );
+
     return (
       <Container>
         {header}
         {fields}
-        {footer}
+        {form.status !== 'ACCEPTED' && footer}
+        {form.status === 'ACCEPTED' && signatureField}
       </Container>
     );
   };

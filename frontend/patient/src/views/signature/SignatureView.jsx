@@ -5,16 +5,16 @@ import Container from 'react-bootstrap/Container';
 
 const Header = ({ message }) => (
   <Row>
-    <div className="w-100 p-2 m-2 border-bottom">
-      <h1>{message}</h1>
+    <div className="w-100 p-1 mr-2 border-bottom">
+      <h4>{message}</h4>
     </div>
   </Row>
 );
 
 const InfoMessage = ({ message }) => (
   <Row>
-    <div className="w-100 p-2 m-2 overflow-auto" style={{ maxHeight: '30vh' }}>
-      <p className="text-justify">{message}</p>
+    <div className="w-100 p-1 ml-2 mr-2 overflow-auto" style={{ maxHeight: '30vh' }}>
+      <h5 className="text-justify">{message}</h5>
     </div>
   </Row>
 );
@@ -23,7 +23,7 @@ const SubmitButton = ({ sendNewSignature, isBlocked }) => (
   <Row>
     <div className="w-100 m-1 p-1 border-top">
       <Button
-        className="btn float-right"
+        className="w-100"
         variant="primary"
         type="submit"
         onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
