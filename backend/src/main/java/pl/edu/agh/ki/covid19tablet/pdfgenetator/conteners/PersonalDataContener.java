@@ -51,7 +51,7 @@ public class PersonalDataContener {
     private PersonalData extractSurname(Form form) {
         List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
-        String name = "Imię:";
+        String name = "Nazwisko:";
         String value = "";
 
         for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
