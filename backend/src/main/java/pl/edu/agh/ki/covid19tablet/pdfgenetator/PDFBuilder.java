@@ -158,7 +158,7 @@ public class PDFBuilder {
             }
 
             if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
-                continue;
+
             }
 
             if (currentField.getFieldType().equals(FieldType.SLIDER)) {
