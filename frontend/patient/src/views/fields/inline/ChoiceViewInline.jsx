@@ -38,15 +38,15 @@ const ChoiceFormTwoValues = ({
 
   const checked = input[0];
   return (
-    <div className="m-1">
+    <div className="mt-1 ml-1 mr-1">
       <Row>
         <Col>
-          <div className="ml-0 pt-1">
+          <div className="pt-1">
             <h4>{title}</h4>
           </div>
         </Col>
         <Col sm="3">
-          <div className="pt-1">
+          <div className="pb-1">
             {isBlocked && blockedField}
             {!isBlocked && firstInteraction && (
               <BootstrapSwitchButton
@@ -101,7 +101,6 @@ const ChoiceFormSingleChoice = ({
                 size="lg"
                 onChange={(event) => setChecked(Number(event.target.value))}
                 value={value >= 0 ? value : 0}
-                readonly={isBlocked}
                 disabled={isBlocked}
               >
                 {options}

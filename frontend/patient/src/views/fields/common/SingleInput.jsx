@@ -17,7 +17,7 @@ const SinglePageForm = ({
   children,
   highlighted,
 }) => (
-  <div className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
+  <div className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
     <Header message={title} />
     {description && (<InfoMessage message={description} />)}
     {children}

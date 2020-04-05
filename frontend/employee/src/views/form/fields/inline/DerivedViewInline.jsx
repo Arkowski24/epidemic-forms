@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Col, Container, Form, Row,
 } from 'react-bootstrap';
@@ -104,7 +104,6 @@ const OneField = ({
                   size="lg"
                   onChange={(event) => setValidator(event.target.value)}
                   value={fieldValidator}
-                  readOnly={isBlocked}
                   disabled={isBlocked}
                 >
                   {options}
@@ -125,7 +124,7 @@ const OneField = ({
   };
 
   return (
-    <div className="w-100 ml-2 mr-2 pl-2 pr-2 pb-1">
+    <div className="w-100 ml-2 mr-2 pl-2 pr-2">
       <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlocked} />
     </div>
   );
@@ -153,7 +152,7 @@ const DerivedViewInline = ({
   ));
 
   return (
-    <Container className={`w-100 ml-1 mt-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
+    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
       {fields}
     </Container>
   );
