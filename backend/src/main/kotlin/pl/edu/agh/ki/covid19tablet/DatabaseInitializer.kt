@@ -72,7 +72,7 @@ class DatabaseInitializer {
                 fieldNumber = 8,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Częstość oddechu",
+                title = "Częstość oddechu:",
                 choices = listOf("10-20", "20-30", "30-40", ">40")
             )
             val choiceField2 = ChoiceField(
@@ -130,7 +130,7 @@ class DatabaseInitializer {
                 fieldNumber = 5,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Temperatura",
+                title = "Temperatura:",
                 minValue = 34.0,
                 maxValue = 43.0,
                 defaultValue = 36.6,
@@ -140,7 +140,7 @@ class DatabaseInitializer {
                 fieldNumber = 6,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Ciśnienie skurczowe",
+                title = "Ciśnienie skurczowe:",
                 minValue = 50.0,
                 maxValue = 300.0,
                 defaultValue = 120.0,
@@ -150,7 +150,7 @@ class DatabaseInitializer {
                 fieldNumber = 7,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Tętno",
+                title = "Tętno:",
                 minValue = 20.0,
                 maxValue = 200.0,
                 defaultValue = 70.0,
@@ -160,7 +160,7 @@ class DatabaseInitializer {
                 fieldNumber = 9,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Saturacja",
+                title = "Saturacja:",
                 minValue = 80.0,
                 maxValue = 100.0,
                 defaultValue = 95.0,
@@ -168,17 +168,17 @@ class DatabaseInitializer {
             )
             val textField1 = TextField(
                 fieldNumber = 1,
-                title = "Nazwisko"
+                title = "Nazwisko:"
             )
             val textField2 = TextField(
                 fieldNumber = 2,
-                title = "Imiona"
+                title = "Imiona:"
             )
             val textField3 = TextField(
                 fieldNumber = 20,
                 fieldType = FieldType.HIDDEN,
                 inline = false,
-                title = "Dodatkowe objawy",
+                title = "Dodatkowe objawy:",
                 multiLine = true
             )
 

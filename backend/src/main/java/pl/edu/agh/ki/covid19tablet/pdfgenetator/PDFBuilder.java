@@ -41,16 +41,14 @@ public class PDFBuilder {
 
     private Font titleFont;
     private Font questionFont;
-    private Font choiceQuestionFont;
     private Font answerFont;
 
     private String dirPath;
 
     public PDFBuilder(String dirPath) throws DocumentException, IOException{
-        this.titleFont = createTitleFont(20);
-        this.questionFont = createQuestionFont(12);
-        this.choiceQuestionFont = createQuestionFont(10);
-        this.answerFont = createAnswerFont(10);
+        this.titleFont = createTitleFont(15);
+        this.questionFont = createQuestionFont(10);
+        this.answerFont = createAnswerFont(8);
 
         this.dirPath = dirPath;
     }
@@ -105,15 +103,13 @@ public class PDFBuilder {
                 derivedParagraph.setAlignment(Element.ALIGN_RIGHT);
                 document.add(derivedParagraph);
             }
-
-            addEmptyLine(document, questionFont);
         }
     }
 
     private void addTitle(Document document, String formName) throws DocumentException {
         Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
-        title.setSpacingAfter(15);
+        title.setSpacingAfter(10);
         document.add(title);
     }
 
@@ -124,8 +120,6 @@ public class PDFBuilder {
         ) throws DocumentException {
 
         int fieldNumber = 0;
-        int questionNumber = 1;
-        boolean isWritten;
 
         while (true) {
             Field currentField = findCurrentField(schemaFields, fieldNumber);
@@ -133,11 +127,9 @@ public class PDFBuilder {
                 return;
             }
 
-            isWritten = true;
-
             if (currentField.getFieldType().equals(FieldType.CHOICE)) {
                 Paragraph title = new Paragraph(
-                        questionNumber + ". " + currentField.getTitle(),
+                        currentField.getTitle(),
                         questionFont
                 );
                 document.add(title);
@@ -168,8 +160,7 @@ public class PDFBuilder {
             }
 
             if (currentField.getFieldType().equals(FieldType.SIMPLE)) {
-                questionNumber--;
-                isWritten = false;
+
             }
 
             if (currentField.getFieldType().equals(FieldType.SLIDER)) {
@@ -183,7 +174,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph question = new Paragraph(
-                        questionNumber + ". " + currentField.getTitle(),
+                        currentField.getTitle(),
                         questionFont
                 );
                 Paragraph answer = new Paragraph(
@@ -206,7 +197,7 @@ public class PDFBuilder {
                 }
 
                 Paragraph question = new Paragraph(
-                        questionNumber + ". " + currentField.getTitle(),
+                        currentField.getTitle(),
                         questionFont
                 );
                 Paragraph answer = new Paragraph(
@@ -218,10 +209,7 @@ public class PDFBuilder {
                 document.add(answer);
             }
 
-            if (isWritten) addEmptyLine(document, questionFont);
-
             fieldNumber++;
-            questionNumber++;
         }
     }
 
@@ -232,6 +220,8 @@ public class PDFBuilder {
             String employeeSignatureTitle,
             String patientSignatureTitle
     ) throws DocumentException, IOException  {
+
+        addEmptyLine(document, answerFont);
 
         resizeSignature(employeeSignature, signatureEmployeeName);
         resizeSignature(patientSignature, signaturePatientName);
