@@ -10,8 +10,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.BooleanConverter;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.converters.ConvertedBoolean;
 import pl.edu.agh.ki.covid19tablet.schema.fields.*;
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
 import pl.edu.agh.ki.covid19tablet.state.FormState;
