@@ -8,7 +8,7 @@ const EndView = ({ setForm, setCredentials, setCurrentPage }) => {
       setForm(null);
       setCurrentPage(1);
       setCredentials(null);
-    }, 5000);
+    }, 2000);
   }, [setCredentials]);
   return (
     <Container className="d-flex justify-content-center align-items-center">
