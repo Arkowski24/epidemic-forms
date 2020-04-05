@@ -75,8 +75,9 @@ const FormView = () => {
         <ChoiceView
           title={fieldSchema.title}
           description={fieldSchema.description}
+          isInline={fieldSchema.inline}
           choices={fieldSchema.choices}
-          isMultiChoice={fieldSchema.isMultiChoice}
+          isMultiChoice={fieldSchema.multiChoice}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
@@ -90,6 +91,7 @@ const FormView = () => {
           derivedType={fieldSchema.derivedType}
           titles={fieldSchema.titles}
           descriptions={fieldSchema.descriptions}
+          isInline={fieldSchema.inline}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
@@ -102,6 +104,7 @@ const FormView = () => {
         <SliderView
           title={fieldSchema.title}
           description={fieldSchema.description}
+          isInline={fieldSchema.inline}
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
@@ -117,7 +120,8 @@ const FormView = () => {
         <TextView
           title={fieldSchema.title}
           description={fieldSchema.description}
-          isMultiline={fieldSchema.isMultiline}
+          isInline={fieldSchema.inline}
+          isMultiline={fieldSchema.multiline}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
@@ -129,6 +133,7 @@ const FormView = () => {
       <SimpleView
         title={fieldSchema.title}
         description={fieldSchema.description}
+        isInline={fieldSchema.inline}
         highlighted={highlighted}
       />
     );

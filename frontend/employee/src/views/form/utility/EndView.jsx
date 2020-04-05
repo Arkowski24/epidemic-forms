@@ -5,7 +5,7 @@ const EndView = ({ history }) => {
   useEffect(() => {
     setTimeout(() => {
       history.push('/employee/');
-    }, 5000);
+    }, 2000);
   }, [history]);
 
   return (

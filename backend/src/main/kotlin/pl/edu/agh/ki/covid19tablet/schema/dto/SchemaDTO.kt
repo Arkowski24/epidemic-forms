@@ -9,6 +9,7 @@ data class SchemaDTO(
     val name: String,
 
     val fields: SchemaFieldsDTO,
+    val multiPage: Boolean,
     val patientSignature: SignatureFieldDTO,
     val employeeSignature: SignatureFieldDTO
 )

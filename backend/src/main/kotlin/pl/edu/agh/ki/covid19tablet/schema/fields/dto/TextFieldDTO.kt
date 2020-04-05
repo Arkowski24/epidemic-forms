@@ -10,6 +10,7 @@ data class TextFieldDTO(
 
     val title: String,
     val description: String,
+    val inline: Boolean,
 
-    val isMultiline: Boolean
+    val multiLine: Boolean
 )

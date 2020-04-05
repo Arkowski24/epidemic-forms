@@ -34,9 +34,9 @@ const SubmitButton = ({ sendNewSignature }) => (
   </Row>
 );
 
-const SignField = ({ setInput }) => {
+const SignField = ({ setInput, setIsEmpty }) => {
   const canvasRef = React.createRef();
-  const handleClear = () => { canvasRef.current.clear(); setInput(null); };
+  const handleClear = () => { canvasRef.current.clear(); setInput(null); setIsEmpty(true); };
 
   return (
     <Row>
@@ -54,7 +54,11 @@ const SignField = ({ setInput }) => {
               penColor="black"
               canvasProps={{ className: 'w-100 h-100 m-0' }}
               ref={canvasRef}
-              onEnd={() => { setInput(canvasRef.current.toDataURL()); }}
+              onEnd={() => {
+                const { current } = canvasRef;
+                setIsEmpty(current.isEmpty());
+                setInput(current.getTrimmedCanvas().toDataURL());
+              }}
             />
           </div>
         </Row>
@@ -68,6 +72,7 @@ const SignatureView = ({
   sendSignature,
 }) => {
   const [input, setInput] = useState('');
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const sendNewSignature = () => {
     const base64 = input.split(',')[1];
@@ -78,8 +83,8 @@ const SignatureView = ({
     <Container>
       <Header message={title} />
       <InfoMessage message={description} />
-      <SignField setInput={setInput} />
-      <SubmitButton sendNewSignature={sendNewSignature} />
+      <SignField setInput={setInput} setIsEmpty={setIsEmpty} />
+      <SubmitButton sendNewSignature={sendNewSignature} isBlocked={isEmpty} />
     </Container>
   );
 };

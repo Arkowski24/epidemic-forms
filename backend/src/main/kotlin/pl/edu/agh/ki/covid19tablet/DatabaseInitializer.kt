@@ -31,6 +31,7 @@ class DatabaseInitializer {
             schemaRepository.save(
                 Schema(
                     name = "Formularz epidemiczny",
+                    multiPage = false,
                     fields = SchemaFields(
                         simple = listOf(
                             SimpleField(
@@ -170,7 +171,7 @@ class DatabaseInitializer {
                                 fieldType = FieldType.HIDDEN,
                                 title = "Dodatkowe objawy",
                                 description = "Miejsce na wprowadzenie zaobserwowanych objawów: (pacjent nie widzi tego pola)",
-                                isMultiline = true
+                                multiLine = true
                             )
                         )
                     ),

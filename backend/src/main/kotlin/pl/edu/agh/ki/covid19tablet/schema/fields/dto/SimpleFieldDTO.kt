@@ -9,5 +9,6 @@ data class SimpleFieldDTO(
     val fieldType: FieldType,
 
     val title: String,
-    val description: String
+    val description: String,
+    val inline: Boolean
 )

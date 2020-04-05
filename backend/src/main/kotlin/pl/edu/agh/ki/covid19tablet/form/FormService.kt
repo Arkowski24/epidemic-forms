@@ -25,6 +25,8 @@ interface FormService {
     fun createForm(request: CreateFormRequest, employeeDetails: EmployeeDetails): FormDTO
     fun updateFormStatus(formId: FormId, newStatus: FormStatus)
 
+    fun deleteForm(formId: FormId)
+
     fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String)
     fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest)
 }
@@ -77,6 +79,14 @@ class FormServiceImpl(
             .copy(status = newStatus)
 
         formRepository.save(form)
+    }
+
+    override fun deleteForm(formId: FormId) {
+        val form = formRepository
+            .findById(formId)
+            .orElseThrow { FormNotFoundException() }
+
+        formRepository.delete(form)
     }
 
     override fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String) {
