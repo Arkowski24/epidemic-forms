@@ -78,14 +78,21 @@ public class PersonalDataContainer {
             List<String> values = derivedFieldState.getValue();
             for (int j = 0; j < titles.size() && j < values.size(); j++) {
                 String value = values.get(j);
-                if (value.isEmpty()) continue;
 
                 if (j == 0 && derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
-                    DerivedPolishTypeData data = extractPersonal(value);
-                    if (data == null) continue;
-                    extractedPersonalData.add(new PersonalData(data.getType() + ':', data.getValue()));
+                    if (value.isEmpty()) {
+                        extractedPersonalData.add(new PersonalData("PESEL" + ':', "B.D."));
+                    } else {
+                        DerivedPolishTypeData data = extractPersonal(value);
+                        if (data == null) continue;
+
+                        String newValue = data.getValue();
+                        if (newValue.isEmpty()) newValue = "B.D";
+                        extractedPersonalData.add(new PersonalData(data.getType() + ':', newValue));
+                    }
                     continue;
                 }
+                if (value.isEmpty()) value = "B.D.";
 
                 String title = titles.get(j);
                 if (title.charAt(title.length() - 1) != ':') {
