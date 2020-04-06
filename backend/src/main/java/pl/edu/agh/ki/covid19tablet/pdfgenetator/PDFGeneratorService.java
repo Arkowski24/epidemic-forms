@@ -22,7 +22,6 @@ public class PDFGeneratorService {
     private FormRepository formRepository;
 
     private static final String pdfDirPath = "/tmp/forms";
-    private static final String pdfNamePrefix = "Covid19Form";
     private static final SimpleDateFormat sdfFileSuffix = new SimpleDateFormat("yyyyMMddHHmm");
     private static final SimpleDateFormat sdfPdfDateHeader = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -43,7 +42,7 @@ public class PDFGeneratorService {
         String pdfName = generatePDFName(pdfData.getPersonalData().getSurname());
 
         PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
-        pdfBuilder.build(pdfName, pdfCreationDate, form);
+        pdfBuilder.build(pdfName, pdfData);
     }
 
     private void createPDFDirectory() throws IOException {

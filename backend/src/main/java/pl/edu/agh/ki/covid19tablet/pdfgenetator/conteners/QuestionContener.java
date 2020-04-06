@@ -13,12 +13,17 @@ import java.util.List;
 
 public class QuestionContener {
 
+    private int maxFieldNumber;
     private List<Question> questions;
 
     public QuestionContener(Form form) {
+        this.maxFieldNumber = 0;
         this.questions = extractQuestions(form);
     }
 
+    public int getMaxFieldNumber() {
+        return maxFieldNumber;
+    }
     public List<Question> getQuestions() {
         return questions;
     }
@@ -43,6 +48,10 @@ public class QuestionContener {
             String title = sliderFields.get(i).getTitle();
             String answer = Double.toString(sliderFieldStates.get(i).getValue());
             extractedQuestions.add(new Question(fieldNumber, title, answer));
+
+            if (fieldNumber > this.maxFieldNumber) {
+                this.maxFieldNumber = fieldNumber;
+            }
         }
 
         return extractedQuestions;
@@ -54,10 +63,16 @@ public class QuestionContener {
         List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
         for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
-            int fieldNumber = textFields.get(i).getFieldNumber();
-            String title = textFields.get(i).getTitle();
-            String answer = textFieldStates.get(i).getValue();
-            extractedQuestions.add(new Question(fieldNumber, title, answer));
+            if (!(textFields.get(i).getTitle().startsWith("Imi") || textFields.get(i).getTitle().startsWith("Nazwis"))) {
+                int fieldNumber = textFields.get(i).getFieldNumber();
+                String title = textFields.get(i).getTitle();
+                String answer = textFieldStates.get(i).getValue();
+                extractedQuestions.add(new Question(fieldNumber, title, answer));
+
+                if (fieldNumber > this.maxFieldNumber) {
+                    this.maxFieldNumber = fieldNumber;
+                }
+            }
         }
 
         return extractedQuestions;
@@ -82,6 +97,9 @@ public class QuestionContener {
             }
 
             extractedQuestions.add(new Question(fieldNumber, title, answer));
+            if (fieldNumber > this.maxFieldNumber) {
+                this.maxFieldNumber = fieldNumber;
+            }
         }
 
         return extractedQuestions;
