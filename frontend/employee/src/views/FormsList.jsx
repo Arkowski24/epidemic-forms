@@ -51,7 +51,7 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
 const FormsTable = ({ forms, setForms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Urządzenie / Kod jednorazowy', '']
+  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Kod jednorazowy', '']
     .map((h) => <th key={h}>{h}</th>);
 
   const deleteForm = async (formId) => {

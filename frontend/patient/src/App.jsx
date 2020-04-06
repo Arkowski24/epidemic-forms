@@ -7,7 +7,7 @@ import EndView from './views/utility/EndView';
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/device/login">
+      <Route path="/device">
         <LoginDeviceView />
       </Route>
       <Route path="/thanks">
