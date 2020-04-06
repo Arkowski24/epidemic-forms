@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
@@ -11,12 +11,12 @@ import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionContener {
+public class QuestionContainer {
 
     private int maxFieldNumber;
     private List<Question> questions;
 
-    public QuestionContener(Form form) {
+    public QuestionContainer(Form form) {
         this.maxFieldNumber = 0;
         this.questions = extractQuestions(form);
     }
@@ -24,6 +24,7 @@ public class QuestionContener {
     public int getMaxFieldNumber() {
         return maxFieldNumber;
     }
+
     public List<Question> getQuestions() {
         return questions;
     }
@@ -88,9 +89,9 @@ public class QuestionContener {
             String title = choiceFields.get(i).getTitle();
             String answer = "";
 
-            List<Boolean> fieldAnwsers = choiceFieldStates.get(i).getValue();
-            for (int j = 0; j < fieldAnwsers.size(); j++) {
-                if (fieldAnwsers.get(j)) {
+            List<Boolean> fieldAnswers = choiceFieldStates.get(i).getValue();
+            for (int j = 0; j < fieldAnswers.size(); j++) {
+                if (fieldAnswers.get(j)) {
                     answer = choiceFieldStates.get(i).getField().getChoices().get(j);
                     break;
                 }

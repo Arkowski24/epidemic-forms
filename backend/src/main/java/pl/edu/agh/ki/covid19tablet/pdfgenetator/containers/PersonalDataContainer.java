@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
@@ -9,20 +9,20 @@ import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalDataContener {
+public class PersonalDataContainer {
 
-    private List<PersonalData> personalDatas;
+    private List<PersonalData> personalDataList;
 
-    public PersonalDataContener(Form form) {
-        this.personalDatas = extractPersonalData(form);
+    public PersonalDataContainer(Form form) {
+        this.personalDataList = extractPersonalData(form);
     }
 
-    public List<PersonalData> getPersonalDatas() {
-        return personalDatas;
+    public List<PersonalData> getPersonalDataList() {
+        return personalDataList;
     }
 
     public String getSurname() {
-        for (PersonalData personalData : personalDatas) {
+        for (PersonalData personalData : personalDataList) {
             if (personalData.getTitle().startsWith("Nazwis")) {
                 return personalData.getValue();
             }
@@ -34,14 +34,14 @@ public class PersonalDataContener {
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
-        extractedPersonalData.add(extactPattern(form, "Nazwisko", "Nazwis"));
-        extractedPersonalData.add(extactPattern(form, "Imię", "Imi"));
-        extractedPersonalData.addAll(extractDerivedes(form));
+        extractedPersonalData.add(extractPattern(form, "Nazwisko", "Nazwis"));
+        extractedPersonalData.add(extractPattern(form, "Imię", "Imi"));
+        extractedPersonalData.addAll(extractDerived(form));
 
         return extractedPersonalData;
     }
 
-    private PersonalData extactPattern(Form form, String defaultName, String pattern) {
+    private PersonalData extractPattern(Form form, String defaultName, String pattern) {
         List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
         String title = defaultName;
@@ -62,7 +62,7 @@ public class PersonalDataContener {
         return new PersonalData(title, value);
     }
 
-    private List<PersonalData> extractDerivedes(Form form) {
+    private List<PersonalData> extractDerived(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
         List<DerivedField> derivedFields = form.getSchema().getFields().getDerived();

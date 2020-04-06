@@ -9,7 +9,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners.*;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -77,9 +77,9 @@ public class PDFBuilder {
         document.add(title);
     }
 
-    private void addPersonalData(Document document, PersonalDataContener personalDataContener)
+    private void addPersonalData(Document document, PersonalDataContainer personalDataContainer)
             throws DocumentException {
-        for (PersonalData personalData : personalDataContener.getPersonalDatas()) {
+        for (PersonalData personalData : personalDataContainer.getPersonalDataList()) {
             Chunk titleChunk = new Chunk(personalData.getTitle(), standardFont);
             Chunk valueChunk = new Chunk(personalData.getValue(), personalDataFont);
 
@@ -93,14 +93,14 @@ public class PDFBuilder {
         addEmptyLine(document, standardFont);
     }
 
-    private void addQuestions(Document document, QuestionContener questionContener) throws DocumentException {
-        List<Question> questions = questionContener.getQuestions();
+    private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
+        List<Question> questions = questionContainer.getQuestions();
 
-        for (int i = 0; i < questionContener.getMaxFieldNumber(); i++) {
+        for (int i = 0; i < questionContainer.getMaxFieldNumber(); i++) {
             for (Question question : questions) {
                 if (i == question.getFieldNumber()) {
                     Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-                    Paragraph answerParagraph =  new Paragraph("    " + question.getAnswer(), answerFont);
+                    Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
                     document.add(questionParagraph);
                     document.add(answerParagraph);
                     break;
@@ -109,12 +109,12 @@ public class PDFBuilder {
         }
     }
 
-    private void addSignatures(Document document, SignaturesContener signaturesContener)
+    private void addSignatures(Document document, SignaturesContainer signaturesContainer)
             throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
 
-        ByteArrayInputStream signatureEmployee = resizeSignature(signaturesContener.getEmployeeSignature());
-        ByteArrayInputStream signaturePatient = resizeSignature(signaturesContener.getPatientSignature());
+        ByteArrayInputStream signatureEmployee = resizeSignature(signaturesContainer.getEmployeeSignature());
+        ByteArrayInputStream signaturePatient = resizeSignature(signaturesContainer.getPatientSignature());
 
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
@@ -124,8 +124,8 @@ public class PDFBuilder {
 
         PdfPTable titleTable = new PdfPTable(2);
         titleTable.setTotalWidth(document.getPageSize().getWidth());
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContener.getEmployeeSignatureTitle(), standardFont)));
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContener.getPatientSignatureTitle(), standardFont)));
+        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
+        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
         document.add(titleTable);
     }
 

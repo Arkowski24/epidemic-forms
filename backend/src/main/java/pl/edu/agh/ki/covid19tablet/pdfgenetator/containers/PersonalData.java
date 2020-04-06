@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
 public class PersonalData {
 

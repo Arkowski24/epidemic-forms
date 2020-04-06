@@ -1,9 +1,9 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
 
-public class SignaturesContener {
+public class SignaturesContainer {
 
     private Signature employeeSignature;
     private Signature patientSignature;
@@ -11,7 +11,7 @@ public class SignaturesContener {
     private String employeeSignatureTitle;
     private String patientSignatureTitle;
 
-    public SignaturesContener(Form form) {
+    public SignaturesContainer(Form form) {
         this.employeeSignature = form.getEmployeeSignature();
         this.patientSignature = form.getPatientSignature();
         this.employeeSignatureTitle = form.getSchema().getEmployeeSignature().getTitle();
