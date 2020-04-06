@@ -14,4 +14,17 @@ const me = (token) => axios
   )
   .then((res) => res.data);
 
-export default { login, me };
+const loginDevice = (username, password) => axios
+  .post(`${baseUrl}/login/employee`, { username, password })
+  .then((res) => res.data);
+
+const meDevice = (token) => axios
+  .get(
+    `${baseUrl}/me/employee`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  .then((res) => res.data);
+
+export default {
+  login, me, loginDevice, meDevice,
+};

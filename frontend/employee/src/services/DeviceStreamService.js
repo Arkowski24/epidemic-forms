@@ -18,14 +18,14 @@ const sendNewForm = (deviceId, pinCode) => {
   const requestType = 'FORM_NEW';
   const request = JSON.stringify({ requestType, deviceId, pinCode });
 
-  webSocket.publish({ destination: '/forms', body: request });
+  webSocket.publish({ destination: '/forms/', body: request });
 };
 
 const sendCancelForm = (formId) => {
   const requestType = 'FORM_CANCEL';
   const request = JSON.stringify({ requestType, formId });
 
-  webSocket.publish({ destination: '/forms', body: request });
+  webSocket.publish({ destination: '/forms/', body: request });
 };
 
 export default {

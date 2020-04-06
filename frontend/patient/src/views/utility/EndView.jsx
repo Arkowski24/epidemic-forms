@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
-const EndView = ({ setForm, setCredentials }) => {
+const EndView = () => {
+  const history = useHistory();
+
   useEffect(() => {
     setTimeout(() => {
-      localStorage.removeItem('credentials');
-      setForm(null);
-      setCredentials(null);
+      history.push('/');
+      window.location.reload();
     }, 2000);
-  }, [setCredentials]);
+  }, []);
+
   return (
     <Container className="d-flex justify-content-center align-items-center">
       <div className="w-50 m-5 p-5 border rounded">

@@ -191,7 +191,7 @@ const FormsList = () => {
   const createForm = async (schemaId, formName, deviceId) => {
     const form = await formService.createForm(schemaId, formName);
 
-    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.id); }
+    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
     const newForms = forms.concat(form);
     setForms(newForms);
   };
