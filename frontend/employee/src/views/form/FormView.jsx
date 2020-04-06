@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Button, Container, Spinner } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
@@ -24,6 +24,7 @@ const FormView = () => {
   const [patientPage, setPatientPage] = useState(0);
   const { formId } = useParams();
   const history = useHistory();
+  const signatureViewRef = useRef();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('ACCEPTED');
@@ -33,6 +34,18 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('CLOSED'));
   };
+
+  useEffect(
+    () => {
+      if (signatureViewRef.current && form.status === 'SIGNED') {
+        window.scrollTo({
+          behavior: 'smooth',
+          top: signatureViewRef.current.offsetTop,
+        });
+      }
+    },
+    [form],
+  );
 
   useEffect(() => {
     const fetchTokenAndData = async () => {
@@ -57,8 +70,6 @@ const FormView = () => {
   }, [formId, token, history]);
 
   if (form === null || token === null) { return (<LoadingView />); }
-  if (form.status === 'ACCEPTED') { return (<LoadingView message="Oczekiwanie na podpis pacjenta." />); }
-  if (form.status === 'SIGNED') { return (<SignatureView title={form.employeeSignature.title} description={form.employeeSignature.description} sendSignature={sendSignature} />); }
   if (form.status === 'CLOSED') { return (<EndView history={history} />); }
 
   const pageIndexMapping = form.schema
@@ -67,8 +78,9 @@ const FormView = () => {
 
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
-    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index, setForm);
     const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
+    const blocked = !(form.status === 'NEW' || form.status === 'FILLED');
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -81,6 +93,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -95,6 +108,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -108,9 +122,11 @@ const FormView = () => {
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
+          defaultValue={fieldSchema.defaultValue}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -121,10 +137,11 @@ const FormView = () => {
           title={fieldSchema.title}
           description={fieldSchema.description}
           isInline={fieldSchema.inline}
-          isMultiline={fieldSchema.multiline}
+          isMultiline={fieldSchema.multiLine}
           input={input}
           setInput={setInput}
           highlighted={highlighted}
+          isBlocked={blocked}
         />
       );
     }
@@ -141,8 +158,9 @@ const FormView = () => {
 
   const header = (
     <Row>
-      <div className="w-100 m-2 p-1 border-bottom">
-        <h1>{form.formName}</h1>
+      <div className="w-100 ml-2 mr-2 p-1 border-bottom">
+        <h4>{form.formName}</h4>
+        {`Kod jednorazowy: ${form.patient.id}`}
       </div>
     </Row>
   );
@@ -151,41 +169,52 @@ const FormView = () => {
     // eslint-disable-next-line react/no-array-index-key
     .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
 
-  const footer = () => {
-    const spinner = (
-      <>
-        <Spinner
-          as="span"
-          animation="border"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
-        {' Oczekiwanie na pacjenta...'}
-      </>
-    );
+  const spinner = (
+    <>
+      <Spinner
+        as="span"
+        animation="border"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
+      {form.status === 'NEW' ? ' Oczekiwanie na pacjenta...' : ' Oczekiwanie na podpis pacjenta...'}
+    </>
+  );
 
-    return (
-      <Row>
-        <div className="w-100 m-2 p-1 border-top">
-          <Button
-            className="btn float-right"
-            type="submit"
-            onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
-            disabled={form.status !== 'FILLED'}
-          >
-            { form.status === 'NEW' ? spinner : 'Akceptuj'}
-          </Button>
-        </div>
-      </Row>
-    );
-  };
+  const footer = (
+    <Row>
+      <div className="w-100 m-2 p-1 border-top">
+        <Button
+          className="w-100"
+          type="submit"
+          onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+          disabled={form.status !== 'FILLED'}
+        >
+          { form.status === 'NEW' || form.status === 'ACCEPTED' ? spinner : 'Akceptuj'}
+        </Button>
+      </div>
+    </Row>
+  );
+
+  const signatureField = (
+    <Row>
+      <div className="w-100 mt-1 ml-1 p-1 border rounded" ref={signatureViewRef}>
+        <SignatureView
+          title={form.employeeSignature.title}
+          description={form.employeeSignature.description}
+          sendSignature={sendSignature}
+        />
+      </div>
+    </Row>
+  );
 
   return (
     <Container>
       {header}
       {fields}
-      {footer()}
+      {form.status !== 'SIGNED' && footer}
+      {form.status === 'SIGNED' && signatureField}
     </Container>
   );
 };

@@ -2,14 +2,14 @@ import React from 'react';
 import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
-
-import PageForm from './common/PageForm';
+import { FaPlus, FaMinus } from 'react-icons/fa';
+import SingleInputButton from './common/SingleInputButton';
 import SliderViewInline from './inline/SliderViewInline';
 
 const RangeForm = ({
   minValue, maxValue, step,
   value, setValue,
-  disabled,
+  isBlocked,
 }) => {
   const decValue = () => { if (value - step >= minValue) setValue(value - step); };
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
@@ -22,9 +22,9 @@ const RangeForm = ({
             <Button
               onClick={decValue}
               variant="danger"
-              disabled={disabled || (value - step < minValue)}
+              disabled={isBlocked || value - step < minValue}
             >
-              -
+              <FaMinus />
             </Button>
           </div>
         </Col>
@@ -39,9 +39,9 @@ const RangeForm = ({
               className="btn float-right"
               onClick={incValue}
               variant="success"
-              disabled={disabled || (value + step > maxValue)}
+              disabled={isBlocked || value + step > maxValue}
             >
-              +
+              <FaPlus />
             </Button>
           </div>
         </Col>
@@ -56,7 +56,7 @@ const RangeForm = ({
               step={step}
               value={value}
               onChange={(event) => setValue(Number(event.target.value))}
-              disabled={disabled}
+              disabled={isBlocked}
             />
           </Form.Group>
         </Form>
@@ -68,45 +68,55 @@ const RangeForm = ({
 const SliderView = ({
   title, description,
   isInline,
-  minValue, maxValue, step,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
+  minValue, maxValue, step, defaultValue,
   input, setInput,
-  disabled,
-  isMultiPage,
+  highlighted,
+  isBlocked,
 }) => {
-  if (!isMultiPage && isInline) {
+  const hidden = input < minValue;
+
+  const setHidden = () => {
+    if (input < minValue) setInput(defaultValue);
+    if (input >= minValue) setInput(minValue - step);
+  };
+
+  if (isInline) {
     return (
       <SliderViewInline
         title={title}
         minValue={minValue}
         maxValue={maxValue}
         step={step}
+        defaultValue={defaultValue}
         input={input}
         setInput={setInput}
+        highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
 
   return (
-    <PageForm
+    <SingleInputButton
       title={title}
       description={description}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-      isMultiPage={isMultiPage}
+      highlighted={highlighted}
+      clicked={hidden}
+      onClick={setHidden}
+      isBlocked={isBlocked}
     >
+      {!hidden && (
       <RangeForm
         minValue={minValue}
         maxValue={maxValue}
         step={step}
+        defaultValue={defaultValue}
         value={input}
         setValue={setInput}
-        disabled={disabled}
+        isBlocked={isBlocked}
       />
-    </PageForm>
+      )}
+    </SingleInputButton>
   );
 };
 

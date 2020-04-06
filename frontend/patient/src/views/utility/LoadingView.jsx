@@ -7,7 +7,7 @@ const LoadingView = ({ message = 'Formularz zaraz się załaduje.' }) => (
       <div className="m-1 p-1 border-bottom d-flex justify-content-center align-items-center">
         <Spinner animation="border" />
       </div>
-      <p className="text-center">{message}</p>
+      <h4 className="text-center">{message}</h4>
     </div>
   </Container>
 );

@@ -10,9 +10,19 @@ webSocket.reconnect_delay = 1000;
 
 let credentials = null;
 let internalForms = null;
+let timeouts = null;
 
 const setCredentials = (newCredentials) => {
   credentials = newCredentials;
+};
+
+const setNewFieldState = (newInput, index, formHandler) => {
+  if (internalForms === null) return;
+  const oldFieldState = internalForms.state[index];
+  internalForms.state[index] = { ...oldFieldState, value: newInput };
+
+  const newForm = { ...internalForms };
+  formHandler(newForm);
 };
 
 const subscribe = (formHandler) => {
@@ -21,14 +31,7 @@ const subscribe = (formHandler) => {
     formHandler(newForm);
   };
 
-  const setFieldState = (newInput, index) => {
-    if (internalForms === null) return;
-    const oldFieldState = internalForms.state[index];
-    internalForms.state[index] = { ...oldFieldState, value: newInput };
-
-    const newForm = { ...internalForms };
-    formHandler(newForm);
-  };
+  const setFieldState = (newInput, index) => setNewFieldState(newInput, index, formHandler);
 
   const buildSchema = (schema) => {
     const { fields } = schema;
@@ -65,6 +68,7 @@ const subscribe = (formHandler) => {
     const state = buildState(responseForm.state, responseForm.schema.fields.simple);
     const { patientSignature, employeeSignature } = responseForm.schema;
     const { multiPage } = responseForm.schema;
+    timeouts = state.map(() => null);
 
     internalForms = {
       ...responseForm, schema, state, patientSignature, employeeSignature, multiPage,
@@ -100,7 +104,7 @@ const subscribe = (formHandler) => {
   });
 };
 
-const sendInput = (newInput, index) => {
+const sendInput = (newInput, index, formHandler) => {
   const field = internalForms.schema[index];
   const fieldType = field.type.toUpperCase();
   const stateId = internalForms.state[index].id;
@@ -109,7 +113,12 @@ const sendInput = (newInput, index) => {
   const payload = JSON.stringify({ id: stateId, newValue: newInput });
   const request = JSON.stringify({ requestType, payload });
 
-  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+  setNewFieldState(newInput, index, formHandler);
+  if (timeouts[index] !== null) { clearTimeout(timeouts[index]); }
+  timeouts[index] = setTimeout(() => {
+    webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+    timeouts[index] = null;
+  }, 250);
 };
 
 const sendMove = (newStatus) => {

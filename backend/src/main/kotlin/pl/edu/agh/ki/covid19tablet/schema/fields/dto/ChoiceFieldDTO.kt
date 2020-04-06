@@ -13,5 +13,7 @@ data class ChoiceFieldDTO(
     val inline: Boolean,
 
     val choices: List<String>,
-    val multiChoice: Boolean
+    val multiChoice: Boolean,
+
+    val required: Boolean
 )

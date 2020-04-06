@@ -5,11 +5,14 @@ import {
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
-
 import { FaTrash } from 'react-icons/fa';
+
 import authService from '../services/AuthService';
+import deviceService from '../services/DeviceService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
+import deviceStreamService from '../services/DeviceStreamService';
+
 import LoadingView from './form/utility/LoadingView';
 
 const Header = ({ setVisible, employeeName, handleLogout }) => (
@@ -53,6 +56,7 @@ const FormsTable = ({ forms, setForms }) => {
 
   const deleteForm = async (formId) => {
     await formService.deleteForm(formId);
+    deviceStreamService.sendCancelForm(formId);
     const newForms = forms.filter((f) => f.id !== formId);
     setForms(newForms);
   };
@@ -101,13 +105,16 @@ const FormsTable = ({ forms, setForms }) => {
 const NewFormModal = ({
   visible, setVisible,
   schemas,
+  devices,
   createForm,
 }) => {
   const [formName, setFormName] = useState('');
   const [schemaId, setSchemaId] = useState('');
+  const [deviceId, setDeviceId] = useState('');
 
   const handleClose = () => setVisible(false);
   const schemaOptions = schemas.map((s) => <option value={s.id} key={s.id}>{s.name}</option>);
+  const deviceOptions = devices.map((s) => <option value={s.id} key={s.id}>{s.fullName}</option>);
 
   const createNewForm = (event) => {
     event.preventDefault();
@@ -118,7 +125,7 @@ const NewFormModal = ({
       else return;
     }
 
-    createForm(formSchemaId, formName);
+    createForm(formSchemaId, formName, deviceId);
     handleClose();
   };
 
@@ -148,6 +155,17 @@ const NewFormModal = ({
               {schemaOptions}
             </Form.Control>
           </Form.Group>
+          <Form.Group controlId="inputFormDevice">
+            <Form.Label>Urządzenie</Form.Label>
+            <Form.Control
+              as="select"
+              value={deviceId}
+              onChange={(e) => setDeviceId(e.target.value)}
+            >
+              {deviceOptions}
+              <option value={-1}>Urządzenie pacjenta</option>
+            </Form.Control>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" type="button" onClick={handleClose}>
@@ -167,12 +185,16 @@ const FormsList = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
   const [schemas, setSchemas] = useState([]);
+  const [devices, setDevices] = useState([]);
   const history = useHistory();
 
-  const createForm = async (schemaId, formName) => {
+  const createForm = async (schemaId, formName, deviceId) => {
     const form = await formService.createForm(schemaId, formName);
+
+    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
     const newForms = forms.concat(form);
     setForms(newForms);
+    history.push(`/employee/forms/${form.id}`);
   };
 
   const handleLogout = (e) => {
@@ -192,6 +214,8 @@ const FormsList = () => {
         .then((employee) => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);
+          deviceService.setToken(newToken);
+          deviceStreamService.setToken(newToken);
           setCredentials({ employee, token: newToken });
         })
         .catch(() => {
@@ -207,6 +231,9 @@ const FormsList = () => {
 
       const schemaResponse = await schemaService.getSchemas();
       setSchemas(schemaResponse);
+
+      const devicesResponse = await deviceService.getDevices();
+      setDevices(devicesResponse);
     };
 
     fetchToken()
@@ -227,6 +254,7 @@ const FormsList = () => {
         visible={modalVisible}
         setVisible={setModalVisible}
         schemas={schemas}
+        devices={devices}
         createForm={createForm}
       />
     </Container>

@@ -1,33 +1,23 @@
 import React from 'react';
-
-import PageForm from './common/PageForm';
+import SingleInput from './common/SingleInput';
 import SimpleViewInline from './inline/SimpleViewInline';
 
 const SimpleView = ({
   title, description,
   isInline,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
-  isMultiPage,
+  highlighted,
 }) => {
-  if (!isMultiPage && isInline) {
+  if (isInline) {
     return (
       <SimpleViewInline
         title={title}
+        highlighted={highlighted}
       />
     );
   }
 
   return (
-    <PageForm
-      title={title}
-      description={description}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-      isMultiPage={isMultiPage}
-    />
+    <SingleInput title={title} description={description} highlighted={highlighted} />
   );
 };
 

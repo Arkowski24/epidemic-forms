@@ -12,5 +12,7 @@ data class DerivedFieldDTO(
     val derivedType: DerivedType,
     val titles: List<String>,
     val descriptions: List<String>,
-    val inline: Boolean
+    val inline: Boolean,
+
+    val required: List<Boolean>
 )

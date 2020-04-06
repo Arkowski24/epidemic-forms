@@ -1,21 +1,21 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
-import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners.*;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,20 +26,21 @@ public class PDFBuilder {
 
     private final static int signatureWidth = 160;
     private final static int signatureHeight = 120;
-    private final static String signatureEmployeeName = "employeeSignature.png";
-    private final static String signaturePatientName = "patientSignature.png";
+    private final static String highlightedAnswer = "TAK";
 
     private Font titleFont;
     private Font standardFont;
     private Font answerFont;
+    private Font answerHighlightedFont;
     private Font personalDataFont;
 
     private String dirPath;
 
-    public PDFBuilder(String dirPath) throws DocumentException, IOException{
+    public PDFBuilder(String dirPath) throws DocumentException, IOException {
         this.titleFont = createBoldFont(18);
         this.standardFont = createRegularFont(10);
         this.answerFont = createItalicFont(8);
+        this.answerHighlightedFont = createBoldFont(8);
         this.personalDataFont = createItalicFont(10);
 
         this.dirPath = dirPath;
@@ -54,6 +55,7 @@ public class PDFBuilder {
         document.open();
 
         addCreationDate(document, formKeyData.getCreationDate());
+        addEmployee(document, formKeyData.getEmployeeFullName());
         addTitle(document, formKeyData.getTitle());
         addPersonalData(document, formKeyData.getPersonalData());
         addQuestions(document, formKeyData.getQuestions());
@@ -71,6 +73,12 @@ public class PDFBuilder {
         document.add(creationDateParagraph);
     }
 
+    private void addEmployee(Document document, String employeeName) throws DocumentException {
+        Paragraph employeeParagraph = new Paragraph(employeeName, standardFont);
+        employeeParagraph.setAlignment(Element.ALIGN_RIGHT);
+        document.add(employeeParagraph);
+    }
+
     private void addTitle(Document document, String formName) throws DocumentException {
         Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
@@ -79,9 +87,9 @@ public class PDFBuilder {
         document.add(title);
     }
 
-    private void addPersonalData(Document document, PersonalDataContener personalDataContener)
+    private void addPersonalData(Document document, PersonalDataContainer personalDataContainer)
             throws DocumentException {
-        for (PersonalData personalData : personalDataContener.getPersonalDatas()) {
+        for (PersonalData personalData : personalDataContainer.getPersonalDataList()) {
             Chunk titleChunk = new Chunk(personalData.getTitle(), standardFont);
             Chunk valueChunk = new Chunk(personalData.getValue(), personalDataFont);
 
@@ -95,53 +103,53 @@ public class PDFBuilder {
         addEmptyLine(document, standardFont);
     }
 
-    private void addQuestions(Document document, QuestionContener questionContener) throws DocumentException {
-        List<Question> questions = questionContener.getQuestions();
+    private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
+        List<Question> questions = questionContainer.getQuestions();
+        questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
-        for (int i = 0; i < questionContener.getMaxFieldNumber(); i++) {
-            for (Question question : questions) {
-                if (i == question.getFieldNumber()) {
-                    Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-                    Paragraph answerParagraph =  new Paragraph("    " + question.getAnswer(), answerFont);
-                    document.add(questionParagraph);
-                    document.add(answerParagraph);
-                    break;
-                }
-            }
+        for (Question question : questions) {
+            Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
+            Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
+            if (question.getAnswer().equals(highlightedAnswer))
+                answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
+            document.add(questionParagraph);
+            document.add(answerParagraph);
         }
     }
 
-    private void addSignatures(Document document, SignaturesContener signaturesContener)
-            throws DocumentException, IOException  {
+    private void addSignatures(Document document, SignaturesContainer signaturesContainer)
+            throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
 
-        resizeSignature(signaturesContener.getEmployeeSignature(), signatureEmployeeName);
-        resizeSignature(signaturesContener.getPatientSignature(), signaturePatientName);
+        ByteArrayInputStream signatureEmployee = resizeSignature(signaturesContainer.getEmployeeSignature());
+        ByteArrayInputStream signaturePatient = resizeSignature(signaturesContainer.getPatientSignature());
 
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
-        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployeeName)));
-        imageTable.addCell(getImageCell(Image.getInstance(signaturePatientName)));
+        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployee.readAllBytes())));
+        imageTable.addCell(getImageCell(Image.getInstance(signaturePatient.readAllBytes())));
         document.add(imageTable);
 
         PdfPTable titleTable = new PdfPTable(2);
         titleTable.setTotalWidth(document.getPageSize().getWidth());
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContener.getEmployeeSignatureTitle(), standardFont)));
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContener.getPatientSignatureTitle(), standardFont)));
+        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
+        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
         document.add(titleTable);
     }
 
-    private void resizeSignature(Signature signature, String name) throws IOException {
+    private ByteArrayInputStream resizeSignature(Signature signature) throws IOException {
         byte[] signatureData = signature.getValue();
         ByteArrayInputStream signatureStream = new ByteArrayInputStream(signatureData);
         BufferedImage signatureImage = ImageIO.read(signatureStream);
-        BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics graphicsEmployee = signatureImageResized.createGraphics();
-        graphicsEmployee.drawImage(signatureImage, 0, 0 , signatureWidth, signatureHeight, null);
+        graphicsEmployee.drawImage(signatureImage, 0, 0, signatureWidth, signatureHeight, null);
         graphicsEmployee.dispose();
 
-        ImageIO.write(signatureImageResized, "png", new File(name) );
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        ImageIO.write(signatureImageResized, "png", result);
+        return new ByteArrayInputStream(result.toByteArray());
     }
 
     private PdfPCell getImageCell(Image image) {
@@ -167,10 +175,12 @@ public class PDFBuilder {
         BaseFont baseFont = BaseFont.createFont("aller_bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
+
     private Font createRegularFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
+
     private Font createItalicFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
