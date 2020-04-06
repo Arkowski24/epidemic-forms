@@ -38,11 +38,11 @@ public class PDFGeneratorService {
         createPDFDirectory();
 
         String pdfCreationDate = generatePDFCreationDate();
-        FormData formData = new FormData(form, pdfCreationDate);
-        String pdfName = generatePDFName(formData.getPersonalData().getSurname());
+        FormKeyData formKeyData = new FormKeyData(form, pdfCreationDate);
+        String pdfName = generatePDFName(formKeyData.getPersonalData().getSurname());
 
         PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
-        pdfBuilder.build(pdfName, formData);
+        pdfBuilder.build(pdfName, formKeyData);
     }
 
     private void createPDFDirectory() throws IOException {
