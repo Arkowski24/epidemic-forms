@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +26,6 @@ public class PDFBuilder {
 
     private final static int signatureWidth = 160;
     private final static int signatureHeight = 120;
-    private final static String signatureEmployeeName = "employeeSignature.png";
-    private final static String signaturePatientName = "patientSignature.png";
 
     private Font titleFont;
     private Font standardFont;
@@ -112,16 +110,16 @@ public class PDFBuilder {
     }
 
     private void addSignatures(Document document, SignaturesContener signaturesContener)
-            throws DocumentException, IOException  {
+            throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
 
-        resizeSignature(signaturesContener.getEmployeeSignature(), signatureEmployeeName);
-        resizeSignature(signaturesContener.getPatientSignature(), signaturePatientName);
+        ByteArrayInputStream signatureEmployee = resizeSignature(signaturesContener.getEmployeeSignature());
+        ByteArrayInputStream signaturePatient = resizeSignature(signaturesContener.getPatientSignature());
 
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
-        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployeeName)));
-        imageTable.addCell(getImageCell(Image.getInstance(signaturePatientName)));
+        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployee.readAllBytes())));
+        imageTable.addCell(getImageCell(Image.getInstance(signaturePatient.readAllBytes())));
         document.add(imageTable);
 
         PdfPTable titleTable = new PdfPTable(2);
@@ -131,17 +129,19 @@ public class PDFBuilder {
         document.add(titleTable);
     }
 
-    private void resizeSignature(Signature signature, String name) throws IOException {
+    private ByteArrayInputStream resizeSignature(Signature signature) throws IOException {
         byte[] signatureData = signature.getValue();
         ByteArrayInputStream signatureStream = new ByteArrayInputStream(signatureData);
         BufferedImage signatureImage = ImageIO.read(signatureStream);
         BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics graphicsEmployee = signatureImageResized.createGraphics();
-        graphicsEmployee.drawImage(signatureImage, 0, 0 , signatureWidth, signatureHeight, null);
+        graphicsEmployee.drawImage(signatureImage, 0, 0, signatureWidth, signatureHeight, null);
         graphicsEmployee.dispose();
 
-        ImageIO.write(signatureImageResized, "png", new File(name) );
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        ImageIO.write(signatureImageResized, "png", result);
+        return new ByteArrayInputStream(result.toByteArray());
     }
 
     private PdfPCell getImageCell(Image image) {
