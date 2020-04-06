@@ -48,6 +48,8 @@ public class QuestionContainer {
             int fieldNumber = sliderFields.get(i).getFieldNumber();
             String title = sliderFields.get(i).getTitle();
             String answer = Double.toString(sliderFieldStates.get(i).getValue());
+            if (sliderFieldStates.get(i).getValue() < sliderFields.get(i).getMinValue())
+                answer = "B.D.";
             extractedQuestions.add(new Question(fieldNumber, title, answer));
 
             if (fieldNumber > this.maxFieldNumber) {
