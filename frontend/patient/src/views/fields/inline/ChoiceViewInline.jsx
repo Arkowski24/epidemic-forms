@@ -52,7 +52,7 @@ const ChoiceFormTwoValues = ({
               <BootstrapSwitchButton
                 checked={checked}
                 onlabel={choices[0]}
-                offlabel="B.D."
+                offlabel="Kliknij"
                 style="w-100 float-right"
                 onChange={(c) => { setChecked(c); }}
               />
