@@ -51,7 +51,7 @@ const Header = ({ setVisible, employeeName, handleLogout }) => (
 const FormsTable = ({ forms, setForms }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Urządzenie / Kod jednorazowy', '']
+  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Kod jednorazowy', '']
     .map((h) => <th key={h}>{h}</th>);
 
   const deleteForm = async (formId) => {
@@ -194,6 +194,7 @@ const FormsList = () => {
     if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
     const newForms = forms.concat(form);
     setForms(newForms);
+    history.push(`/employee/forms/${form.id}`);
   };
 
   const handleLogout = (e) => {
