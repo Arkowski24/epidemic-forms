@@ -45,7 +45,7 @@ public class PDFBuilder {
         this.dirPath = dirPath;
     }
 
-    public void build(String name, PDFData pdfData) throws DocumentException, IOException {
+    public void build(String name, FormData formData) throws DocumentException, IOException {
         Document document = new Document();
 
         Path savingPath = Paths.get(dirPath, name);
@@ -53,11 +53,11 @@ public class PDFBuilder {
         PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(savingPath));
         document.open();
 
-        addCreationDate(document, pdfData.getCreationDate());
-        addTitle(document, pdfData.getTitle());
-        addPersonalData(document, pdfData.getPersonalData());
-        addQuestions(document, pdfData.getQuestions());
-        addSignatures(document, pdfData.getSignatures());
+        addCreationDate(document, formData.getCreationDate());
+        addTitle(document, formData.getTitle());
+        addPersonalData(document, formData.getPersonalData());
+        addQuestions(document, formData.getQuestions());
+        addSignatures(document, formData.getSignatures());
 
         document.close();
         writer.close();
