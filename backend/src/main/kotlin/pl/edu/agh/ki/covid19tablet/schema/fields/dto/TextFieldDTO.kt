@@ -12,5 +12,7 @@ data class TextFieldDTO(
     val description: String,
     val inline: Boolean,
 
-    val multiLine: Boolean
+    val multiLine: Boolean,
+
+    val required: Boolean
 )

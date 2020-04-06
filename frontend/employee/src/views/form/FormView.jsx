@@ -122,6 +122,7 @@ const FormView = () => {
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
+          defaultValue={fieldSchema.defaultValue}
           input={input}
           setInput={setInput}
           highlighted={highlighted}

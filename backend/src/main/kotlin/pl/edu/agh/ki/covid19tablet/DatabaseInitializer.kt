@@ -46,47 +46,56 @@ class DatabaseInitializer {
                             ChoiceField(
                                 fieldNumber = 8,
                                 title = "Czy miał Pan(i) kontakt z osoba zakażoną koronawirusem?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 9,
                                 title = "Czy miał Pan(i) kontakt z osobą w trakcie kwarantanny?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 10,
                                 title = "Czy w ciągu ostatnich dwóch tygodni przebywał Pan(i) za granicą?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 11,
                                 title = "Czy w ciągu ostatnich dwóch tygodni miał Pan(i) jakikolwiek kontakt z osobą, która powróciła z innego kraju?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 12,
                                 title = "Czy miał Pan(i) kontakt z osobą z objawami infekcji dróg oddechowych?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 13,
                                 title = "Czy pracuje Pan(i) w szpitalu lub przychodni lub zakładzie opiekuńczym?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 14,
                                 title = "Czy ma Pan(i) podwyższona temperaturę?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 15,
                                 title = "Czy ma Pan(i) kaszel?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 16,
                                 title = "Czy odczuwa Pan(i) duszność, brak tchu?",
-                                choices = listOf("TAK", "NIE")
+                                choices = listOf("TAK", "NIE"),
+                                required = true
                             )
                         ),
                         derived = listOf(
@@ -141,11 +150,13 @@ class DatabaseInitializer {
                         text = listOf(
                             TextField(
                                 fieldNumber = 0,
-                                title = "Nazwisko"
+                                title = "Nazwisko",
+                                required = true
                             ),
                             TextField(
                                 fieldNumber = 1,
-                                title = "Imię"
+                                title = "Imię",
+                                required = true
                             ),
                             TextField(
                                 fieldNumber = 17,

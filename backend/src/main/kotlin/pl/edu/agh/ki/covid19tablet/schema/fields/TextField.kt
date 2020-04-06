@@ -20,7 +20,9 @@ data class TextField(
     val description: String = "",
     val inline: Boolean = true,
 
-    val multiLine: Boolean = false
+    val multiLine: Boolean = false,
+
+    val required: Boolean = false
 )
 
 fun TextField.toDTO() =
@@ -31,7 +33,8 @@ fun TextField.toDTO() =
         title = title,
         description = description,
         inline = inline,
-        multiLine = multiLine
+        multiLine = multiLine,
+        required = required
     )
 
 fun TextField.buildInitialState() =

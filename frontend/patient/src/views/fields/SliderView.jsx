@@ -3,7 +3,7 @@ import {
   Button, Col, Container, Form, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import SingleInput from './common/SingleInput';
+import SingleInputButton from './common/SingleInputButton';
 import SliderViewInline from './inline/SliderViewInline';
 
 const RangeForm = ({
@@ -68,11 +68,18 @@ const RangeForm = ({
 const SliderView = ({
   title, description,
   isInline,
-  minValue, maxValue, step,
+  minValue, maxValue, step, defaultValue,
   input, setInput,
   highlighted,
   isBlocked,
 }) => {
+  const hidden = input < minValue;
+
+  const setHidden = () => {
+    if (input < minValue) setInput(defaultValue);
+    if (input >= minValue) setInput(minValue - step);
+  };
+
   if (isInline) {
     return (
       <SliderViewInline
@@ -80,6 +87,7 @@ const SliderView = ({
         minValue={minValue}
         maxValue={maxValue}
         step={step}
+        defaultValue={defaultValue}
         input={input}
         setInput={setInput}
         highlighted={highlighted}
@@ -89,16 +97,26 @@ const SliderView = ({
   }
 
   return (
-    <SingleInput title={title} description={description} highlighted={highlighted}>
+    <SingleInputButton
+      title={title}
+      description={description}
+      highlighted={highlighted}
+      clicked={hidden}
+      onClick={setHidden}
+      isBlocked={isBlocked}
+    >
+      {!hidden && (
       <RangeForm
         minValue={minValue}
         maxValue={maxValue}
         step={step}
+        defaultValue={defaultValue}
         value={input}
         setValue={setInput}
         isBlocked={isBlocked}
       />
-    </SingleInput>
+      )}
+    </SingleInputButton>
   );
 };
 

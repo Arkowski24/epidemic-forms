@@ -147,6 +147,7 @@ const FormView = () => {
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
+          defaultValue={fieldSchema.defaultValue}
           input={input}
           setInput={setInput}
           isBlocked={blocked}
@@ -176,6 +177,42 @@ const FormView = () => {
       />
     );
   };
+
+  const validateRequired = (fieldSchema, index) => {
+    if (fieldSchema.type === 'derived') {
+      const { value } = form.state[index];
+
+      const handleField = (fieldValue, fieldIndex) => {
+        if (fieldValue.length === 0) return false;
+
+        if (fieldSchema.derivedType === 'BIRTHDAY_PESEL' && fieldIndex === 0) {
+          return JSON.parse(fieldValue).value > 0;
+        }
+        return true;
+      };
+
+      return value
+        .map((v, i) => !fieldSchema.required[i] || handleField(v, i))
+        .filter((v) => !v)
+        .length === 0;
+    }
+
+    const isRequired = fieldSchema.required;
+    if (!fieldSchema || !isRequired) return true;
+    const input = form.state[index].value;
+
+    if (fieldSchema.type === 'choice') { return input.filter((v) => v).length > 0; }
+    if (fieldSchema.type === 'slider') { return input >= fieldSchema.minValue; }
+    if (fieldSchema.type === 'text') { return input.length > 0; }
+    return true;
+  };
+
+  const validFields = form.schema
+    .map((s, i) => validateRequired(s, i));
+
+  const isNotValidInput = validFields
+    .filter((v) => !v)
+    .length > 0;
 
   const buildFieldsSinglePage = () => {
     const header = (
@@ -209,7 +246,7 @@ const FormView = () => {
             className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
-            disabled={form.status !== 'NEW'}
+            disabled={form.status !== 'NEW' || isNotValidInput}
           >
             { form.status === 'NEW' ? 'Prześlij' : spinner}
           </Button>
