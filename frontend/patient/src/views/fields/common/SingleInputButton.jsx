@@ -9,14 +9,16 @@ const Header = ({
 }) => (
   <div className="ml-2 mr-2 mb-1 pb-1 border-bottom">
     <Row>
-      <Col xs="6">
+      <Col>
         <h4>{message}</h4>
       </Col>
       <Col xs="auto">
-        <Button type="button" disabled={isBlocked} onClick={(e) => { e.preventDefault(); onClick(); }}>
-          {clicked && (<FaEyeSlash />)}
-          {!clicked && (<FaEye />)}
-        </Button>
+        <div className="pr-2">
+          <Button type="button" disabled={isBlocked} onClick={(e) => { e.preventDefault(); onClick(); }}>
+            {clicked && (<FaEyeSlash />)}
+            {!clicked && (<FaEye />)}
+          </Button>
+        </div>
       </Col>
     </Row>
   </div>
