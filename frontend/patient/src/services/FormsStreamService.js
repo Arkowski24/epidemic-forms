@@ -28,6 +28,7 @@ const setNewFieldState = (newInput, index, formHandler) => {
 const subscribe = (formHandler) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
+    internalForms = newForm;
     formHandler(newForm);
   };
 
@@ -124,6 +125,7 @@ const sendInput = (newInput, index, formHandler) => {
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
+  console.log(newStatus)
 
   webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
