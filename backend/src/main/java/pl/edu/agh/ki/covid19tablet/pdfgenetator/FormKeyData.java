@@ -5,7 +5,7 @@ import pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners.PersonalDataContener;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners.QuestionContener;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.conteners.SignaturesContener;
 
-public class FormData {
+public class FormKeyData {
 
     private String creationDate;
     private String title;
@@ -13,7 +13,7 @@ public class FormData {
     private QuestionContener questions;
     private SignaturesContener signatures;
 
-    public FormData(Form form, String creationDate) {
+    public FormKeyData(Form form, String creationDate) {
         this.creationDate = creationDate;
         this.title = form.getFormName();
         this.personalData = new PersonalDataContener(form);
