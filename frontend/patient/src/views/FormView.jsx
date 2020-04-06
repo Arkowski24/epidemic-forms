@@ -106,7 +106,7 @@ const FormView = () => {
   const createField = (fieldSchema, pageIndex) => {
     const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
-    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index, setForm);
     const blocked = fieldSchema.fieldType === 'BLOCKED' || !(form.status === 'NEW');
 
     if (fieldSchema.type === 'choice') {
