@@ -16,7 +16,7 @@ public class FormKeyData {
 
     public FormKeyData(Form form, String creationDate) {
         this.creationDate = creationDate;
-        this.title = form.getFormName();
+        this.title = form.getSchema().getName();
         this.employeeFullName = form.getCreatedBy().getFullName();
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);

@@ -24,8 +24,8 @@ import java.util.List;
 
 public class PDFBuilder {
 
-    private final static int signatureWidth = 120;
-    private final static int signatureHeight = 90;
+    private final static int signatureWidth = 160;
+    private final static int signatureHeight = 120;
     private final static String highlightedAnswer = "TAK";
 
     private Font titleFont;
@@ -105,19 +105,15 @@ public class PDFBuilder {
 
     private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
         List<Question> questions = questionContainer.getQuestions();
+        questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
-        for (int i = 0; i < questionContainer.getMaxFieldNumber(); i++) {
-            for (Question question : questions) {
-                if (i == question.getFieldNumber()) {
-                    Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-                    Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-                    if (question.getAnswer().equals(highlightedAnswer))
-                        answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
-                    document.add(questionParagraph);
-                    document.add(answerParagraph);
-                    break;
-                }
-            }
+        for (Question question : questions) {
+            Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
+            Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
+            if (question.getAnswer().equals(highlightedAnswer))
+                answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
+            document.add(questionParagraph);
+            document.add(answerParagraph);
         }
     }
 
