@@ -157,8 +157,9 @@ const FormView = () => {
 
   const header = (
     <Row>
-      <div className="w-100 m-2 p-1 border-bottom">
+      <div className="w-100 ml-2 mr-2 p-1 border-bottom">
         <h4>{form.formName}</h4>
+        {`Kod jednorazowy: ${form.patient.id}`}
       </div>
     </Row>
   );

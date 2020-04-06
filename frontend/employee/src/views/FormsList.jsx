@@ -194,6 +194,7 @@ const FormsList = () => {
     if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
     const newForms = forms.concat(form);
     setForms(newForms);
+    history.push(`/employee/forms/${form.id}`);
   };
 
   const handleLogout = (e) => {
