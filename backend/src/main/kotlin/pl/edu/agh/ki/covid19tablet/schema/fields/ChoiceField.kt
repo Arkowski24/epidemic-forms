@@ -41,8 +41,10 @@ fun ChoiceField.toDTO() =
         required = required
     )
 
-fun ChoiceField.buildInitialState() =
-    ChoiceFieldState(
+fun ChoiceField.buildInitialState(): ChoiceFieldState {
+    val firstValue = (inline && choices.size > 2)
+    return ChoiceFieldState(
         field = this,
-        value = choices.map { false }
+        value = (listOf(firstValue) + choices.map { false }).dropLast(1)
     )
+}
