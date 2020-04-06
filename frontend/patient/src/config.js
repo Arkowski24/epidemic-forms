@@ -1,4 +1,4 @@
-const ROOT_ADDRESS = '192.168.100.3:8080';
+const ROOT_ADDRESS = 'localhost/api';
 export const API_URL = `http://${ROOT_ADDRESS}`;
 export const WS_URL = `ws://${ROOT_ADDRESS}`;
 
