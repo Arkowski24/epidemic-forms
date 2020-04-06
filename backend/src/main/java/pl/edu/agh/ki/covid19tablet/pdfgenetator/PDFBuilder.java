@@ -1,9 +1,9 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
-import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -135,7 +135,7 @@ public class PDFBuilder {
         byte[] signatureData = signature.getValue();
         ByteArrayInputStream signatureStream = new ByteArrayInputStream(signatureData);
         BufferedImage signatureImage = ImageIO.read(signatureStream);
-        BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics graphicsEmployee = signatureImageResized.createGraphics();
         graphicsEmployee.drawImage(signatureImage, 0, 0 , signatureWidth, signatureHeight, null);
