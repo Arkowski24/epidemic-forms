@@ -102,7 +102,8 @@ class DatabaseInitializer {
                             DerivedField(
                                 fieldNumber = 2,
                                 derivedType = DerivedType.BIRTHDAY_PESEL,
-                                titles = listOf("PESEL", "Data urodzenia")
+                                titles = listOf("PESEL", "Data urodzenia"),
+                                required = listOf(true, false)
                             )
                         ),
                         slider = listOf(
