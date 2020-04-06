@@ -15,7 +15,7 @@ data class Employee(
     val username: String,
     val passwordHash: String,
 
-    val fullName: String = "",
+    val fullName: String? = null,
     val role: EmployeeRole = EmployeeRole.EMPLOYEE
 )
 

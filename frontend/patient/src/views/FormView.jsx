@@ -3,6 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Button, Container, Row, Spinner,
 } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+
+import authService from '../services/AuthService';
+import deviceStreamService from '../services/DeviceStreamService';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -21,6 +25,7 @@ const FormView = () => {
   const [form, setForm] = useState(null);
   const [credentials, setCredentials] = useState(null);
   const signatureViewRef = useRef();
+  const history = useHistory();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('FILLED');
@@ -31,27 +36,65 @@ const FormView = () => {
       .then(() => formStreamService.sendMove('SIGNED'));
   };
 
-  useEffect(
-    () => {
-      if (signatureViewRef.current && form.status === 'ACCEPTED') {
-        window.scrollTo({
-          behavior: 'smooth',
-          top: signatureViewRef.current.offsetTop,
-        });
+  useEffect(() => {
+    const handleSendForm = async (pinCode) => {
+      const newCredentials = await authService.login(pinCode);
+      localStorage.setItem('credentials', JSON.stringify(newCredentials));
+      setCredentials(newCredentials);
+    };
+
+    const handleCancelForm = async () => {
+      localStorage.removeItem('credentials');
+      setCredentials(null);
+      setForm(null);
+      window.location.reload();
+    };
+
+    const subscribeForms = async () => {
+      const deviceToken = localStorage.getItem('device-token');
+      if (!deviceToken) return;
+      try {
+        await authService.meDevice(deviceToken);
+        deviceStreamService.subscribe(deviceToken, handleSendForm, handleCancelForm);
+      } catch (e) {
+        localStorage.removeItem('device-token');
       }
-    },
-    [form],
-  );
+    };
+    subscribeForms();
+  }, [setCredentials, setForm, form, credentials]);
 
   useEffect(() => {
-    if (credentials === null) return;
+    if (signatureViewRef.current && form.status === 'ACCEPTED') {
+      window.scrollTo({
+        behavior: 'smooth',
+        top: signatureViewRef.current.offsetTop,
+      });
+    }
+  },
+  [form]);
+
+  useEffect(() => {
+    if (credentials === null) { deviceStreamService.setFormId(null); return; }
     const setNewForm = (newForm) => setForm(newForm);
 
+    deviceStreamService.setFormId(credentials.formId);
     formStreamService.setCredentials(credentials);
     formService.setCredentials(credentials);
     formStreamService.subscribe(setNewForm);
   }, [credentials]);
 
+  useEffect(() => {
+    if (!form) return;
+    if (form.status === 'SIGNED' || form.status === 'CLOSED') {
+      localStorage.removeItem('credentials');
+      setForm(null);
+      setCredentials(null);
+      history.push('/thanks');
+    }
+  }, [form]);
+
+  const isContinuous = localStorage.getItem('device-token') !== null;
+  if (credentials === null && isContinuous) { return (<LoadingView message="Oczekiwanie na rozpoczęcie." />); }
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCredentials={setCredentials} />); }

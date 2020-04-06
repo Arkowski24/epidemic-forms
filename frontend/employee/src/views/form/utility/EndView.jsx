@@ -5,6 +5,7 @@ const EndView = ({ history }) => {
   useEffect(() => {
     setTimeout(() => {
       history.push('/employee/');
+      window.location.reload();
     }, 2000);
   }, [history]);
 
