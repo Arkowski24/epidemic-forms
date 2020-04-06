@@ -24,20 +24,23 @@ import java.util.List;
 
 public class PDFBuilder {
 
-    private final static int signatureWidth = 160;
-    private final static int signatureHeight = 120;
+    private final static int signatureWidth = 120;
+    private final static int signatureHeight = 90;
+    private final static String highlightedAnswer = "TAK";
 
     private Font titleFont;
     private Font standardFont;
     private Font answerFont;
+    private Font answerHighlightedFont;
     private Font personalDataFont;
 
     private String dirPath;
 
-    public PDFBuilder(String dirPath) throws DocumentException, IOException{
+    public PDFBuilder(String dirPath) throws DocumentException, IOException {
         this.titleFont = createBoldFont(18);
         this.standardFont = createRegularFont(10);
         this.answerFont = createItalicFont(8);
+        this.answerHighlightedFont = createBoldFont(8);
         this.personalDataFont = createItalicFont(10);
 
         this.dirPath = dirPath;
@@ -52,6 +55,7 @@ public class PDFBuilder {
         document.open();
 
         addCreationDate(document, formKeyData.getCreationDate());
+        addEmployee(document, formKeyData.getEmployeeFullName());
         addTitle(document, formKeyData.getTitle());
         addPersonalData(document, formKeyData.getPersonalData());
         addQuestions(document, formKeyData.getQuestions());
@@ -67,6 +71,12 @@ public class PDFBuilder {
         Paragraph creationDateParagraph = new Paragraph(creationDate, standardFont);
         creationDateParagraph.setAlignment(Element.ALIGN_RIGHT);
         document.add(creationDateParagraph);
+    }
+
+    private void addEmployee(Document document, String employeeName) throws DocumentException {
+        Paragraph employeeParagraph = new Paragraph(employeeName, standardFont);
+        employeeParagraph.setAlignment(Element.ALIGN_RIGHT);
+        document.add(employeeParagraph);
     }
 
     private void addTitle(Document document, String formName) throws DocumentException {
@@ -101,6 +111,8 @@ public class PDFBuilder {
                 if (i == question.getFieldNumber()) {
                     Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
                     Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
+                    if (question.getAnswer().equals(highlightedAnswer))
+                        answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
                     document.add(questionParagraph);
                     document.add(answerParagraph);
                     break;
@@ -167,10 +179,12 @@ public class PDFBuilder {
         BaseFont baseFont = BaseFont.createFont("aller_bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
+
     private Font createRegularFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
+
     private Font createItalicFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);

@@ -9,6 +9,7 @@ public class FormKeyData {
 
     private String creationDate;
     private String title;
+    private String employeeFullName;
     private PersonalDataContainer personalData;
     private QuestionContainer questions;
     private SignaturesContainer signatures;
@@ -16,6 +17,7 @@ public class FormKeyData {
     public FormKeyData(Form form, String creationDate) {
         this.creationDate = creationDate;
         this.title = form.getFormName();
+        this.employeeFullName = form.getCreatedBy().getFullName();
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);
         this.signatures = new SignaturesContainer(form);
@@ -27,6 +29,10 @@ public class FormKeyData {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getEmployeeFullName() {
+        return employeeFullName;
     }
 
     public PersonalDataContainer getPersonalData() {
