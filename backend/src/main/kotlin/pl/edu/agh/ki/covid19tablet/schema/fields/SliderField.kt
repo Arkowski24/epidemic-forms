@@ -36,7 +36,8 @@ fun SliderField.toDTO() =
         inline = inline,
         minValue = minValue,
         maxValue = maxValue,
-        step = step
+        step = step,
+        defaultValue = defaultValue
     )
 
 fun SliderField.buildInitialState() =
