@@ -28,6 +28,7 @@ const setNewFieldState = (newInput, index, formHandler) => {
 const subscribe = (formHandler) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
+    internalForms = newForm;
     formHandler(newForm);
   };
 

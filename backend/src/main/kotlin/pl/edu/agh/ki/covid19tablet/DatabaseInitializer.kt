@@ -45,7 +45,7 @@ class DatabaseInitializer {
                             ),
                             ChoiceField(
                                 fieldNumber = 8,
-                                title = "Czy miał Pan(i) kontakt z osoba zakażoną koronawirusem?",
+                                title = "Czy miał Pan(i) kontakt z osobą zakażoną koronawirusem?",
                                 choices = listOf("TAK", "NIE"),
                                 required = true
                             ),
@@ -75,13 +75,13 @@ class DatabaseInitializer {
                             ),
                             ChoiceField(
                                 fieldNumber = 13,
-                                title = "Czy pracuje Pan(i) w szpitalu lub przychodni lub zakładzie opiekuńczym?",
+                                title = "Czy pracuje Pan(i) w szpitalu lub przychodni, lub zakładzie opiekuńczym?",
                                 choices = listOf("TAK", "NIE"),
                                 required = true
                             ),
                             ChoiceField(
                                 fieldNumber = 14,
-                                title = "Czy ma Pan(i) podwyższona temperaturę?",
+                                title = "Czy ma Pan(i) podwyższoną temperaturę?",
                                 choices = listOf("TAK", "NIE"),
                                 required = true
                             ),
@@ -102,7 +102,8 @@ class DatabaseInitializer {
                             DerivedField(
                                 fieldNumber = 2,
                                 derivedType = DerivedType.BIRTHDAY_PESEL,
-                                titles = listOf("PESEL", "Data urodzenia")
+                                titles = listOf("PESEL", "Data urodzenia"),
+                                required = listOf(true, false)
                             )
                         ),
                         slider = listOf(

@@ -58,7 +58,7 @@ const SignField = ({ setInput, setIsEmpty }) => {
               onEnd={() => {
                 const { current } = canvasRef;
                 setIsEmpty(current.isEmpty());
-                setInput(current.getTrimmedCanvas().toDataURL());
+                setInput(current.toDataURL());
               }}
             />
           </div>

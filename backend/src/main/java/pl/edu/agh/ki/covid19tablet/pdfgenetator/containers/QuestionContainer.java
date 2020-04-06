@@ -42,13 +42,14 @@ public class QuestionContainer {
     private List<Question> extractSliderQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
-        List<SliderField> sliderFields = form.getSchema().getFields().getSlider();
         List<SliderFieldState> sliderFieldStates = form.getState().getSlider();
-        for (int i = 0; i < sliderFields.size() && i < sliderFieldStates.size(); i++) {
-            int fieldNumber = sliderFields.get(i).getFieldNumber();
-            String title = sliderFields.get(i).getTitle();
-            String answer = Double.toString(sliderFieldStates.get(i).getValue());
-            if (sliderFieldStates.get(i).getValue() < sliderFields.get(i).getMinValue())
+        for (SliderFieldState sliderFieldState : sliderFieldStates) {
+            SliderField sliderField = sliderFieldState.getField();
+
+            int fieldNumber = sliderField.getFieldNumber();
+            String title = sliderField.getTitle();
+            String answer = Double.toString(sliderFieldState.getValue());
+            if (sliderFieldState.getValue() < sliderField.getMinValue())
                 answer = "B.D.";
             extractedQuestions.add(new Question(fieldNumber, title, answer));
 
@@ -63,13 +64,14 @@ public class QuestionContainer {
     private List<Question> extractTextQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
-        List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
-        for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
-            if (!(textFields.get(i).getTitle().startsWith("Imi") || textFields.get(i).getTitle().startsWith("Nazwis"))) {
-                int fieldNumber = textFields.get(i).getFieldNumber();
-                String title = textFields.get(i).getTitle();
-                String answer = textFieldStates.get(i).getValue();
+        for (TextFieldState textFieldState : textFieldStates) {
+            TextField textField = textFieldState.getField();
+
+            if (!(textField.getTitle().startsWith("Imi") || textField.getTitle().startsWith("Nazwis"))) {
+                int fieldNumber = textField.getFieldNumber();
+                String title = textField.getTitle();
+                String answer = textFieldState.getValue();
                 extractedQuestions.add(new Question(fieldNumber, title, answer));
 
                 if (fieldNumber > this.maxFieldNumber) {
@@ -84,17 +86,18 @@ public class QuestionContainer {
     private List<Question> extractChoiceQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
-        List<ChoiceField> choiceFields = form.getSchema().getFields().getChoice();
         List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
-        for (int i = 0; i < choiceFields.size() && i < choiceFieldStates.size(); i++) {
-            int fieldNumber = choiceFields.get(i).getFieldNumber();
-            String title = choiceFields.get(i).getTitle();
+        for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
+            ChoiceField choiceField = choiceFieldState.getField();
+
+            int fieldNumber = choiceField.getFieldNumber();
+            String title = choiceField.getTitle();
             String answer = "";
 
-            List<Boolean> fieldAnswers = choiceFieldStates.get(i).getValue();
+            List<Boolean> fieldAnswers = choiceFieldState.getValue();
             for (int j = 0; j < fieldAnswers.size(); j++) {
                 if (fieldAnswers.get(j)) {
-                    answer = choiceFieldStates.get(i).getField().getChoices().get(j);
+                    answer = choiceFieldState.getField().getChoices().get(j);
                     break;
                 }
             }

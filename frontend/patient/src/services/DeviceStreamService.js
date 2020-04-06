@@ -8,21 +8,20 @@ webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;
 
 let token = null;
-let formId = null;
-
-const setFormId = (newFormId) => {
-  formId = newFormId;
-};
 
 const subscribe = (newToken, setForm, cancelForm) => {
   token = newToken;
 
   const handleRequest = (message) => {
     const request = JSON.parse(message.body);
+    const rawCredentials = localStorage.getItem('credentials');
     if (request.requestType === 'FORM_NEW') {
-      if (formId === null) setForm(request.pinCode);
+      if (rawCredentials) return;
+      setForm(request.pinCode);
     } else if (request.requestType === 'FORM_CANCEL') {
-      if (request.formId === formId) cancelForm();
+      if (!rawCredentials) return;
+      const credentials = JSON.parse(rawCredentials);
+      if (request.formId === credentials.formId) cancelForm();
     }
   };
 
@@ -31,4 +30,4 @@ const subscribe = (newToken, setForm, cancelForm) => {
   });
 };
 
-export default { setFormId, subscribe };
+export default { subscribe };

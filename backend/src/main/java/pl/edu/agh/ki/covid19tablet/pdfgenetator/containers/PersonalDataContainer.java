@@ -46,15 +46,16 @@ public class PersonalDataContainer {
     }
 
     private PersonalData extractPattern(Form form, String defaultName, String pattern) {
-        List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
+
         String title = defaultName;
         String value = "";
 
-        for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
-            if (textFields.get(i).getTitle().startsWith(pattern)) {
-                title = textFields.get(i).getTitle();
-                value = textFieldStates.get(i).getValue();
+        for (TextFieldState textFieldState : textFieldStates) {
+            TextField textField = textFieldState.getField();
+            if (textField.getTitle().startsWith(pattern)) {
+                title = textField.getTitle();
+                value = textFieldState.getValue();
                 break;
             }
         }
@@ -68,24 +69,30 @@ public class PersonalDataContainer {
 
     private List<PersonalData> extractDerived(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
-
-        List<DerivedField> derivedFields = form.getSchema().getFields().getDerived();
         List<DerivedFieldState> derivedFieldStates = form.getState().getDerived();
 
-        for (int i = 0; i < derivedFields.size() && i < derivedFieldStates.size(); i++) {
-            List<String> titles = derivedFields.get(i).getTitles();
-            List<String> values = derivedFieldStates.get(i).getValue();
-            DerivedField derivedField = derivedFields.get(i);
+        for (DerivedFieldState derivedFieldState : derivedFieldStates) {
+            DerivedField derivedField = derivedFieldState.getField();
+
+            List<String> titles = derivedField.getTitles();
+            List<String> values = derivedFieldState.getValue();
             for (int j = 0; j < titles.size() && j < values.size(); j++) {
                 String value = values.get(j);
-                if (value.isEmpty()) continue;
 
                 if (j == 0 && derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
-                    DerivedPolishTypeData data = extractPersonal(value);
-                    if (data == null) continue;
-                    extractedPersonalData.add(new PersonalData(data.getType() + ':', data.getValue()));
+                    if (value.isEmpty()) {
+                        extractedPersonalData.add(new PersonalData("PESEL" + ':', "B.D."));
+                    } else {
+                        DerivedPolishTypeData data = extractPersonal(value);
+                        if (data == null) continue;
+
+                        String newValue = data.getValue();
+                        if (newValue.isEmpty()) newValue = "B.D";
+                        extractedPersonalData.add(new PersonalData(data.getType() + ':', newValue));
+                    }
                     continue;
                 }
+                if (value.isEmpty()) value = "B.D.";
 
                 String title = titles.get(j);
                 if (title.charAt(title.length() - 1) != ':') {
