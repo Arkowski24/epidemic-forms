@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
+import pl.edu.agh.ki.covid19tablet.device.Device
 import pl.edu.agh.ki.covid19tablet.schema.Schema
 import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField
@@ -17,6 +18,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
 import pl.edu.agh.ki.covid19tablet.user.employee.Employee
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
+import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRole
 
 @Component
 @Profile("!prod")
@@ -441,14 +443,24 @@ class DatabaseInitializer {
                 Employee(
                     username = "user",
                     fullName = "Jeannette Kalyta",
-                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
+                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq",
+                    role = EmployeeRole.EMPLOYEE
                 )
             )
             employeeRepository.save(
                 Employee(
                     username = "admin",
                     fullName = "Dr. Oetker",
-                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq"
+                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq",
+                    role = EmployeeRole.ADMIN
+                )
+            )
+            employeeRepository.save(
+                Device(
+                    username = "device",
+                    fullName = "HAL-3000",
+                    passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq",
+                    role = EmployeeRole.DEVICE
                 )
             )
         }

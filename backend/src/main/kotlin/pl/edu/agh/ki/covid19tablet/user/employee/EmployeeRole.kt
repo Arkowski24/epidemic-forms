@@ -1,5 +1,9 @@
 package pl.edu.agh.ki.covid19tablet.user.employee
 
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_CREATE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_DELETE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_READ
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_SUBSCRIBE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_CREATE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_DELETE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_MODIFY
@@ -16,6 +20,12 @@ object Authorities {
     const val FORM_DELETE = "FORM_DELETE"
 
     const val SCHEMA_READ = "SCHEMA_READ"
+
+    const val DEVICE_READ = "DEVICE_READ"
+    const val DEVICE_CREATE = "DEVICE_CREATE"
+    const val DEVICE_DELETE = "DEVICE_DELETE"
+
+    const val DEVICE_SUBSCRIBE = "DEVICE_SUBSCRIBE"
 }
 
 object Roles {
@@ -31,7 +41,8 @@ enum class EmployeeRole(val authorities: List<String>) {
             FORM_CREATE,
             FORM_MODIFY,
             FORM_DELETE,
-            SCHEMA_READ
+            SCHEMA_READ,
+            DEVICE_READ
         )
     ),
     ADMIN(
@@ -41,7 +52,15 @@ enum class EmployeeRole(val authorities: List<String>) {
             FORM_CREATE,
             FORM_MODIFY,
             FORM_DELETE,
-            SCHEMA_READ
+            SCHEMA_READ,
+            DEVICE_READ,
+            DEVICE_CREATE,
+            DEVICE_DELETE
+        )
+    ),
+    DEVICE(
+        authorities = listOf(
+            DEVICE_SUBSCRIBE
         )
     )
 }
