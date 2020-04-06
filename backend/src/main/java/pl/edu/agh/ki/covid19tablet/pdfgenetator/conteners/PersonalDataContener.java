@@ -34,45 +34,32 @@ public class PersonalDataContener {
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
-        extractedPersonalData.add(extractFirstName(form));
-        extractedPersonalData.add(extractSurname(form));
+        extractedPersonalData.add(extactPattern(form, "Nazwisko", "Nazwis"));
+        extractedPersonalData.add(extactPattern(form, "Imię", "Imi"));
         extractedPersonalData.addAll(extractDerivedes(form));
 
         return extractedPersonalData;
     }
 
-    private PersonalData extractFirstName(Form form) {
+    private PersonalData extactPattern(Form form, String defaultName, String pattern) {
         List<TextField> textFields = form.getSchema().getFields().getText();
         List<TextFieldState> textFieldStates = form.getState().getText();
-        String name = "Imię:";
+        String title = defaultName;
         String value = "";
 
         for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
-            if (textFields.get(i).getTitle().startsWith("Imi")) {
-                name = textFields.get(i).getTitle();
+            if (textFields.get(i).getTitle().startsWith(pattern)) {
+                title = textFields.get(i).getTitle();
                 value = textFieldStates.get(i).getValue();
                 break;
             }
         }
 
-        return new PersonalData(name, value);
-    }
-
-    private PersonalData extractSurname(Form form) {
-        List<TextField> textFields = form.getSchema().getFields().getText();
-        List<TextFieldState> textFieldStates = form.getState().getText();
-        String name = "Nazwisko:";
-        String value = "";
-
-        for (int i = 0; i < textFields.size() && i < textFieldStates.size(); i++) {
-            if (textFields.get(i).getTitle().startsWith("Nazwis")) {
-                name = textFields.get(i).getTitle();
-                value = textFieldStates.get(i).getValue();
-                break;
-            }
+        if (title.charAt(title.length() - 1) != ':') {
+            title = title + ':';
         }
 
-        return new PersonalData(name, value);
+        return new PersonalData(title, value);
     }
 
     private List<PersonalData> extractDerivedes(Form form) {
@@ -85,7 +72,14 @@ public class PersonalDataContener {
             List<String> titles = derivedFields.get(i).getTitles();
             List<String> values = derivedFieldStates.get(i).getValue();
             for (int j = 0; j < titles.size() && j < values.size(); j++) {
-                extractedPersonalData.add(new PersonalData(titles.get(i), values.get(i)));
+                String title = titles.get(j);
+                String value = values.get(j);
+
+                if (title.charAt(title.length() - 1) != ':') {
+                    title = title + ':';
+                }
+
+                extractedPersonalData.add(new PersonalData(title, value));
             }
         }
 
