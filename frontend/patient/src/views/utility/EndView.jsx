@@ -10,7 +10,7 @@ const EndView = () => {
       history.push('/');
       window.location.reload();
     }, 2000);
-  }, []);
+  }, [history]);
 
   return (
     <Container className="d-flex justify-content-center align-items-center">

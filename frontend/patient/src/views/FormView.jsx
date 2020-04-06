@@ -91,7 +91,7 @@ const FormView = () => {
       setCredentials(null);
       history.push('/thanks');
     }
-  }, [form]);
+  }, [form, history]);
 
   const isContinuous = localStorage.getItem('device-token') !== null;
   if (credentials === null && isContinuous) { return (<LoadingView message="Oczekiwanie na rozpoczęcie." />); }

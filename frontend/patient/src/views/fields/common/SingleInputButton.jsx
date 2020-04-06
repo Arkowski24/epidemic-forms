@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const Header = ({
   message,
   clicked, onClick,
-  isBlocked
+  isBlocked,
 }) => (
   <div className="ml-2 mr-2 mb-1 pb-1 border-bottom">
     <Row>
@@ -33,7 +33,7 @@ const SingleInputButton = ({
   children,
   highlighted,
   clicked, onClick,
-  isBlocked
+  isBlocked,
 }) => (
   <div className={`w-100 ml-1 mr-1 mt-1 pl-1 pr-1 pt-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
     <Header message={title} clicked={clicked} onClick={onClick} isBlocked={isBlocked} />
