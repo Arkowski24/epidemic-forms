@@ -1,21 +1,20 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-import PageForm from './common/PageForm';
+import SingleInput from './common/SingleInput';
 import TextViewInline from './inline/TextViewInline';
 
 const InputForm = ({
-  text, setText,
-  isMultiline, disabled,
+  text, setText, isMultiline, isBlocked,
 }) => (
   <div className="p-1">
     <Form>
       <Form.Control
-        as="textarea"
+        as={isMultiline ? 'textarea' : 'input'}
         rows={isMultiline ? 3 : 1}
         value={text}
         onChange={(event) => setText(event.target.value)}
-        disabled={disabled}
+        disabled={isBlocked}
       />
     </Form>
   </div>
@@ -25,40 +24,27 @@ const TextView = ({
   title, description,
   isInline,
   isMultiline,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
   input, setInput,
-  disabled,
-  isMultiPage,
+  highlighted,
+  isBlocked,
 }) => {
-  if (!isMultiPage && isInline) {
+  if (isInline) {
     return (
       <TextViewInline
         title={title}
         input={input}
         setInput={setInput}
         isMultiline={isMultiline}
+        highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
 
   return (
-    <PageForm
-      title={title}
-      description={description}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onClickPrev={onClickPrev}
-      onClickNext={onClickNext}
-      isMultiPage={isMultiPage}
-    >
-      <InputForm
-        text={input}
-        setText={setInput}
-        isMultiline={isMultiline}
-        disabled={disabled}
-      />
-    </PageForm>
+    <SingleInput title={title} description={description} highlighted={highlighted}>
+      <InputForm text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} />
+    </SingleInput>
   );
 };
 

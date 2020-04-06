@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../helper/DerivedHelper';
-import SinglePage from './common/SinglePage';
 import DerivedViewInline from './inline/DerivedViewInline';
 
 const Header = ({ message }) => (
@@ -17,14 +16,15 @@ const InfoMessage = ({ message }) => (
   </div>
 );
 
-const InputForm = ({ text, setText }) => (
+const InputForm = ({ text, setText, isBlocked }) => (
   <div className="m-2 p-1">
     <Form>
       <Form.Control
-        as="textarea"
+        as="input"
         rows={1}
         value={text}
         onChange={(event) => setText(event.target.value)}
+        disabled={isBlocked}
       />
     </Form>
   </div>
@@ -34,7 +34,7 @@ const OneField = ({
   derivedType, index,
   title, description,
   input, setInput,
-  disabled,
+  isBlocked,
 }) => {
   const setNewInput = (value) => {
     const newInput = input.slice();
@@ -49,7 +49,7 @@ const OneField = ({
     <div className="w-100 m-1 p-1">
       <Header message={title} />
       <InfoMessage message={description} />
-      <InputForm text={text} setText={setNewInput} disabled={disabled} />
+      <InputForm text={text} setText={setNewInput} isBlocked={isBlocked} />
     </div>
   );
 };
@@ -58,19 +58,19 @@ const DerivedView = ({
   derivedType,
   titles, descriptions,
   isInline,
-  currentPage, totalPages,
-  onClickPrev, onClickNext,
   input, setInput,
-  disabled,
-  isMultiPage,
+  highlighted,
+  isBlocked,
 }) => {
-  if (!isMultiPage && isInline) {
+  if (isInline) {
     return (
       <DerivedViewInline
         derivedType={derivedType}
         titles={titles}
         input={input}
         setInput={setInput}
+        highlighted={highlighted}
+        isBlocked={isBlocked}
       />
     );
   }
@@ -85,28 +85,15 @@ const DerivedView = ({
         description={descriptions[i]}
         input={input}
         setInput={setInput}
-        disabled={disabled}
+        isBlocked={isBlocked}
       />
     </Row>
   ));
 
-  if (isMultiPage) {
-    return (
-      <SinglePage
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onClickPrev={onClickPrev}
-        onClickNext={onClickNext}
-      >
-        {fields}
-      </SinglePage>
-    );
-  }
   return (
-    <Container className="w-100 m-1 p-1 rounded border">
+    <Container className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
       {fields}
     </Container>
   );
 };
-
 export default DerivedView;

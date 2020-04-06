@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Button, Container, Row } from 'react-bootstrap';
+import {
+  Button, Container, Row, Spinner,
+} from 'react-bootstrap';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -18,7 +20,7 @@ import DerivedView from './fields/DerivedView';
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [credentials, setCredentials] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const signatureViewRef = useRef();
 
   const sendFormResponse = () => {
     formStreamService.sendMove('FILLED');
@@ -28,6 +30,18 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
+
+  useEffect(
+    () => {
+      if (signatureViewRef.current && form.status === 'ACCEPTED') {
+        window.scrollTo({
+          behavior: 'smooth',
+          top: signatureViewRef.current.offsetTop,
+        });
+      }
+    },
+    [form],
+  );
 
   useEffect(() => {
     if (credentials === null) return;
@@ -40,22 +54,17 @@ const FormView = () => {
 
   if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'FILLED') { return (<LoadingView message="Oczekiwanie na akceptację przez pracownika." />); }
-  if (form.status === 'ACCEPTED') { return (<SignatureView title={form.patientSignature.title} description={form.patientSignature.description} sendSignature={sendSignature} />); }
-  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCurrentPage={setCurrentPage} setCredentials={setCredentials} />); }
+  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCredentials={setCredentials} />); }
 
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
 
-  const createField = (fieldSchema, pageIndex, prevPage, nextPage) => {
+  const createField = (fieldSchema, pageIndex) => {
     const { index } = pageIndexMapping[pageIndex];
     const input = form.state[index].value;
-    const { multiPage } = form;
-
-    const totalPages = pageIndexMapping.length;
-    const disabled = form.schema[index].fieldType === 'BLOCKED';
-    const setInput = (newInput) => { if (!disabled) formStreamService.sendInput(newInput, index); };
+    const setInput = (newInput) => formStreamService.sendInput(newInput, index);
+    const blocked = fieldSchema.fieldType === 'BLOCKED' || !(form.status === 'NEW');
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -65,14 +74,9 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           choices={fieldSchema.choices}
           isMultiChoice={fieldSchema.multiChoice}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -84,14 +88,9 @@ const FormView = () => {
           titles={fieldSchema.titles}
           descriptions={fieldSchema.descriptions}
           isInline={fieldSchema.inline}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -105,14 +104,9 @@ const FormView = () => {
           minValue={fieldSchema.minValue}
           maxValue={fieldSchema.maxValue}
           step={fieldSchema.step}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -122,16 +116,11 @@ const FormView = () => {
         <TextView
           title={fieldSchema.title}
           description={fieldSchema.description}
-          isMultiline={fieldSchema.multiline}
           isInline={fieldSchema.inline}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onClickPrev={prevPage}
-          onClickNext={nextPage}
+          isMultiline={fieldSchema.multiLine}
           input={input}
           setInput={setInput}
-          disabled={disabled}
-          isMultiPage={multiPage}
+          isBlocked={blocked}
         />
       );
     }
@@ -141,18 +130,9 @@ const FormView = () => {
         title={fieldSchema.title}
         description={fieldSchema.description}
         isInline={fieldSchema.inline}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onClickPrev={prevPage}
-        onClickNext={nextPage}
-        input={input}
-        setInput={setInput}
-        disabled={disabled}
-        isMultiPage={multiPage}
       />
     );
   };
-
 
   const buildFieldsSinglePage = () => {
     const header = (
@@ -164,18 +144,44 @@ const FormView = () => {
     const fields = form.schema
       // eslint-disable-next-line react/no-array-index-key
       .filter((r) => r.fieldType !== 'HIDDEN')
-      .map((s, i) => (<Row key={i}>{createField(s, i, () => {}, () => {})}</Row>));
+      .map((s, i) => (<Row key={i}>{createField(s, i)}</Row>));
+
+    const spinner = (
+      <>
+        <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        {' Oczekiwanie na akceptację...'}
+      </>
+    );
 
     const footer = (
       <Row>
-        <div className="w-100 m-2 p-1 pt-0 border-top">
+        <div className="w-100 m-2 p-1 border-top">
           <Button
             className="w-100"
             type="submit"
             onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
+            disabled={form.status !== 'NEW'}
           >
-            Prześlij
+            { form.status === 'NEW' ? 'Prześlij' : spinner}
           </Button>
+        </div>
+      </Row>
+    );
+
+    const signatureField = (
+      <Row>
+        <div className="w-100 mt-1 ml-1 p-1 border rounded" ref={signatureViewRef}>
+          <SignatureView
+            title={form.patientSignature.title}
+            description={form.patientSignature.description}
+            sendSignature={sendSignature}
+          />
         </div>
       </Row>
     );
@@ -184,38 +190,15 @@ const FormView = () => {
       <Container>
         {header}
         {fields}
-        {footer}
+        {form.status !== 'ACCEPTED' && footer}
+        {form.status === 'ACCEPTED' && signatureField}
       </Container>
     );
   };
 
-  const buildFieldsMultiPage = () => {
-    const { index } = pageIndexMapping[currentPage - 1];
-    const fieldSchema = form.schema[index];
-
-    const nextPage = (event) => {
-      event.preventDefault();
-      if (currentPage === pageIndexMapping.length) {
-        sendFormResponse();
-      } else {
-        formStreamService.sendPageChange(currentPage + 1);
-        setCurrentPage(currentPage + 1);
-      }
-    };
-    const prevPage = (event) => {
-      event.preventDefault();
-      if (currentPage - 1 > 0) {
-        formStreamService.sendPageChange(currentPage - 1);
-        setCurrentPage(currentPage - 1);
-      }
-    };
-
-    return createField(fieldSchema, index, prevPage, nextPage);
-  };
-
   return (
     <>
-      {form.multiPage ? buildFieldsMultiPage() : buildFieldsSinglePage()}
+      {buildFieldsSinglePage()}
     </>
   );
 };
