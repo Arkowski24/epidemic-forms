@@ -6,7 +6,6 @@ import {
 import { useHistory } from 'react-router-dom';
 
 import authService from '../services/AuthService';
-import deviceStreamService from '../services/DeviceStreamService';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
 
@@ -16,14 +15,12 @@ import SimpleView from './fields/SimpleView';
 import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
-import LoginView from './utility/LoginView';
 
 import SignatureView from './signature/SignatureView';
 import DerivedView from './fields/DerivedView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
-  const [credentials, setCredentials] = useState(null);
   const signatureViewRef = useRef();
   const history = useHistory();
 
@@ -37,31 +34,23 @@ const FormView = () => {
   };
 
   useEffect(() => {
-    const handleSendForm = async (pinCode) => {
-      const newCredentials = await authService.login(pinCode);
-      localStorage.setItem('credentials', JSON.stringify(newCredentials));
-      setCredentials(newCredentials);
-    };
-
-    const handleCancelForm = async () => {
-      localStorage.removeItem('credentials');
-      setCredentials(null);
-      setForm(null);
-      window.location.reload();
-    };
-
-    const subscribeForms = async () => {
-      const deviceToken = localStorage.getItem('device-token');
-      if (!deviceToken) return;
+    const rawCredentials = localStorage.getItem('credentials');
+    if (rawCredentials === null) { history.push('/'); return; }
+    const fetchData = async () => {
       try {
-        await authService.meDevice(deviceToken);
-        deviceStreamService.subscribe(deviceToken, handleSendForm, handleCancelForm);
+        const credentials = JSON.parse(rawCredentials);
+
+        await authService.me(credentials.token);
+        formStreamService.setCredentials(credentials);
+        formService.setCredentials(credentials);
+        formStreamService.subscribe((f) => setForm(f));
       } catch (e) {
-        localStorage.removeItem('device-token');
+        localStorage.removeItem('credentials');
+        history.push('/');
       }
     };
-    subscribeForms();
-  }, [setCredentials, setForm, form, credentials]);
+    fetchData();
+  }, [history]);
 
   useEffect(() => {
     if (signatureViewRef.current && form.status === 'ACCEPTED') {
@@ -74,30 +63,16 @@ const FormView = () => {
   [form]);
 
   useEffect(() => {
-    if (credentials === null) { deviceStreamService.setFormId(null); return; }
-    const setNewForm = (newForm) => setForm(newForm);
-
-    deviceStreamService.setFormId(credentials.formId);
-    formStreamService.setCredentials(credentials);
-    formService.setCredentials(credentials);
-    formStreamService.subscribe(setNewForm);
-  }, [credentials]);
-
-  useEffect(() => {
     if (!form) return;
     if (form.status === 'SIGNED' || form.status === 'CLOSED') {
       localStorage.removeItem('credentials');
       setForm(null);
-      setCredentials(null);
       history.push('/thanks');
     }
   }, [form, history]);
 
-  const isContinuous = localStorage.getItem('device-token') !== null;
-  if (credentials === null && isContinuous) { return (<LoadingView message="Oczekiwanie na rozpoczęcie." />); }
-  if (credentials === null) { return (<LoginView setCredentials={setCredentials} />); }
   if (form === null) { return (<LoadingView />); }
-  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} setCredentials={setCredentials} />); }
+  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} />); }
 
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))

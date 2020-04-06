@@ -125,7 +125,6 @@ const sendInput = (newInput, index, formHandler) => {
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
-  console.log(newStatus)
 
   webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
