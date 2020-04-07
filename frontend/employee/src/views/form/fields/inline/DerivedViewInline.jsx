@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Col, Container, Form, Row,
 } from 'react-bootstrap';
 
-import dataValidator from '../../../helper/DataValidator';
-import derivedHelper from '../../../helper/DerivedHelper';
+import dataValidator from '../../../../helper/DataValidator';
+import derivedHelper from '../../../../helper/DerivedHelper';
 
 const InputForm = ({
   title, text, setText, isInvalid,
   isBlocked,
 }) => {
-  const [dirty, setDirty] = useState(false);
+  const dirty = text.length > 0;
   return (
     <Form>
       <Form.Control
@@ -19,7 +19,7 @@ const InputForm = ({
         rows={1}
         value={text}
         placeholder={title}
-        onChange={(event) => { setDirty(true); setText(event.target.value); }}
+        onChange={(event) => setText(event.target.value)}
         isInvalid={dirty && isInvalid}
         disabled={isBlocked}
       />
@@ -128,7 +128,7 @@ const DerivedViewInline = ({
   ));
 
   return (
-    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-danger shadow-sm' : ''}`}>
+    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-secondary' : ''}`}>
       {fields}
     </Container>
   );

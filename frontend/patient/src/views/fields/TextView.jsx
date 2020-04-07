@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import SingleInput from './common/SingleInput';
@@ -8,7 +8,7 @@ const InputForm = ({
   text, setText, isMultiline, isBlocked,
   isInvalid,
 }) => {
-  const [dirty, setDirty] = useState(false);
+  const dirty = text.length > 0;
   return (
     <div className="p-1">
       <Form>
@@ -16,7 +16,7 @@ const InputForm = ({
           as={isMultiline ? 'textarea' : 'input'}
           rows={isMultiline ? 3 : 1}
           value={text}
-          onChange={(event) => { setDirty(true); setText(event.target.value); }}
+          onChange={(event) => setText(event.target.value)}
           disabled={isBlocked}
           isInvalid={dirty && isInvalid}
         />
