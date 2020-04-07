@@ -27,6 +27,7 @@ public class PDFBuilder {
     private final static int signatureWidth = 160;
     private final static int signatureHeight = 120;
 
+    private Font hospitalNameFont;
     private Font titleFont;
     private Font standardFont;
     private Font answerFont;
@@ -36,7 +37,8 @@ public class PDFBuilder {
     private String dirPath;
 
     public PDFBuilder(String dirPath) throws DocumentException, IOException {
-        this.titleFont = createBoldFont(18);
+        this.hospitalNameFont = createRegularFont(15);
+        this.titleFont = createBoldFont(20);
         this.standardFont = createRegularFont(10);
         this.answerFont = createItalicFont(8);
         this.answerHighlightedFont = createItalicBoldFont(8);
@@ -65,9 +67,19 @@ public class PDFBuilder {
     }
 
     private void addHospitalName(Document document, String hospitalName) throws DocumentException {
-        Paragraph creationDateParagraph = new Paragraph(hospitalName, standardFont);
-        creationDateParagraph.setAlignment(Element.ALIGN_RIGHT);
-        document.add(creationDateParagraph);
+        try {
+            Chunk hospitalLogoChunk = new Chunk(Image.getInstance("hospital_logo.png"), 0, 0);
+            Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
+
+            Paragraph hospitalParagraph = new Paragraph();
+            hospitalParagraph.add(hospitalLogoChunk);
+            hospitalParagraph.add(hospitalNameChunk);
+            hospitalParagraph.setAlignment(Element.ALIGN_CENTER);
+            document.add(hospitalParagraph);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void addCreationDate(Document document, String creationDate) throws DocumentException {

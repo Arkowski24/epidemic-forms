@@ -7,7 +7,7 @@ import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 
 public class FormKeyData {
 
-    private final String hospitalName = "Krakowski Szpital Sppcjalistyczny im. Jana Pawła II";
+    private final String hospitalName = "Krakowski Szpital Specjalistyczny im. Jana Pawła II";
 
     private String creationDate;
     private String title;
