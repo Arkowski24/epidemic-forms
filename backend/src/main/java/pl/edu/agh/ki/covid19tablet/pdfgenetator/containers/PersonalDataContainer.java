@@ -28,7 +28,9 @@ public class PersonalDataContainer {
     public String getSurname() {
         for (PersonalData personalData : personalDataList) {
             if (personalData.getTitle().startsWith("Nazwis")) {
-                return personalData.getValue();
+                String surname = personalData.getValue();
+                surname = surname.replaceAll(" ", "");
+                return surname;
             }
         }
 
