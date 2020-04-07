@@ -55,7 +55,6 @@ public class PDFBuilder {
         document.open();
 
         addCreationDate(document, formKeyData.getCreationDate());
-        addEmployee(document, formKeyData.getEmployeeFullName());
         addTitle(document, formKeyData.getTitle());
         addPersonalData(document, formKeyData.getPersonalData());
         addQuestions(document, formKeyData.getQuestions());
@@ -71,12 +70,6 @@ public class PDFBuilder {
         Paragraph creationDateParagraph = new Paragraph(creationDate, standardFont);
         creationDateParagraph.setAlignment(Element.ALIGN_RIGHT);
         document.add(creationDateParagraph);
-    }
-
-    private void addEmployee(Document document, String employeeName) throws DocumentException {
-        Paragraph employeeParagraph = new Paragraph(employeeName, standardFont);
-        employeeParagraph.setAlignment(Element.ALIGN_RIGHT);
-        document.add(employeeParagraph);
     }
 
     private void addTitle(Document document, String formName) throws DocumentException {
@@ -135,6 +128,11 @@ public class PDFBuilder {
         titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
         titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
         document.add(titleTable);
+
+        PdfPTable employeeNameTable = new PdfPTable(2);
+        employeeNameTable.setTotalWidth(document.getPageSize().getWidth());
+        employeeNameTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeFullName(), standardFont)));
+        document.add(employeeNameTable);
     }
 
     private ByteArrayInputStream resizeSignature(Signature signature) throws IOException {
