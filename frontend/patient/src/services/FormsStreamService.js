@@ -105,6 +105,10 @@ const subscribe = (formHandler) => {
   });
 };
 
+const disconnect = () => {
+  webSocket.disconnect();
+};
+
 const sendInput = (newInput, index, formHandler) => {
   const field = internalForms.schema[index];
   const fieldType = field.type.toUpperCase();
@@ -129,13 +133,6 @@ const sendMove = (newStatus) => {
   webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
 };
 
-const sendPageChange = (newPage) => {
-  const requestType = 'NEW_PAGE';
-  const request = JSON.stringify({ requestType, newPage });
-
-  webSocket.publish({ destination: `/changes/${credentials.formId}`, body: request });
-};
-
 export default {
-  setCredentials, subscribe, sendInput, sendMove, sendPageChange,
+  setCredentials, subscribe, disconnect, sendInput, sendMove,
 };

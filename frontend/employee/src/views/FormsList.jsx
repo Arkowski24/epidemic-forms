@@ -12,6 +12,7 @@ import deviceService from '../services/DeviceService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
 import deviceStreamService from '../services/DeviceStreamService';
+import formStreamService from '../services/FormsStreamService';
 
 import LoadingView from './form/utility/LoadingView';
 
@@ -203,6 +204,10 @@ const FormsList = () => {
     history.push('/employee/login');
     setCredentials(null);
   };
+
+  useEffect(() => {
+    formStreamService.disconnect();
+  }, []);
 
   useEffect(() => {
     const fetchToken = async () => {

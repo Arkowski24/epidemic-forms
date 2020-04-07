@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 import authService from '../../services/AuthService';
 import deviceStreamService from '../../services/DeviceStreamService';
+import formStreamService from '../../services/FormsStreamService';
 import LoadingView from './LoadingView';
 
 const LoginView = () => {
@@ -12,6 +13,10 @@ const LoginView = () => {
   const [error, setError] = useState(false);
   const history = useHistory();
   const isContinuous = localStorage.getItem('device-token') !== null;
+
+  useEffect(() => {
+    formStreamService.disconnect();
+  }, []);
 
   useEffect(() => {
     const rawCredentials = localStorage.getItem('credentials');

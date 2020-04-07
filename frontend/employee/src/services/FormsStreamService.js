@@ -105,6 +105,10 @@ const subscribe = (formHandler) => {
   });
 };
 
+const disconnect = () => {
+  webSocket.disconnect();
+};
+
 const sendInput = (newInput, index, formHandler) => {
   const field = internalForms.schema[index];
   const fieldType = field.type.toUpperCase();
@@ -132,5 +136,5 @@ const sendMove = (newStatus) => {
 };
 
 export default {
-  setCredentials, subscribe, sendInput, sendMove,
+  setCredentials, subscribe, disconnect, sendInput, sendMove,
 };
