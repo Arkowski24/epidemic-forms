@@ -53,10 +53,12 @@ public class QuestionContainer {
 
             answer = addUnits(title, answer);
 
-            if (sliderFieldState.getValue() < sliderField.getMinValue())
-                answer = "B.D.";
-
             boolean isHighlighted = isOutOfNorm(title, value);
+
+            if (sliderFieldState.getValue() < sliderField.getMinValue()) {
+                answer = "B.D.";
+                isHighlighted = false;
+            }
 
             extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
 
@@ -132,7 +134,7 @@ public class QuestionContainer {
         else if (title.startsWith("Satura"))
             answer += " %";
 
-        else if (title.startsWith("Częstość"))
+        else if (title.startsWith("Częstość odd"))
             answer += " /min";
 
         else if (title.startsWith("Ciśnienie skur"))
