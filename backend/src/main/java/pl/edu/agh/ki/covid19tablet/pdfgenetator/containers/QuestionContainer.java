@@ -51,10 +51,13 @@ public class QuestionContainer {
             double value = sliderFieldState.getValue();
             String answer = Double.toString(value);
 
+            answer = addUnits(title, answer);
+
             if (sliderFieldState.getValue() < sliderField.getMinValue())
                 answer = "B.D.";
 
             boolean isHighlighted = isOutOfNorm(title, value);
+
             extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
 
             if (fieldNumber > this.maxFieldNumber) {
@@ -108,6 +111,8 @@ public class QuestionContainer {
 
             boolean isHighlighted = isOutOfNorm(title, answer);
 
+            answer = addUnits(title, answer);
+
             extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
@@ -115,6 +120,25 @@ public class QuestionContainer {
         }
 
         return extractedQuestions;
+    }
+
+    private String addUnits(String title, String answer) {
+        if (title.startsWith("Tempera"))
+            answer += " C";
+
+        else if (title.startsWith("Tętn"))
+            answer += " /min";
+
+        else if (title.startsWith("Satura"))
+            answer += " %";
+
+        else if (title.startsWith("Częstość"))
+            answer += " /min";
+
+        else if (title.startsWith("Ciśnienie skur"))
+            answer += " mm Hg";
+
+        return answer;
     }
 
     private boolean isOutOfNorm(String title, double value) {
