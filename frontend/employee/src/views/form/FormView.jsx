@@ -7,6 +7,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
 
+import dataValidator from '../../helper/DataValidator';
+
 import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
 import SimpleView from './fields/SimpleView';
@@ -71,14 +73,34 @@ const FormView = () => {
   if (form === null || token === null) { return (<LoadingView />); }
   if (form.status === 'CLOSED') { return (<EndView history={history} />); }
 
-  const pageIndexMapping = form.schema
-    .map((f, i) => ({ type: f.fieldType, index: i }))
-    .filter((r) => r.type !== 'HIDDEN');
+  const isValidField = (fieldSchema, fieldIndex) => {
+    if (fieldSchema.fieldType === 'HIDDEN') return true;
+    const input = form.state[fieldIndex].value;
+    const { required } = fieldSchema;
+
+    if (fieldSchema.type === 'derived') {
+      const { derivedType } = fieldSchema;
+      return input
+        .map((v, i) => !required[i] || dataValidator.validateDerivedField(v, i, derivedType))
+        .filter((v) => !v)
+        .length === 0;
+    }
+
+    if (!required) return true;
+    if (fieldSchema.type === 'choice') { return dataValidator.validateChoiceField(input); }
+    if (fieldSchema.type === 'slider') { return dataValidator.validateSliderField(input, fieldSchema.minValue); }
+    if (fieldSchema.type === 'text') { return dataValidator.validateTextField(input); }
+    return true;
+  };
+
+  const validFields = form.schema
+    .map((f, i) => isValidField(f, i));
 
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index, setForm);
     const blocked = !(form.status === 'NEW' || form.status === 'FILLED');
+    const isInvalid = !validFields[index];
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -90,8 +112,8 @@ const FormView = () => {
           isMultiChoice={fieldSchema.multiChoice}
           input={input}
           setInput={setInput}
-          highlighted={highlighted}
           isBlocked={blocked}
+          highlighted={isInvalid}
         />
       );
     }
@@ -105,7 +127,7 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           input={input}
           setInput={setInput}
-          highlighted={highlighted}
+          highlighted={isInvalid}
           isBlocked={blocked}
         />
       );
@@ -124,6 +146,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={isInvalid}
         />
       );
     }
@@ -138,6 +161,8 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={isInvalid}
+          isInvalid={isInvalid}
         />
       );
     }

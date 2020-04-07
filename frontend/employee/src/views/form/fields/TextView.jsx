@@ -6,6 +6,7 @@ import TextViewInline from './inline/TextViewInline';
 
 const InputForm = ({
   text, setText, isMultiline, isBlocked,
+  isInvalid,
 }) => (
   <div className="p-1">
     <Form>
@@ -13,8 +14,9 @@ const InputForm = ({
         as={isMultiline ? 'textarea' : 'input'}
         rows={isMultiline ? 3 : 1}
         value={text}
-        onChange={(event) => setText(event.target.value)}
+        onChange={(event) => { setText(event.target.value); }}
         disabled={isBlocked}
+        isInvalid={isInvalid}
       />
     </Form>
   </div>
@@ -27,6 +29,7 @@ const TextView = ({
   input, setInput,
   highlighted,
   isBlocked,
+  isInvalid,
 }) => {
   if (isInline) {
     return (
@@ -37,13 +40,14 @@ const TextView = ({
         isMultiline={isMultiline}
         highlighted={highlighted}
         isBlocked={isBlocked}
+        isInvalid={isInvalid}
       />
     );
   }
 
   return (
     <SingleInput title={title} description={description} highlighted={highlighted}>
-      <InputForm text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} />
+      <InputForm text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} isInvalid={isInvalid} />
     </SingleInput>
   );
 };
