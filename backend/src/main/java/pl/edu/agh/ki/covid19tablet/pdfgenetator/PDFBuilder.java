@@ -102,7 +102,7 @@ public class PDFBuilder {
         for (Question question : questions) {
             Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
             Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-            if (question.isDistinguished())
+            if (question.isHighlighted())
                 answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
             document.add(questionParagraph);
             document.add(answerParagraph);

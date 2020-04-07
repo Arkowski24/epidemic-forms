@@ -54,8 +54,8 @@ public class QuestionContainer {
             if (sliderFieldState.getValue() < sliderField.getMinValue())
                 answer = "B.D.";
 
-            boolean isDistiguished = isOutOfNorm(title, value);
-            extractedQuestions.add(new Question(fieldNumber, title, answer, isDistiguished));
+            boolean isHighlighted = isOutOfNorm(title, value);
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted));
 
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
@@ -132,11 +132,11 @@ public class QuestionContainer {
                 }
             }
 
-            boolean isDistiguished = false;
+            boolean isHighlighted = false;
             if (answer.startsWith("T"))
-                isDistiguished = true;
+                isHighlighted = true;
 
-            extractedQuestions.add(new Question(fieldNumber, title, answer, isDistiguished));
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted));
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
             }

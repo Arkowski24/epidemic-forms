@@ -5,13 +5,13 @@ public class Question {
     private int fieldNumber;
     private String title;
     private String answer;
-    private boolean isDistinguished;
+    private boolean isHighlighted;
 
-    public Question(int fieldNumber, String title, String answer, boolean isDistinguished) {
+    public Question(int fieldNumber, String title, String answer, boolean isHighlighted) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
-        this.isDistinguished = isDistinguished;
+        this.isHighlighted = isHighlighted;
     }
 
     public int getFieldNumber() {
@@ -23,7 +23,7 @@ public class Question {
     public String getAnswer() {
         return answer;
     }
-    public boolean isDistinguished() {
-        return isDistinguished;
+    public boolean isHighlighted() {
+        return isHighlighted;
     }
 }
