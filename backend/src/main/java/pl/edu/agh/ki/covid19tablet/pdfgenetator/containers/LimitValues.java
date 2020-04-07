@@ -9,7 +9,7 @@ public class LimitValues {
 
     private static final double minAeration = 90;
 
-    private static final double maxBreathRate = 30.0;
+    private static final String[] outOfNormBreathRates = {"30-40", ">40"};
 
 
 
@@ -28,7 +28,7 @@ public class LimitValues {
         return minAeration;
     }
 
-    public static double getMaxBreathRate() {
-        return maxBreathRate;
+    public static String[] getOutOfNormBreathRates() {
+        return outOfNormBreathRates;
     }
 }

@@ -65,32 +65,6 @@ public class QuestionContainer {
         return extractedQuestions;
     }
 
-    private boolean isOutOfNorm(String title, double value) {
-        if (title.startsWith("Tempera")) {
-            if (value > LimitValues.getMaxTemperature())
-                return true;
-        }
-
-        if (title.startsWith("Tętn")) {
-            if (value > LimitValues.getMaxPulseRate())
-                return true;
-            if (value < LimitValues.getMinPulseRate())
-                return true;
-        }
-
-        if (title.startsWith("Satura")) {
-            if (value < LimitValues.getMinAeration())
-                return true;
-        }
-
-        if (title.startsWith("Częstość odd")) {
-            if (value > LimitValues.getMaxBreathRate())
-                return true;
-        }
-
-        return false;
-    }
-
     private List<Question> extractTextQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
@@ -132,9 +106,7 @@ public class QuestionContainer {
                 }
             }
 
-            boolean isHighlighted = false;
-            if (answer.startsWith("T"))
-                isHighlighted = true;
+            boolean isHighlighted = isOutOfNorm(title, answer);
 
             extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted));
             if (fieldNumber > this.maxFieldNumber) {
@@ -143,5 +115,40 @@ public class QuestionContainer {
         }
 
         return extractedQuestions;
+    }
+
+    private boolean isOutOfNorm(String title, double value) {
+        if (title.startsWith("Tempera")) {
+            if (value > LimitValues.getMaxTemperature())
+                return true;
+        }
+
+        if (title.startsWith("Tętn")) {
+            if (value > LimitValues.getMaxPulseRate())
+                return true;
+            if (value < LimitValues.getMinPulseRate())
+                return true;
+        }
+
+        if (title.startsWith("Satura")) {
+            if (value < LimitValues.getMinAeration())
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean isOutOfNorm(String title, String value) {
+        if (title.startsWith("Częstość odd")) {
+            for (String elem : LimitValues.getOutOfNormBreathRates()) {
+                if (value.equals(elem))
+                    return true;
+            }
+        }
+
+        if (value.equals("TAK"))
+            return true;
+
+        return false;
     }
 }
