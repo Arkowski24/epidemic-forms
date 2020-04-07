@@ -138,6 +138,7 @@ public class PDFBuilder {
         PdfPTable employeeNameTable = new PdfPTable(2);
         employeeNameTable.setTotalWidth(document.getPageSize().getWidth());
         employeeNameTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeFullName(), standardFont)));
+        employeeNameTable.addCell(getTitleCell(new Phrase("", standardFont)));
         document.add(employeeNameTable);
     }
 
