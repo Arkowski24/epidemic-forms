@@ -55,6 +55,7 @@ const ChoiceView = ({
   input, setInput,
   highlighted,
   isBlocked,
+  isInvalid
 }) => {
   if (isInline) {
     return (
@@ -66,12 +67,13 @@ const ChoiceView = ({
         setInput={setInput}
         highlighted={highlighted}
         isBlocked={isBlocked}
+        isInvalid={isInvalid}
       />
     );
   }
 
   return (
-    <SingleInput title={title} description={description} highlighted={highlighted}>
+    <SingleInput title={title} description={description} highlighted={highlighted || isInvalid}>
       <ChoiceForm
         choices={choices}
         isMultiChoice={isMultiChoice}

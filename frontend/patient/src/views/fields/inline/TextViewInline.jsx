@@ -8,6 +8,7 @@ const InputForm = ({
   text, setText,
   isMultiline,
   isBlocked,
+  isInvalid,
 }) => (
   <div className="p-1">
     <Form>
@@ -19,6 +20,7 @@ const InputForm = ({
         placeholder={title}
         onChange={(event) => setText(event.target.value)}
         disabled={isBlocked}
+        isInvalid={isInvalid}
       />
     </Form>
   </div>
@@ -30,9 +32,10 @@ const TextViewInline = ({
   input, setInput,
   highlighted,
   isBlocked,
+  isInvalid,
 }) => (
   <InlineView highlighted={highlighted}>
-    <InputForm title={title} text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} />
+    <InputForm title={title} text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} isInvalid={isInvalid} />
   </InlineView>
 );
 

@@ -77,8 +77,9 @@ const SliderViewInline = ({
   input, setInput,
   highlighted,
   isBlocked,
+  isInvalid
 }) => (
-  <InlineView highlighted={highlighted}>
+  <InlineView highlighted={highlighted || isInvalid}>
     <RangeForm
       title={title}
       minValue={minValue}

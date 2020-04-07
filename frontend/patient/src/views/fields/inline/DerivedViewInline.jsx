@@ -3,7 +3,7 @@ import {
   Col, Container, Form, Row,
 } from 'react-bootstrap';
 
-import { validatePolish } from 'validate-polish';
+import dataValidator from '../../../helper/DataValidator';
 import derivedHelper from '../../../helper/DerivedHelper';
 
 const InputForm = ({
@@ -54,34 +54,7 @@ const OneField = ({
       setInput(newValues);
     };
 
-    const validatePassport = (passportNumber) => {
-      const passportRegex = /^[A-Z]{2}[0-9]{7}$/;
-      if (passportNumber.match(passportRegex) === null) return false;
-      const weights = [7, 3, 9, 1, 7, 3, 1, 7, 3];
-      const letters = [0, 1].map((i) => passportNumber.charCodeAt(i) - 55);
-      const digits = [...Array(7).keys()].map((i) => Number(passportNumber.charAt(i + 2)));
-
-      const result = letters
-        .concat(digits)
-        .map((d, i) => d * weights[i])
-        .reduce((a, c) => a + c, 0);
-
-      return result % 10 === 0;
-    };
-
-    const validateInput = () => {
-      if (fieldValidator === 'PESEL') { return validatePolish.pesel(text); }
-      if (fieldValidator === 'Nr dow. os.') {
-        return validatePolish.identityCard(text)
-          || validatePolish.identityCardWithSeparator(text);
-      }
-      if (fieldValidator === 'Nr paszportu') {
-        return validatePassport(text);
-      }
-      return true;
-    };
-    const isValid = validateInput();
-
+    const isValid = dataValidator.validateDerivedField(input[index], index, derivedType);
     return (
       <>
         <Col>
@@ -152,7 +125,7 @@ const DerivedViewInline = ({
   ));
 
   return (
-    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
+    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-danger shadow-sm' : ''}`}>
       {fields}
     </Container>
   );

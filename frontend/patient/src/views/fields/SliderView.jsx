@@ -72,6 +72,7 @@ const SliderView = ({
   input, setInput,
   highlighted,
   isBlocked,
+  isInvalid
 }) => {
   const hidden = input < minValue;
 
@@ -92,6 +93,7 @@ const SliderView = ({
         setInput={setInput}
         highlighted={highlighted}
         isBlocked={isBlocked}
+        isInvalid={isInvalid}
       />
     );
   }
@@ -100,7 +102,7 @@ const SliderView = ({
     <SingleInputButton
       title={title}
       description={description}
-      highlighted={highlighted}
+      highlighted={highlighted || isInvalid}
       clicked={hidden}
       onClick={setHidden}
       isBlocked={isBlocked}
