@@ -39,7 +39,7 @@ public class PDFBuilder {
         this.titleFont = createBoldFont(18);
         this.standardFont = createRegularFont(10);
         this.answerFont = createItalicFont(8);
-        this.answerHighlightedFont = createBoldFont(8);
+        this.answerHighlightedFont = createItalicBoldFont(8);
         this.personalDataFont = createItalicFont(10);
 
         this.dirPath = dirPath;
@@ -172,14 +172,16 @@ public class PDFBuilder {
         BaseFont baseFont = BaseFont.createFont("aller_bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
-
     private Font createRegularFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
-
     private Font createItalicFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        return new Font(baseFont, size);
+    }
+    private Font createItalicBoldFont(int size) throws DocumentException, IOException {
+        BaseFont baseFont = BaseFont.createFont("aller_italic_bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
 }
