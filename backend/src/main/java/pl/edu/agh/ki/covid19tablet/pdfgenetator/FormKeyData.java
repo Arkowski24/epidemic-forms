@@ -7,6 +7,8 @@ import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 
 public class FormKeyData {
 
+    private final String hospitalName = "Krakowski Szpital Sppcjalistyczny im. Jana Pawła II";
+
     private String creationDate;
     private String title;
     private PersonalDataContainer personalData;
@@ -19,6 +21,10 @@ public class FormKeyData {
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);
         this.signatures = new SignaturesContainer(form);
+    }
+
+    public String getHospitalName() {
+        return hospitalName;
     }
 
     public String getCreationDate() {

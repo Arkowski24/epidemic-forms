@@ -53,6 +53,7 @@ public class PDFBuilder {
         PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(savingPath));
         document.open();
 
+        addHospitalName(document, formKeyData.getHospitalName());
         addCreationDate(document, formKeyData.getCreationDate());
         addTitle(document, formKeyData.getTitle());
         addPersonalData(document, formKeyData.getPersonalData());
@@ -61,6 +62,12 @@ public class PDFBuilder {
 
         document.close();
         writer.close();
+    }
+
+    private void addHospitalName(Document document, String hospitalName) throws DocumentException {
+        Paragraph creationDateParagraph = new Paragraph(hospitalName, standardFont);
+        creationDateParagraph.setAlignment(Element.ALIGN_RIGHT);
+        document.add(creationDateParagraph);
     }
 
     private void addCreationDate(Document document, String creationDate) throws DocumentException {
