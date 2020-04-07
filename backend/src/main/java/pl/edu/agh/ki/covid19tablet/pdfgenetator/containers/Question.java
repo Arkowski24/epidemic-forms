@@ -5,13 +5,15 @@ public class Question {
     private int fieldNumber;
     private String title;
     private String answer;
-    private boolean isHighlighted;
+    private boolean highlighted;
+    private boolean inTable;
 
-    public Question(int fieldNumber, String title, String answer, boolean isHighlighted) {
+    public Question(int fieldNumber, String title, String answer, boolean highlighted, boolean inTable) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
-        this.isHighlighted = isHighlighted;
+        this.highlighted = highlighted;
+        this.inTable = inTable;
     }
 
     public int getFieldNumber() {
@@ -24,6 +26,9 @@ public class Question {
         return answer;
     }
     public boolean isHighlighted() {
-        return isHighlighted;
+        return highlighted;
+    }
+    public boolean isInTable() {
+        return inTable;
     }
 }

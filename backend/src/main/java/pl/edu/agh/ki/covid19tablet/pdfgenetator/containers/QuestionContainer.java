@@ -55,7 +55,7 @@ public class QuestionContainer {
                 answer = "B.D.";
 
             boolean isHighlighted = isOutOfNorm(title, value);
-            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted));
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
 
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
@@ -76,7 +76,7 @@ public class QuestionContainer {
                 int fieldNumber = textField.getFieldNumber();
                 String title = textField.getTitle();
                 String answer = textFieldState.getValue();
-                extractedQuestions.add(new Question(fieldNumber, title, answer, false));
+                extractedQuestions.add(new Question(fieldNumber, title, answer, false, false));
 
                 if (fieldNumber > this.maxFieldNumber) {
                     this.maxFieldNumber = fieldNumber;
@@ -108,7 +108,7 @@ public class QuestionContainer {
 
             boolean isHighlighted = isOutOfNorm(title, answer);
 
-            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted));
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
             }

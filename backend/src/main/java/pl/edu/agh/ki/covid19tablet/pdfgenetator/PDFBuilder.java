@@ -24,15 +24,16 @@ import java.util.List;
 
 public class PDFBuilder {
 
-    private final static int signatureWidth = 120;
-    private final static int signatureHeight = 90;
+    private final static int signatureWidth = 160;
+    private final static int signatureHeight = 120;
 
     private Font hospitalNameFont;
     private Font titleFont;
     private Font standardFont;
-    private Font answerFont;
+    private Font answerInTableFont;
     private Font answerHighlightedFont;
     private Font personalDataFont;
+    private Font answerFont;
 
     private String dirPath;
 
@@ -40,9 +41,10 @@ public class PDFBuilder {
         this.hospitalNameFont = createRegularFont(15);
         this.titleFont = createBoldFont(20);
         this.standardFont = createRegularFont(10);
-        this.answerFont = createItalicFont(8);
+        this.answerInTableFont = createItalicFont(8);
         this.answerHighlightedFont = createItalicBoldFont(8);
         this.personalDataFont = createItalicFont(10);
+        this.answerFont = createItalicFont(10);
 
         this.dirPath = dirPath;
     }
@@ -126,12 +128,37 @@ public class PDFBuilder {
         questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
         for (Question question : questions) {
-            Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-            Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-            if (question.isHighlighted())
-                answerParagraph = new Paragraph("    " + question.getAnswer() + " (!)", answerHighlightedFont);
-            document.add(questionParagraph);
-            document.add(answerParagraph);
+            if (question.isInTable()) {
+                float[] widths = {0.85f, 0.15f};
+                PdfPTable questionTable = new PdfPTable(widths);
+                questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);    // xDDDD
+                questionTable.setLockedWidth(true);
+
+                PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
+                PdfPCell answerCell = new PdfPCell(new Phrase("    " + question.getAnswer(), answerInTableFont));
+                if (question.isHighlighted())
+                    answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
+
+                questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                questionTable.addCell(questionCell);
+                questionTable.addCell(answerCell);
+
+                document.add(questionTable);
+            }
+            else {
+                Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
+                Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
+                if (question.isHighlighted())
+                    answerParagraph = new Paragraph("    " + question.getAnswer() + " (!)", answerHighlightedFont);
+
+                questionParagraph.setSpacingBefore(10);
+
+                document.add(questionParagraph);
+                document.add(answerParagraph);
+            }
+
         }
     }
 
