@@ -67,24 +67,24 @@ public class QuestionContainer {
 
     private boolean isOutOfNorm(String title, double value) {
         if (title.startsWith("Tempera")) {
-            if (value > CeilingValues.getMaxTemperature())
+            if (value > LimitValues.getMaxTemperature())
                 return true;
         }
 
         if (title.startsWith("Tętn")) {
-            if (value > CeilingValues.getMaxPulseRate())
+            if (value > LimitValues.getMaxPulseRate())
                 return true;
-            if (value < CeilingValues.getMinPulseRate())
+            if (value < LimitValues.getMinPulseRate())
                 return true;
         }
 
         if (title.startsWith("Satura")) {
-            if (value < CeilingValues.getMinAeration())
+            if (value < LimitValues.getMinAeration())
                 return true;
         }
 
         if (title.startsWith("Częstość odd")) {
-            if (value > CeilingValues.getMaxBreathRate())
+            if (value > LimitValues.getMaxBreathRate())
                 return true;
         }
 

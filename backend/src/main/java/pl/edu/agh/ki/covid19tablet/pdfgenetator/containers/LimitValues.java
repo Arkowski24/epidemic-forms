@@ -1,6 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
-public class CeilingValues {
+public class LimitValues {
 
     private static final double maxTemperature = 37.0;
 
