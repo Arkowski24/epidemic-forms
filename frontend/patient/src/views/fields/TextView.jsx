@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 
 import SingleInput from './common/SingleInput';
@@ -7,20 +7,23 @@ import TextViewInline from './inline/TextViewInline';
 const InputForm = ({
   text, setText, isMultiline, isBlocked,
   isInvalid,
-}) => (
-  <div className="p-1">
-    <Form>
-      <Form.Control
-        as={isMultiline ? 'textarea' : 'input'}
-        rows={isMultiline ? 3 : 1}
-        value={text}
-        onChange={(event) => setText(event.target.value)}
-        disabled={isBlocked}
-        isInvalid={isInvalid}
-      />
-    </Form>
-  </div>
-);
+}) => {
+  const [dirty, setDirty] = useState(false);
+  return (
+    <div className="p-1">
+      <Form>
+        <Form.Control
+          as={isMultiline ? 'textarea' : 'input'}
+          rows={isMultiline ? 3 : 1}
+          value={text}
+          onChange={(event) => { setDirty(true); setText(event.target.value); }}
+          disabled={isBlocked}
+          isInvalid={dirty && isInvalid}
+        />
+      </Form>
+    </div>
+  );
+};
 
 const TextView = ({
   title, description,

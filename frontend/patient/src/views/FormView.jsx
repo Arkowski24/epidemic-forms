@@ -23,6 +23,7 @@ import DerivedView from './fields/DerivedView';
 
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [formTouched, setFormTouched] = useState(false);
   const signatureViewRef = useRef();
   const history = useHistory();
 
@@ -121,7 +122,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
-          isInvalid={isInvalid}
+          highlighted={formTouched && isInvalid}
         />
       );
     }
@@ -135,6 +136,7 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           input={input}
           setInput={setInput}
+          highlighted={formTouched && isInvalid}
           isBlocked={blocked}
         />
       );
@@ -153,7 +155,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
-          isInvalid={isInvalid}
+          highlighted={formTouched && isInvalid}
         />
       );
     }
@@ -168,6 +170,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={formTouched && isInvalid}
           isInvalid={isInvalid}
         />
       );
@@ -217,8 +220,12 @@ const FormView = () => {
           <Button
             className="w-100"
             type="submit"
-            onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
-            disabled={form.status !== 'NEW' || isNotValidInput}
+            onClick={(e) => {
+              e.preventDefault();
+              setFormTouched(true);
+              if (!isNotValidInput) sendFormResponse();
+            }}
+            disabled={form.status !== 'NEW' || (formTouched && isNotValidInput)}
           >
             { form.status === 'NEW' ? 'Prześlij' : spinner}
           </Button>

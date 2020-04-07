@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Col, Container, Form, Row,
 } from 'react-bootstrap';
@@ -9,20 +9,23 @@ import derivedHelper from '../../../helper/DerivedHelper';
 const InputForm = ({
   title, text, setText, isInvalid,
   isBlocked,
-}) => (
-  <Form>
-    <Form.Control
-      as="input"
-      size="lg"
-      rows={1}
-      value={text}
-      placeholder={title}
-      onChange={(event) => setText(event.target.value)}
-      isInvalid={isInvalid}
-      disabled={isBlocked}
-    />
-  </Form>
-);
+}) => {
+  const [dirty, setDirty] = useState(false);
+  return (
+    <Form>
+      <Form.Control
+        as="input"
+        size="lg"
+        rows={1}
+        value={text}
+        placeholder={title}
+        onChange={(event) => { setDirty(true); setText(event.target.value); }}
+        isInvalid={dirty && isInvalid}
+        disabled={isBlocked}
+      />
+    </Form>
+  );
+};
 
 const OneField = ({
   derivedType, index,

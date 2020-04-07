@@ -165,9 +165,8 @@ const ChoiceViewInline = ({
   input, setInput,
   highlighted,
   isBlocked,
-  isInvalid,
 }) => (
-  <InlineView highlighted={highlighted || isInvalid}>
+  <InlineView highlighted={highlighted}>
     {isMultiChoice && (
       <ChoiceFormMultiChoice
         title={title}
