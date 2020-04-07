@@ -24,8 +24,8 @@ import java.util.List;
 
 public class PDFBuilder {
 
-    private final static int signatureWidth = 160;
-    private final static int signatureHeight = 120;
+    private final static int signatureWidth = 120;
+    private final static int signatureHeight = 90;
 
     private Font hospitalNameFont;
     private Font titleFont;
@@ -56,8 +56,8 @@ public class PDFBuilder {
         document.open();
 
         addHospitalName(document, formKeyData.getHospitalName());
-        addCreationDate(document, formKeyData.getCreationDate());
         addTitle(document, formKeyData.getTitle());
+        addMetadata(document, formKeyData.getMetadata());
         addPersonalData(document, formKeyData.getPersonalData());
         addQuestions(document, formKeyData.getQuestions());
         addSignatures(document, formKeyData.getSignatures());
@@ -66,36 +66,43 @@ public class PDFBuilder {
         writer.close();
     }
 
-    private void addHospitalName(Document document, String hospitalName) throws DocumentException {
-        try {
-            Chunk hospitalLogoChunk = new Chunk(Image.getInstance("hospital_logo.png"), 0, 0);
-            Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
+    private void addHospitalName(Document document, String hospitalName) throws DocumentException, IOException {
+        Chunk hospitalLogoChunk = new Chunk(Image.getInstance("hospital_logo.png"), 0, 0);
+        Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
 
-            Paragraph hospitalParagraph = new Paragraph();
-            hospitalParagraph.add(hospitalLogoChunk);
-            hospitalParagraph.add(hospitalNameChunk);
-            hospitalParagraph.setAlignment(Element.ALIGN_CENTER);
-            document.add(hospitalParagraph);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    private void addCreationDate(Document document, String creationDate) throws DocumentException {
-        document.addCreationDate();
-
-        Paragraph creationDateParagraph = new Paragraph(creationDate, standardFont);
-        creationDateParagraph.setAlignment(Element.ALIGN_RIGHT);
-        document.add(creationDateParagraph);
+        Paragraph hospitalParagraph = new Paragraph();
+        hospitalParagraph.add(hospitalLogoChunk);
+        hospitalParagraph.add(hospitalNameChunk);
+        hospitalParagraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(hospitalParagraph);
     }
 
     private void addTitle(Document document, String formName) throws DocumentException {
         Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
-        title.setSpacingAfter(20);
-        title.setSpacingBefore(10);
+        title.setSpacingAfter(10);
+        title.setSpacingBefore(5);
         document.add(title);
+    }
+
+    private void addMetadata(Document document, MetadataContainer metadataContainer) throws DocumentException {
+        Paragraph deviceParagraph = new Paragraph(
+                metadataContainer.getUsedDeviceTitle()
+                + ": "
+                + metadataContainer.getUsedDevice(),
+                standardFont
+        );
+        document.add(deviceParagraph);
+
+        Paragraph creationDateParagraph = new Paragraph(
+                metadataContainer.getCreationDateTitle()
+                + ": "
+                + metadataContainer.getCreationDate(),
+                standardFont
+        );
+        document.add(creationDateParagraph);
+
+        addEmptyLine(document, standardFont);
     }
 
     private void addPersonalData(Document document, PersonalDataContainer personalDataContainer)
