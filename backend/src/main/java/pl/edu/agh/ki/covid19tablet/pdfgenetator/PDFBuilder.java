@@ -82,8 +82,7 @@ public class PDFBuilder {
     private void addTitle(Document document, String formName) throws DocumentException {
         Paragraph title = new Paragraph(formName, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
-        title.setSpacingAfter(10);
-        title.setSpacingBefore(5);
+        title.setSpacingAfter(20);
         document.add(title);
     }
 
