@@ -25,7 +25,7 @@ const setNewFieldState = (newInput, index, formHandler) => {
   formHandler(newForm);
 };
 
-const subscribe = (formHandler, setPatientPage) => {
+const subscribe = (formHandler) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
     internalForms = newForm;
@@ -98,15 +98,9 @@ const subscribe = (formHandler, setPatientPage) => {
     }
   };
 
-  const handlePageChangeResponse = (message) => {
-    const response = JSON.parse(message.body);
-    setPatientPage(response.newPage);
-  };
-
   webSocket.connect({ Authorization: `Bearer ${credentials.token}` }, () => {
     internalForms = null;
     webSocket.subscribe(`/updates/${credentials.formId}`, handleResponse);
-    webSocket.subscribe(`/changes/${credentials.formId}`, handlePageChangeResponse);
     webSocket.publish(webSocketsHelper.buildInitialRequest(credentials.formId));
   });
 };

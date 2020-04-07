@@ -21,7 +21,6 @@ import DerivedView from './fields/DerivedView';
 const FormView = () => {
   const [form, setForm] = useState(null);
   const [token, setToken] = useState(null);
-  const [patientPage, setPatientPage] = useState(0);
   const { formId } = useParams();
   const history = useHistory();
   const signatureViewRef = useRef();
@@ -59,7 +58,7 @@ const FormView = () => {
         formService.setToken(newToken);
         formStreamService.setCredentials({ token: newToken, formId });
         const setNewForm = (newForm) => setForm(newForm);
-        formStreamService.subscribe(setNewForm, setPatientPage);
+        formStreamService.subscribe(setNewForm);
         setToken(newToken);
       } catch (e) {
         localStorage.removeItem('token');
@@ -79,7 +78,6 @@ const FormView = () => {
   const createField = (fieldSchema, index) => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index, setForm);
-    const highlighted = patientPage && index === pageIndexMapping[patientPage - 1].index;
     const blocked = !(form.status === 'NEW' || form.status === 'FILLED');
 
     if (fieldSchema.type === 'choice') {
@@ -125,7 +123,6 @@ const FormView = () => {
           defaultValue={fieldSchema.defaultValue}
           input={input}
           setInput={setInput}
-          highlighted={highlighted}
           isBlocked={blocked}
         />
       );
@@ -140,7 +137,6 @@ const FormView = () => {
           isMultiline={fieldSchema.multiLine}
           input={input}
           setInput={setInput}
-          highlighted={highlighted}
           isBlocked={blocked}
         />
       );
@@ -151,7 +147,6 @@ const FormView = () => {
         title={fieldSchema.title}
         description={fieldSchema.description}
         isInline={fieldSchema.inline}
-        highlighted={highlighted}
       />
     );
   };
