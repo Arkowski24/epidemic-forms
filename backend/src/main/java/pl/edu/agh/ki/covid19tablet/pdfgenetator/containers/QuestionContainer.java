@@ -48,10 +48,14 @@ public class QuestionContainer {
 
             int fieldNumber = sliderField.getFieldNumber();
             String title = sliderField.getTitle();
-            String answer = Double.toString(sliderFieldState.getValue());
+            double value = sliderFieldState.getValue();
+            String answer = Double.toString(value);
+
             if (sliderFieldState.getValue() < sliderField.getMinValue())
                 answer = "B.D.";
-            extractedQuestions.add(new Question(fieldNumber, title, answer));
+
+            boolean isDistiguished = isOutOfNorm(title, value);
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isDistiguished));
 
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
@@ -59,6 +63,32 @@ public class QuestionContainer {
         }
 
         return extractedQuestions;
+    }
+
+    private boolean isOutOfNorm(String title, double value) {
+        if (title.startsWith("Tempera")) {
+            if (value > CeilingValues.getMaxTemperature())
+                return true;
+        }
+
+        if (title.startsWith("Tętn")) {
+            if (value > CeilingValues.getMaxPulseRate())
+                return true;
+            if (value < CeilingValues.getMinPulseRate())
+                return true;
+        }
+
+        if (title.startsWith("Satura")) {
+            if (value < CeilingValues.getMinAeration())
+                return true;
+        }
+
+        if (title.startsWith("Częstość odd")) {
+            if (value > CeilingValues.getMaxBreathRate())
+                return true;
+        }
+
+        return false;
     }
 
     private List<Question> extractTextQuestions(Form form) {
@@ -72,7 +102,7 @@ public class QuestionContainer {
                 int fieldNumber = textField.getFieldNumber();
                 String title = textField.getTitle();
                 String answer = textFieldState.getValue();
-                extractedQuestions.add(new Question(fieldNumber, title, answer));
+                extractedQuestions.add(new Question(fieldNumber, title, answer, false));
 
                 if (fieldNumber > this.maxFieldNumber) {
                     this.maxFieldNumber = fieldNumber;
@@ -102,7 +132,11 @@ public class QuestionContainer {
                 }
             }
 
-            extractedQuestions.add(new Question(fieldNumber, title, answer));
+            boolean isDistiguished = false;
+            if (answer.startsWith("T"))
+                isDistiguished = true;
+
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isDistiguished));
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
             }

@@ -26,7 +26,6 @@ public class PDFBuilder {
 
     private final static int signatureWidth = 160;
     private final static int signatureHeight = 120;
-    private final static String highlightedAnswer = "TAK";
 
     private Font titleFont;
     private Font standardFont;
@@ -103,7 +102,7 @@ public class PDFBuilder {
         for (Question question : questions) {
             Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
             Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-            if (question.getAnswer().equals(highlightedAnswer))
+            if (question.isDistinguished())
                 answerParagraph = new Paragraph("    " + question.getAnswer(), answerHighlightedFont);
             document.add(questionParagraph);
             document.add(answerParagraph);
