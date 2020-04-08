@@ -120,7 +120,10 @@ class FormServiceImpl(
             .copy(employeeSignature = signature)
 
         formRepository.save(form)
-        kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
+        kotlin.runCatching {
+            pdfGeneratorService.generatePDF(form)
+            formRepository.delete(form)
+        }
     }
 
     private fun serializeImage(image: String): ByteArray =
