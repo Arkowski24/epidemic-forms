@@ -78,7 +78,11 @@ class FormServiceImpl(
             .orElseThrow { FormNotFoundException() }
             .copy(status = newStatus)
 
-        formRepository.save(form)
+        if (newStatus == FormStatus.CLOSED) {
+            formRepository.delete(form)
+        } else {
+            formRepository.save(form)
+        }
     }
 
     override fun deleteForm(formId: FormId) {
@@ -122,7 +126,6 @@ class FormServiceImpl(
         formRepository.save(form)
         kotlin.runCatching {
             pdfGeneratorService.generatePDF(form)
-            formRepository.delete(form)
         }
     }
 
