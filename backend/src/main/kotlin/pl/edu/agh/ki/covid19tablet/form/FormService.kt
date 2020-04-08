@@ -59,6 +59,10 @@ class FormServiceImpl(
             .findById(request.schemaId)
             .orElseThrow { SchemaNotFoundException() }
 
+        val employee = employeeRepository
+            .findById(employeeDetails.employee.id!!)
+            .get()
+
         val patient = Patient()
         val form = formRepository.save(
             Form(
@@ -70,7 +74,6 @@ class FormServiceImpl(
             )
         )
 
-        val employee = employeeDetails.employee
         employee.forms.add(form)
         patientRepository.save(patient.copy(form = form))
         employeeRepository.save(employee)
