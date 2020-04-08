@@ -181,7 +181,7 @@ const NewFormModal = ({
   );
 };
 
-const FormsList = () => {
+const FormsListView = () => {
   const [credentials, setCredentials] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
@@ -269,4 +269,4 @@ const FormsList = () => {
   );
 };
 
-export default FormsList;
+export default FormsListView;

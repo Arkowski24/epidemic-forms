@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
-import FormsList from './views/FormsList';
+import FormsListView from './views/FormsListView';
 import FormView from './views/form/FormView';
 import LoginView from './views/LoginView';
 
@@ -15,7 +15,7 @@ const App = () => (
         <LoginView />
       </Route>
       <Route path="/employee/">
-        <FormsList />
+        <FormsListView />
       </Route>
     </Switch>
   </BrowserRouter>
