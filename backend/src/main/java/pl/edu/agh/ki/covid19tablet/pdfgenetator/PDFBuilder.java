@@ -8,14 +8,9 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.*;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +18,9 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class PDFBuilder {
+
+    private final static int hospitalLogoWidth = 30;
+    private final static int hospitalLogoHeight = 30;
 
     private final static int signatureWidth = 160;
     private final static int signatureHeight = 120;
@@ -69,14 +67,20 @@ public class PDFBuilder {
     }
 
     private void addHospitalName(Document document, String hospitalName) throws DocumentException, IOException {
-        Chunk hospitalLogoChunk = new Chunk(Image.getInstance("hospital_logo.png"), 0, 0);
-        Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
+        Image hospitalLogo = Image.getInstance("hospital_logo.png");
+        hospitalLogo.scaleAbsolute(hospitalLogoWidth, hospitalLogoHeight);
 
-        Paragraph hospitalParagraph = new Paragraph();
-        hospitalParagraph.add(hospitalLogoChunk);
-        hospitalParagraph.add(hospitalNameChunk);
-        hospitalParagraph.setAlignment(Element.ALIGN_CENTER);
-        document.add(hospitalParagraph);
+        Chunk hospitalLogoChunk = new Chunk(hospitalLogo, 0, 0);
+        Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
+        Paragraph hospitalNameParagraph = new Paragraph();
+        Paragraph hospitalLogoParagraph = new Paragraph();
+        hospitalNameParagraph.add(hospitalNameChunk);
+        hospitalLogoParagraph.add(hospitalLogoChunk);
+        hospitalNameParagraph.setAlignment(Element.ALIGN_CENTER);
+        hospitalLogoParagraph.setAlignment(Element.ALIGN_CENTER);
+
+        document.add(hospitalLogoParagraph);
+        document.add(hospitalNameParagraph);
     }
 
     private void addTitle(Document document, String formName) throws DocumentException {
