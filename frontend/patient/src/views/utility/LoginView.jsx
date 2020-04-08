@@ -5,6 +5,7 @@ import {
 import Container from 'react-bootstrap/Container';
 
 import { useHistory } from 'react-router-dom';
+import ClickNHold from 'react-click-n-hold';
 import authService from '../../services/AuthService';
 import deviceStreamService from '../../services/DeviceStreamService';
 import formStreamService from '../../services/FormsStreamService';
@@ -13,7 +14,7 @@ import LoadingView from './LoadingView';
 import hospitalLogo from '../../public/hospital_logo.png';
 
 const HospitalIcon = () => (
-  <Image src={hospitalLogo} style={{ height: '25px' }} alt="Logo of the hospital" fluid />
+  <Image src={hospitalLogo} style={{ height: '40px' }} alt="Logo of the hospital" fluid />
 );
 
 
@@ -55,10 +56,17 @@ const LoginView = () => {
 
   const header = (
     <Row>
-      <div className="w-100 m-1 p-1 border-bottom text-center">
-        <HospitalIcon />
-        {' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}
-      </div>
+      <Col className="m-0">
+        <ClickNHold
+          time={2}
+          onClickNHold={() => history.push('/device')}
+        >
+          <div className="w-100 m-1 p-1 border-bottom text-center">
+            <HospitalIcon />
+            <h4>{' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}</h4>
+          </div>
+        </ClickNHold>
+      </Col>
     </Row>
   );
 
@@ -91,7 +99,11 @@ const LoginView = () => {
     </Row>
   );
 
-  if (isContinuous) { return (<LoadingView message="Oczekiwanie na rozpoczęcie." />); }
+  if (isContinuous) {
+    return (
+      <LoadingView message="Oczekiwanie na rozpoczęcie." redirectHandler={() => history.push('/device')} />
+    );
+  }
   return (
     <Container className="d-flex justify-content-center align-items-center">
       <Col>
