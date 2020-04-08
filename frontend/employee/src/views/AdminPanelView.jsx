@@ -254,19 +254,18 @@ const FormsListView = () => {
   const [employees, setEmployees] = useState([]);
   const history = useHistory();
 
-  const createEmployee = async (username, fullName, password, role) => {
-    const employee = await employeeService
-      .createEmployee(username, fullName, password, role);
-
-    const newEmployee = employees.concat(employee);
-    setEmployees(newEmployee);
+  const createEmployee = (username, fullName, password, role) => {
+    employeeService
+      .createEmployee(username, fullName, password, role)
+      .then((e) => employees.concat(e))
+      .then((e) => setEmployees(e));
   };
 
-  const deleteEmployee = async (employeeId) => {
-    await employeeService.deleteEmployee(employeeId);
-
-    const newEmployee = employees.filter((e) => e.id !== employeeId);
-    setEmployees(newEmployee);
+  const deleteEmployee = (employeeId) => {
+    employeeService
+      .deleteEmployee(employeeId)
+      .then(() => employees.filter((e) => e.id !== employeeId))
+      .then((e) => setEmployees(e));
   };
 
   useEffect(() => {
