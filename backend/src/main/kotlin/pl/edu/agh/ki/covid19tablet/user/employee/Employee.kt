@@ -22,5 +22,6 @@ data class Employee(
 fun Employee.toDTO() = EmployeeDTO(
     id = id!!,
     username = username,
-    fullName = fullName
+    fullName = fullName,
+    role = role
 )

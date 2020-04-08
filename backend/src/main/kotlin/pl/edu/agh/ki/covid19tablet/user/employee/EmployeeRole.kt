@@ -1,9 +1,10 @@
 package pl.edu.agh.ki.covid19tablet.user.employee
 
-import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_CREATE
-import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_DELETE
-import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_READ
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_SUBSCRIBE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_CREATE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_DELETE
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_MODIFY
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_READ
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_CREATE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_DELETE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.FORM_MODIFY
@@ -21,9 +22,10 @@ object Authorities {
 
     const val SCHEMA_READ = "SCHEMA_READ"
 
-    const val DEVICE_READ = "DEVICE_READ"
-    const val DEVICE_CREATE = "DEVICE_CREATE"
-    const val DEVICE_DELETE = "DEVICE_DELETE"
+    const val EMPLOYEE_READ = "EMPLOYEE_READ"
+    const val EMPLOYEE_CREATE = "EMPLOYEE_CREATE"
+    const val EMPLOYEE_MODIFY = "EMPLOYEE_MODIFY"
+    const val EMPLOYEE_DELETE = "EMPLOYEE_DELETE"
 
     const val DEVICE_SUBSCRIBE = "DEVICE_SUBSCRIBE"
 }
@@ -42,7 +44,7 @@ enum class EmployeeRole(val authorities: List<String>) {
             FORM_MODIFY,
             FORM_DELETE,
             SCHEMA_READ,
-            DEVICE_READ
+            EMPLOYEE_READ
         )
     ),
     ADMIN(
@@ -53,9 +55,10 @@ enum class EmployeeRole(val authorities: List<String>) {
             FORM_MODIFY,
             FORM_DELETE,
             SCHEMA_READ,
-            DEVICE_READ,
-            DEVICE_CREATE,
-            DEVICE_DELETE
+            EMPLOYEE_READ,
+            EMPLOYEE_CREATE,
+            EMPLOYEE_MODIFY,
+            EMPLOYEE_DELETE
         )
     ),
     DEVICE(
