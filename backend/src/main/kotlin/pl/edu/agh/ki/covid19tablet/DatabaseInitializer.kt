@@ -199,7 +199,7 @@ class DatabaseInitializer {
                 employeeRepository.save(
                     Device(
                         username = "device",
-                        fullName = "HAL-3000",
+                        fullName = "Educatorium",
                         passwordHash = "\$2a\$10\$Nm7GiH.CHxvW4eWWUqeldOLhhhv07xhkE/sm6f2XQvVjmnTY7k8Oq",
                         role = EmployeeRole.DEVICE
                     )
