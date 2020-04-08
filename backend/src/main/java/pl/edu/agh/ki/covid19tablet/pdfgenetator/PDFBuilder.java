@@ -165,13 +165,16 @@ public class PDFBuilder {
             throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
 
-        ByteArrayInputStream signatureEmployee = resizeSignature(signaturesContainer.getEmployeeSignature());
-        ByteArrayInputStream signaturePatient = resizeSignature(signaturesContainer.getPatientSignature());
-
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
-        imageTable.addCell(getImageCell(Image.getInstance(signatureEmployee.readAllBytes())));
-        imageTable.addCell(getImageCell(Image.getInstance(signaturePatient.readAllBytes())));
+        ByteArrayInputStream signatureEmployee = new ByteArrayInputStream(signaturesContainer.getEmployeeSignature().getValue());
+        ByteArrayInputStream signaturePatient = new ByteArrayInputStream(signaturesContainer.getPatientSignature().getValue());
+        Image employeeSignatureImage = Image.getInstance(Image.getInstance(signatureEmployee.readAllBytes()));
+        Image patientSignatureImage = Image.getInstance(Image.getInstance(signaturePatient.readAllBytes()));
+        employeeSignatureImage.scaleAbsolute(signatureWidth, signatureHeight);
+        patientSignatureImage.scaleAbsolute(signatureWidth, signatureHeight);
+        imageTable.addCell(getImageCell(employeeSignatureImage));
+        imageTable.addCell(getImageCell(patientSignatureImage));
         document.add(imageTable);
 
         PdfPTable titleTable = new PdfPTable(2);
@@ -185,21 +188,6 @@ public class PDFBuilder {
         employeeNameTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeFullName(), standardFont)));
         employeeNameTable.addCell(getTitleCell(new Phrase("", standardFont)));
         document.add(employeeNameTable);
-    }
-
-    private ByteArrayInputStream resizeSignature(Signature signature) throws IOException {
-        byte[] signatureData = signature.getValue();
-        ByteArrayInputStream signatureStream = new ByteArrayInputStream(signatureData);
-        BufferedImage signatureImage = ImageIO.read(signatureStream);
-        BufferedImage signatureImageResized = new BufferedImage(signatureWidth, signatureHeight, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics graphicsEmployee = signatureImageResized.createGraphics();
-        graphicsEmployee.drawImage(signatureImage, 0, 0, signatureWidth, signatureHeight, null);
-        graphicsEmployee.dispose();
-
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        ImageIO.write(signatureImageResized, "png", result);
-        return new ByteArrayInputStream(result.toByteArray());
     }
 
     private PdfPCell getImageCell(Image image) {
