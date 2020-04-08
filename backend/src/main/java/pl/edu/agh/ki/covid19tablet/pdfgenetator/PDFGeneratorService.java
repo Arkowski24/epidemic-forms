@@ -23,7 +23,7 @@ public class PDFGeneratorService {
 
     private static final String pdfDirPath = "/tmp/forms";
     private static final SimpleDateFormat sdfFileSuffix = new SimpleDateFormat("yyyyMMddHHmm");
-    private static final SimpleDateFormat sdfPdfDateHeader = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdfPdfDateHeader = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public Form getForm(long id) {
         Optional<Form> form = formRepository.findById(id);

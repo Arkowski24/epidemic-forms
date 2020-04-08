@@ -48,10 +48,19 @@ public class QuestionContainer {
 
             int fieldNumber = sliderField.getFieldNumber();
             String title = sliderField.getTitle();
-            String answer = Double.toString(sliderFieldState.getValue());
-            if (sliderFieldState.getValue() < sliderField.getMinValue())
+            double value = sliderFieldState.getValue();
+            String answer = Double.toString(value);
+
+            answer = addUnits(title, answer);
+
+            boolean isHighlighted = isOutOfNorm(title, value);
+
+            if (sliderFieldState.getValue() < sliderField.getMinValue()) {
                 answer = "B.D.";
-            extractedQuestions.add(new Question(fieldNumber, title, answer));
+                isHighlighted = false;
+            }
+
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
 
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
@@ -72,7 +81,7 @@ public class QuestionContainer {
                 int fieldNumber = textField.getFieldNumber();
                 String title = textField.getTitle();
                 String answer = textFieldState.getValue();
-                extractedQuestions.add(new Question(fieldNumber, title, answer));
+                extractedQuestions.add(new Question(fieldNumber, title, answer, false, false));
 
                 if (fieldNumber > this.maxFieldNumber) {
                     this.maxFieldNumber = fieldNumber;
@@ -102,12 +111,70 @@ public class QuestionContainer {
                 }
             }
 
-            extractedQuestions.add(new Question(fieldNumber, title, answer));
+            boolean isHighlighted = isOutOfNorm(title, answer);
+
+            answer = addUnits(title, answer);
+
+            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
             }
         }
 
         return extractedQuestions;
+    }
+
+    private String addUnits(String title, String answer) {
+        if (title.startsWith("Tempera"))
+            answer += " C";
+
+        else if (title.startsWith("Tętn"))
+            answer += " /min";
+
+        else if (title.startsWith("Satura"))
+            answer += " %";
+
+        else if (title.startsWith("Częstość odd"))
+            answer += " /min";
+
+        else if (title.startsWith("Ciśnienie skur"))
+            answer += " mm Hg";
+
+        return answer;
+    }
+
+    private boolean isOutOfNorm(String title, double value) {
+        if (title.startsWith("Tempera")) {
+            if (value > LimitValues.getMaxTemperature())
+                return true;
+        }
+
+        if (title.startsWith("Tętn")) {
+            if (value > LimitValues.getMaxPulseRate())
+                return true;
+            if (value < LimitValues.getMinPulseRate())
+                return true;
+        }
+
+        if (title.startsWith("Satura")) {
+            if (value < LimitValues.getMinAeration())
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean isOutOfNorm(String title, String value) {
+        if (title.startsWith("Częstość odd")) {
+            for (String elem : LimitValues.getOutOfNormBreathRates()) {
+                if (value.equals(elem))
+                    return true;
+            }
+        }
+
+        if (value.equals("TAK"))
+            return true;
+
+        return false;
     }
 }

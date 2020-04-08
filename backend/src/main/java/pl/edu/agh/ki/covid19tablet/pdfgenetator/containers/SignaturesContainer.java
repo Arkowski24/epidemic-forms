@@ -11,11 +11,14 @@ public class SignaturesContainer {
     private String employeeSignatureTitle;
     private String patientSignatureTitle;
 
+    private String employeeFullName;
+
     public SignaturesContainer(Form form) {
         this.employeeSignature = form.getEmployeeSignature();
         this.patientSignature = form.getPatientSignature();
         this.employeeSignatureTitle = form.getSchema().getEmployeeSignature().getTitle();
         this.patientSignatureTitle = form.getSchema().getPatientSignature().getTitle();
+        this.employeeFullName = form.getCreatedBy().getFullName();
     }
 
     public Signature getEmployeeSignature() {
@@ -30,5 +33,9 @@ public class SignaturesContainer {
     }
     public String getPatientSignatureTitle() {
         return patientSignatureTitle;
+    }
+
+    public String getEmployeeFullName() {
+        return employeeFullName;
     }
 }
