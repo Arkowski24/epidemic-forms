@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Button, Container, Spinner } from 'react-bootstrap';
+import {
+  Button, Col, Container, Modal, Spinner,
+} from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useParams, useHistory } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa';
 
+import authService from '../../services/AuthService';
 import formService from '../../services/FormService';
 import formStreamService from '../../services/FormsStreamService';
-
+import deviceStreamService from '../../services/DeviceStreamService';
 import dataValidator from '../../helper/DataValidator';
 
 import ChoiceView from './fields/ChoiceView';
@@ -15,12 +19,11 @@ import SimpleView from './fields/SimpleView';
 import LoadingView from './utility/LoadingView';
 import EndView from './utility/EndView';
 import SliderView from './fields/SliderView';
-
-import SignatureView from './signature/SignatureView';
-import authService from '../../services/AuthService';
 import DerivedView from './fields/DerivedView';
+import SignatureView from './signature/SignatureView';
 
 const FormView = () => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [form, setForm] = useState(null);
   const [token, setToken] = useState(null);
   const { formId } = useParams();
@@ -176,13 +179,44 @@ const FormView = () => {
     );
   };
 
+  const deleteForm = async (event) => {
+    event.preventDefault();
+    deviceStreamService.sendCancelForm(formId);
+    await formService.deleteForm(formId);
+    history.push('/employee/');
+  };
+
+  const handleCloseModal = () => setShowDeleteModal(false);
+  const deleteFormModal = (
+    <Modal show={showDeleteModal} onHide={handleCloseModal}>
+      <Modal.Body>Czy na pewno chcesz usunąć formularz?</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Anuluj
+        </Button>
+        <Button variant="danger" onClick={deleteForm}>
+          Usuń formularz
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+
   const header = (
-    <Row>
-      <div className="w-100 ml-2 mr-2 p-1 border-bottom">
-        <h4>{form.formName}</h4>
-        {`Kod jednorazowy: ${form.patient.id}`}
-      </div>
-    </Row>
+    <div className="w-100 ml-2 mr-2 p-1 border-bottom">
+      <Row>
+        <Col>
+          <div>
+            <h4>{form.formName}</h4>
+            {`Kod jednorazowy: ${form.patient.id}`}
+          </div>
+        </Col>
+        <Col sm="auto">
+          <Button type="button" variant="danger" onClick={(e) => { e.preventDefault(); setShowDeleteModal(true); }}>
+            <FaTrash />
+          </Button>
+        </Col>
+      </Row>
+    </div>
   );
 
   const fields = form.schema
@@ -231,6 +265,7 @@ const FormView = () => {
 
   return (
     <Container>
+      {deleteFormModal}
       {header}
       {fields}
       {form.status !== 'SIGNED' && footer}
