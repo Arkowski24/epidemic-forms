@@ -126,7 +126,7 @@ const NewFormModal = ({
       else return;
     }
 
-    createForm(formSchemaId, formName, deviceId);
+    createForm(Number(formSchemaId), formName, Number(deviceId));
     handleClose();
   };
 
