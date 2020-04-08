@@ -79,10 +79,11 @@ class FormServiceImpl(
             .copy(status = newStatus)
 
         if (newStatus == FormStatus.CLOSED) {
-            formRepository.delete(form)
-        } else {
-            formRepository.save(form)
+            kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
+            return deleteForm(formId)
         }
+        
+        formRepository.save(form)
     }
 
     override fun deleteForm(formId: FormId) {
@@ -107,9 +108,7 @@ class FormServiceImpl(
             Signature(value = serializeImage(request.signature))
         )
 
-        val newForm = form
-            .copy(patientSignature = signature)
-
+        val newForm = form.copy(patientSignature = signature)
         formRepository.save(newForm)
     }
 
@@ -124,9 +123,6 @@ class FormServiceImpl(
             .copy(employeeSignature = signature)
 
         formRepository.save(form)
-        kotlin.runCatching {
-            pdfGeneratorService.generatePDF(form)
-        }
     }
 
     private fun serializeImage(image: String): ByteArray =
