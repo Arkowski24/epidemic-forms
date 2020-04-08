@@ -14,6 +14,7 @@ import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.security.patient.PatientTokenProvider
+import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
 import pl.edu.agh.ki.covid19tablet.user.patient.Patient
 import pl.edu.agh.ki.covid19tablet.user.patient.PatientRepository
 import java.util.Base64
@@ -35,6 +36,7 @@ interface FormService {
 class FormServiceImpl(
     private val formRepository: FormRepository,
     private val patientRepository: PatientRepository,
+    private val employeeRepository: EmployeeRepository,
     private val signatureRepository: SignatureRepository,
     private val schemaRepository: SchemaRepository,
     private val patientTokenProvider: PatientTokenProvider,
@@ -57,6 +59,10 @@ class FormServiceImpl(
             .findById(request.schemaId)
             .orElseThrow { SchemaNotFoundException() }
 
+        val employee = employeeRepository
+            .findById(employeeDetails.employee.id!!)
+            .get()
+
         val patient = Patient()
         val form = formRepository.save(
             Form(
@@ -67,7 +73,10 @@ class FormServiceImpl(
                 state = schema.fields.buildInitialState()
             )
         )
+
+        employee.forms.add(form)
         patientRepository.save(patient.copy(form = form))
+        employeeRepository.save(employee)
 
         return form.toDTO()
     }
@@ -78,11 +87,6 @@ class FormServiceImpl(
             .orElseThrow { FormNotFoundException() }
             .copy(status = newStatus)
 
-        if (newStatus == FormStatus.CLOSED) {
-            kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
-            return deleteForm(formId)
-        }
-        
         formRepository.save(form)
     }
 
@@ -122,6 +126,7 @@ class FormServiceImpl(
             .orElseThrow { FormNotFoundException() }
             .copy(employeeSignature = signature)
 
+        pdfGeneratorService.generatePDF(form)
         formRepository.save(form)
     }
 
