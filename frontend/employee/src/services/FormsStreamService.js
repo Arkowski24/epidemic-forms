@@ -125,14 +125,14 @@ const sendInput = (newInput, index, formHandler) => {
     timeouts[index] = null;
   }, 500);
 
-  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+  if (webSocket.connected) { webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request }); }
 };
 
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
 
-  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+  if (webSocket.connected) { webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request }); }
 };
 
 export default {

@@ -48,7 +48,7 @@ const FormView = () => {
       formService.getForm(formId)
         .catch(() => history.push('/employee/'));
     }
-  }, [token, history]);
+  }, [token, history, formId]);
 
   useEffect(
     () => {

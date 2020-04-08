@@ -9,10 +9,9 @@ webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;
 
 let token = null;
-let connected = false;
 
 const subscribe = async (history) => {
-  if (connected) return;
+  if (webSocket.connected) return;
 
   token = localStorage.getItem('device-token');
   if (!token) { return; }
@@ -43,7 +42,6 @@ const subscribe = async (history) => {
 
   webSocket.connect({ Authorization: `Bearer ${token}` }, () => {
     webSocket.subscribe('/forms/', handleRequest);
-    connected = true;
   });
 };
 
