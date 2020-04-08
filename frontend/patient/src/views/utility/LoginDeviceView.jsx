@@ -5,6 +5,7 @@ import {
 import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 
+import { FaArrowLeft, FaSignOutAlt } from 'react-icons/all';
 import authService from '../../services/AuthService';
 
 const LoginDeviceView = () => {
@@ -93,12 +94,15 @@ const LoginDeviceView = () => {
     <Container>
       <div className="m-5 p-2 border rounded">
         <Row>
+          <Col xs="auto">
+            <Button type="button" onClick={(e) => { e.preventDefault(); history.push('/'); }}><FaArrowLeft /></Button>
+          </Col>
           <Col>
             <h4>{`Zalogowany jako ${user}`}</h4>
           </Col>
           <Col xs="auto">
-            <Button type="button" onClick={handleLogout}>
-              Wyloguj się
+            <Button type="button" onClick={handleLogout} variant="light">
+              <FaSignOutAlt />
             </Button>
           </Col>
         </Row>

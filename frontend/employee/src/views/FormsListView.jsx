@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 
 import authService from '../services/AuthService';
-import deviceService from '../services/DeviceService';
+import employeeService from '../services/EmployeeService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
 import deviceStreamService from '../services/DeviceStreamService';
@@ -16,38 +16,47 @@ import formStreamService from '../services/FormsStreamService';
 
 import LoadingView from './form/utility/LoadingView';
 
-const Header = ({ setVisible, employeeName, handleLogout }) => (
-  <>
-    <Row className="w-100 m-1 p-1 border-bottom">
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          {`${employeeName}`}
-        </Dropdown.Toggle>
+const Header = ({ setVisible, employee, handleLogout }) => {
+  const history = useHistory();
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    history.push('/employee/admin');
+  };
 
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={handleLogout}>Wyloguj się</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </Row>
-    <Row className="w-100 m-1 p-1 border-bottom">
-      <Col>
-        <h1>Lista formularzy</h1>
-      </Col>
-      <Col md="auto">
-        <Button
-          variant="primary"
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            setVisible(true);
-          }}
-        >
-          Stwórz nowy
-        </Button>
-      </Col>
-    </Row>
-  </>
-);
+  return (
+    <>
+      <Row className="w-100 m-1 p-1 border-bottom">
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            {`${employee.fullName}`}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            {employee.role === 'ADMIN' && <Dropdown.Item onClick={handleAdminClick}>Użytkownicy</Dropdown.Item>}
+            <Dropdown.Item onClick={handleLogout}>Wyloguj się</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </Row>
+      <Row className="w-100 m-1 p-1 border-bottom">
+        <Col>
+          <h1>Lista formularzy</h1>
+        </Col>
+        <Col md="auto">
+          <Button
+            variant="primary"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setVisible(true);
+            }}
+          >
+            Stwórz nowy
+          </Button>
+        </Col>
+      </Row>
+    </>
+  );
+};
 
 const FormsTable = ({ forms, setForms }) => {
   const history = useHistory();
@@ -126,7 +135,7 @@ const NewFormModal = ({
       else return;
     }
 
-    createForm(formSchemaId, formName, deviceId);
+    createForm(Number(formSchemaId), formName, Number(deviceId));
     handleClose();
   };
 
@@ -181,7 +190,7 @@ const NewFormModal = ({
   );
 };
 
-const FormsList = () => {
+const FormsListView = () => {
   const [credentials, setCredentials] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [forms, setForms] = useState([]);
@@ -223,7 +232,7 @@ const FormsList = () => {
         .then((employee) => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);
-          deviceService.setToken(newToken);
+          employeeService.setToken(newToken);
           setCredentials({ employee, token: newToken });
         })
         .catch(() => {
@@ -240,8 +249,9 @@ const FormsList = () => {
       const schemaResponse = await schemaService.getSchemas();
       setSchemas(schemaResponse);
 
-      const devicesResponse = await deviceService.getDevices();
-      setDevices(devicesResponse);
+
+      const devicesResponse = await employeeService.getEmployees();
+      setDevices(devicesResponse.filter((e) => e.role === 'DEVICE'));
     };
 
     fetchToken()
@@ -254,7 +264,7 @@ const FormsList = () => {
     <Container>
       <Header
         setVisible={setModalVisible}
-        employeeName={credentials.employee.fullName}
+        employee={credentials.employee}
         handleLogout={handleLogout}
       />
       <FormsTable forms={forms} setForms={setForms} />
@@ -269,4 +279,4 @@ const FormsList = () => {
   );
 };
 
-export default FormsList;
+export default FormsListView;

@@ -14,7 +14,7 @@ const InputForm = ({
       <Form>
         <Form.Control
           as={isMultiline ? 'textarea' : 'input'}
-          rows={isMultiline ? 3 : 1}
+          rows={isMultiline ? 10 : 1}
           value={text}
           onChange={(event) => setText(event.target.value)}
           disabled={isBlocked}

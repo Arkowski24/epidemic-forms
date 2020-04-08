@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
-  Button, Container, Row, Spinner,
+  Button, Container, Image, Row, Spinner,
 } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
@@ -22,6 +22,11 @@ import SliderView from './fields/SliderView';
 import SignatureView from './signature/SignatureView';
 import DerivedView from './fields/DerivedView';
 
+import hospitalLogo from '../public/hospital_logo.png';
+
+const HospitalIcon = () => (
+  <Image src={hospitalLogo} style={{ height: '20px' }} alt="Logo of the hospital" fluid />
+);
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -198,7 +203,10 @@ const FormView = () => {
 
     const header = (
       <Row>
-        <div className="w-100 m-2 border-bottom" />
+        <div className="w-100 m-1 p-1 border-bottom text-center">
+          <HospitalIcon />
+          {' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}
+        </div>
       </Row>
     );
 

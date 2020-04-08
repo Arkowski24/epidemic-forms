@@ -17,7 +17,7 @@ const InputForm = ({
         <Form.Control
           as={isMultiline ? 'textarea' : 'input'}
           size="lg"
-          rows={isMultiline ? 3 : 1}
+          rows={isMultiline ? 10 : 1}
           value={text}
           placeholder={title}
           onChange={(event) => { setText(event.target.value); }}

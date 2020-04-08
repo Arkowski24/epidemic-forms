@@ -78,6 +78,11 @@ class FormServiceImpl(
             .orElseThrow { FormNotFoundException() }
             .copy(status = newStatus)
 
+        if (newStatus == FormStatus.CLOSED) {
+            kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
+            return deleteForm(formId)
+        }
+        
         formRepository.save(form)
     }
 
@@ -103,9 +108,7 @@ class FormServiceImpl(
             Signature(value = serializeImage(request.signature))
         )
 
-        val newForm = form
-            .copy(patientSignature = signature)
-
+        val newForm = form.copy(patientSignature = signature)
         formRepository.save(newForm)
     }
 
@@ -120,7 +123,6 @@ class FormServiceImpl(
             .copy(employeeSignature = signature)
 
         formRepository.save(form)
-        kotlin.runCatching { pdfGeneratorService.generatePDF(form) }
     }
 
     private fun serializeImage(image: String): ByteArray =
