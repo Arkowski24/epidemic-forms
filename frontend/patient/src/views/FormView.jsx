@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import authService from '../services/AuthService';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
+import deviceStreamService from '../services/DeviceStreamService';
 
 import dataValidator from '../helper/DataValidator';
 
@@ -20,6 +21,7 @@ import SliderView from './fields/SliderView';
 
 import SignatureView from './signature/SignatureView';
 import DerivedView from './fields/DerivedView';
+
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -35,6 +37,10 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
+
+  useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
 
   useEffect(() => {
     const rawCredentials = localStorage.getItem('credentials');

@@ -29,21 +29,8 @@ const LoginView = () => {
   }, [history]);
 
   useEffect(() => {
-    const token = localStorage.getItem('device-token');
-    if (!token) return;
-
-    const setForm = (pinCode) => {
-      authService.login(pinCode)
-        .then((c) => localStorage.setItem('credentials', JSON.stringify(c)))
-        .then(() => history.push('/form'));
-    };
-    const cancelForm = () => {
-      localStorage.removeItem('credentials');
-      history.push('/');
-      window.location.reload();
-    };
-    deviceStreamService.subscribe(token, setForm, cancelForm);
-  }, [isContinuous, history]);
+    deviceStreamService.subscribe(history);
+  }, [history]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
