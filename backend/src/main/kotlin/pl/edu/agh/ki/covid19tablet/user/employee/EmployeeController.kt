@@ -21,7 +21,7 @@ import pl.edu.agh.ki.covid19tablet.user.dto.ModifyEmployeeRequest
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 class EmployeeController(
     private val employeeService: EmployeeService
 ) {
@@ -45,7 +45,7 @@ class EmployeeController(
     fun createEmployee(@Valid @RequestBody request: CreateEmployeeRequest): EmployeeDTO =
         employeeService.createEmployee(request)
 
-    @PutMapping
+    @PutMapping("{employeeId}")
     @PreAuthorize("hasAuthority('${Authorities.EMPLOYEE_MODIFY}')")
     fun modifyEmployee(
         @PathVariable employeeId: EmployeeId,
@@ -58,7 +58,7 @@ class EmployeeController(
             ResponseEntity(HttpStatus.NOT_FOUND)
         }
 
-    @DeleteMapping("{deviceId}")
+    @DeleteMapping("{employeeId}")
     @PreAuthorize("hasAuthority('${Authorities.EMPLOYEE_DELETE}')")
     fun deleteDevice(
         @AuthenticationPrincipal employeeDetails: EmployeeDetails,
