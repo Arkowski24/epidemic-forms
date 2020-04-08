@@ -1,8 +1,5 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -67,7 +64,7 @@ public class PDFBuilder {
     }
 
     private void addHospitalName(Document document, String hospitalName) throws DocumentException, IOException {
-        Image hospitalLogo = Image.getInstance("hospital_logo.png");
+        Image hospitalLogo = Image.getInstance(PDFBuilder.class.getResourceAsStream("/hospital_logo.png").readAllBytes());
         hospitalLogo.scaleAbsolute(hospitalLogoWidth, hospitalLogoHeight);
 
         Chunk hospitalLogoChunk = new Chunk(hospitalLogo, 0, 0);
