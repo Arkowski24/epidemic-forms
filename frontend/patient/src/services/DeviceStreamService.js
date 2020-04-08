@@ -1,5 +1,6 @@
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import { WS_URL } from '../config';
+import authService from './AuthService';
 
 const url = `${WS_URL}/requests`;
 
@@ -9,8 +10,22 @@ webSocket.reconnect_delay = 1000;
 
 let token = null;
 
-const subscribe = (newToken, setForm, cancelForm) => {
-  token = newToken;
+const subscribe = async (history) => {
+  if (webSocket.connected) return;
+
+  token = localStorage.getItem('device-token');
+  if (!token) { return; }
+  try { await authService.meDevice(token); } catch (e) { localStorage.removeItem('device-token'); history.push('/'); return; }
+
+  const setForm = (pinCode) => {
+    authService.login(pinCode)
+      .then((c) => localStorage.setItem('credentials', JSON.stringify(c)))
+      .then(() => history.push('/form'));
+  };
+  const cancelForm = () => {
+    localStorage.removeItem('credentials');
+    history.push('/');
+  };
 
   const handleRequest = (message) => {
     const request = JSON.parse(message.body);

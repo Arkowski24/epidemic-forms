@@ -12,6 +12,7 @@ import deviceService from '../services/DeviceService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
 import deviceStreamService from '../services/DeviceStreamService';
+import formStreamService from '../services/FormsStreamService';
 
 import LoadingView from './form/utility/LoadingView';
 
@@ -205,6 +206,14 @@ const FormsList = () => {
   };
 
   useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
+
+  useEffect(() => {
+    formStreamService.disconnect();
+  }, []);
+
+  useEffect(() => {
     const fetchToken = async () => {
       if (credentials !== null) return;
       const newToken = localStorage.getItem('token');
@@ -215,7 +224,6 @@ const FormsList = () => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);
           deviceService.setToken(newToken);
-          deviceStreamService.setToken(newToken);
           setCredentials({ employee, token: newToken });
         })
         .catch(() => {

@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import formStreamService from '../../services/FormsStreamService';
 
 const EndView = () => {
   const history = useHistory();
-
   useEffect(() => {
-    setTimeout(() => {
-      history.push('/');
-      window.location.reload();
-    }, 2000);
+    formStreamService.disconnect();
+    setTimeout(() => { history.push('/'); }, 2000);
   }, [history]);
 
   return (

@@ -8,6 +8,9 @@ import { useHistory } from 'react-router-dom';
 import authService from '../services/AuthService';
 import formService from '../services/FormService';
 import formStreamService from '../services/FormsStreamService';
+import deviceStreamService from '../services/DeviceStreamService';
+
+import dataValidator from '../helper/DataValidator';
 
 import ChoiceView from './fields/ChoiceView';
 import TextView from './fields/TextView';
@@ -19,8 +22,10 @@ import SliderView from './fields/SliderView';
 import SignatureView from './signature/SignatureView';
 import DerivedView from './fields/DerivedView';
 
+
 const FormView = () => {
   const [form, setForm] = useState(null);
+  const [formTouched, setFormTouched] = useState(false);
   const signatureViewRef = useRef();
   const history = useHistory();
 
@@ -32,6 +37,10 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
+
+  useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
 
   useEffect(() => {
     const rawCredentials = localStorage.getItem('credentials');
@@ -74,6 +83,29 @@ const FormView = () => {
   if (form === null) { return (<LoadingView />); }
   if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} />); }
 
+  const isValidField = (fieldSchema, fieldIndex) => {
+    if (fieldSchema.fieldType === 'HIDDEN') return true;
+    const input = form.state[fieldIndex].value;
+    const { required } = fieldSchema;
+
+    if (fieldSchema.type === 'derived') {
+      const { derivedType } = fieldSchema;
+      return input
+        .map((v, i) => !required[i] || dataValidator.validateDerivedField(v, i, derivedType))
+        .filter((v) => !v)
+        .length === 0;
+    }
+
+    if (!required) return true;
+    if (fieldSchema.type === 'choice') { return dataValidator.validateChoiceField(input); }
+    if (fieldSchema.type === 'slider') { return dataValidator.validateSliderField(input, fieldSchema.minValue); }
+    if (fieldSchema.type === 'text') { return dataValidator.validateTextField(input); }
+    return true;
+  };
+
+  const validFields = form.schema
+    .map((f, i) => isValidField(f, i));
+
   const pageIndexMapping = form.schema
     .map((f, i) => ({ type: f.fieldType, index: i }))
     .filter((r) => r.type !== 'HIDDEN');
@@ -83,6 +115,7 @@ const FormView = () => {
     const input = form.state[index].value;
     const setInput = (newInput) => formStreamService.sendInput(newInput, index, setForm);
     const blocked = fieldSchema.fieldType === 'BLOCKED' || !(form.status === 'NEW');
+    const isInvalid = !validFields[index];
 
     if (fieldSchema.type === 'choice') {
       return (
@@ -95,6 +128,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={formTouched && isInvalid}
         />
       );
     }
@@ -108,6 +142,7 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           input={input}
           setInput={setInput}
+          highlighted={formTouched && isInvalid}
           isBlocked={blocked}
         />
       );
@@ -126,6 +161,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={formTouched && isInvalid}
         />
       );
     }
@@ -140,6 +176,8 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
+          highlighted={formTouched && isInvalid}
+          isInvalid={isInvalid}
         />
       );
     }
@@ -153,43 +191,11 @@ const FormView = () => {
     );
   };
 
-  const validateRequired = (fieldSchema, index) => {
-    if (fieldSchema.type === 'derived') {
-      const { value } = form.state[index];
-
-      const handleField = (fieldValue, fieldIndex) => {
-        if (fieldValue.length === 0) return false;
-
-        if (fieldSchema.derivedType === 'BIRTHDAY_PESEL' && fieldIndex === 0) {
-          return JSON.parse(fieldValue).value > 0;
-        }
-        return true;
-      };
-
-      return value
-        .map((v, i) => !fieldSchema.required[i] || handleField(v, i))
-        .filter((v) => !v)
-        .length === 0;
-    }
-
-    const isRequired = fieldSchema.required;
-    if (!fieldSchema || !isRequired) return true;
-    const input = form.state[index].value;
-
-    if (fieldSchema.type === 'choice') { return input.filter((v) => v).length > 0; }
-    if (fieldSchema.type === 'slider') { return input >= fieldSchema.minValue; }
-    if (fieldSchema.type === 'text') { return input.length > 0; }
-    return true;
-  };
-
-  const validFields = form.schema
-    .map((s, i) => validateRequired(s, i));
-
-  const isNotValidInput = validFields
-    .filter((v) => !v)
-    .length > 0;
-
   const buildFieldsSinglePage = () => {
+    const isNotValidInput = validFields
+      .filter((v) => !v)
+      .length > 0;
+
     const header = (
       <Row>
         <div className="w-100 m-2 border-bottom" />
@@ -220,8 +226,12 @@ const FormView = () => {
           <Button
             className="w-100"
             type="submit"
-            onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
-            disabled={form.status !== 'NEW' || isNotValidInput}
+            onClick={(e) => {
+              e.preventDefault();
+              setFormTouched(true);
+              if (!isNotValidInput) sendFormResponse();
+            }}
+            disabled={form.status !== 'NEW' || (formTouched && isNotValidInput)}
           >
             { form.status === 'NEW' ? 'Prześlij' : spinner}
           </Button>

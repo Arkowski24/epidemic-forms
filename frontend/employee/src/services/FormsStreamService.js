@@ -25,7 +25,7 @@ const setNewFieldState = (newInput, index, formHandler) => {
   formHandler(newForm);
 };
 
-const subscribe = (formHandler, setPatientPage) => {
+const subscribe = (formHandler) => {
   const setFormStatus = (newStatus) => {
     const newForm = { ...internalForms, status: newStatus };
     internalForms = newForm;
@@ -98,17 +98,15 @@ const subscribe = (formHandler, setPatientPage) => {
     }
   };
 
-  const handlePageChangeResponse = (message) => {
-    const response = JSON.parse(message.body);
-    setPatientPage(response.newPage);
-  };
-
   webSocket.connect({ Authorization: `Bearer ${credentials.token}` }, () => {
     internalForms = null;
     webSocket.subscribe(`/updates/${credentials.formId}`, handleResponse);
-    webSocket.subscribe(`/changes/${credentials.formId}`, handlePageChangeResponse);
     webSocket.publish(webSocketsHelper.buildInitialRequest(credentials.formId));
   });
+};
+
+const disconnect = () => {
+  webSocket.disconnect();
 };
 
 const sendInput = (newInput, index, formHandler) => {
@@ -127,16 +125,16 @@ const sendInput = (newInput, index, formHandler) => {
     timeouts[index] = null;
   }, 500);
 
-  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+  if (webSocket.connected) { webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request }); }
 };
 
 const sendMove = (newStatus) => {
   const requestType = `MOVE_${newStatus}`;
   const request = JSON.stringify({ requestType });
 
-  webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request });
+  if (webSocket.connected) { webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request }); }
 };
 
 export default {
-  setCredentials, subscribe, sendInput, sendMove,
+  setCredentials, subscribe, disconnect, sendInput, sendMove,
 };

@@ -91,7 +91,7 @@ const DerivedView = ({
   ));
 
   return (
-    <Container className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-primary shadow-sm' : ''}`}>
+    <Container className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-secondary' : ''}`}>
       {fields}
     </Container>
   );
