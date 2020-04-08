@@ -206,6 +206,10 @@ const FormsList = () => {
   };
 
   useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
+
+  useEffect(() => {
     formStreamService.disconnect();
   }, []);
 
@@ -220,7 +224,6 @@ const FormsList = () => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);
           deviceService.setToken(newToken);
-          deviceStreamService.setToken(newToken);
           setCredentials({ employee, token: newToken });
         })
         .catch(() => {

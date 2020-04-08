@@ -26,7 +26,7 @@ const FormView = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [form, setForm] = useState(null);
   const [token, setToken] = useState(null);
-  const { formId } = useParams();
+  const formId = Number(useParams().formId);
   const history = useHistory();
   const signatureViewRef = useRef();
 
@@ -38,6 +38,17 @@ const FormView = () => {
     formService.createSignature(form.id, signature)
       .then(() => formStreamService.sendMove('CLOSED'));
   };
+
+  useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
+
+  useEffect(() => {
+    if (token !== null) {
+      formService.getForm(formId)
+        .catch(() => history.push('/employee/'));
+    }
+  }, [token, history]);
 
   useEffect(
     () => {
@@ -181,7 +192,7 @@ const FormView = () => {
 
   const deleteForm = async (event) => {
     event.preventDefault();
-    deviceStreamService.sendCancelForm(formId);
+    await deviceStreamService.sendCancelForm(formId);
     await formService.deleteForm(formId);
     history.push('/employee/');
   };
