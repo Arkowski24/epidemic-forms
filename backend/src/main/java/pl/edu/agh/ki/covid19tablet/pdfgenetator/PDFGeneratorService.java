@@ -21,7 +21,7 @@ public class PDFGeneratorService {
     @Autowired
     private FormRepository formRepository;
 
-    private static final String pdfDirPath = "/tmp/forms";
+    private static final String pdfBasicDirPath = "/tmp/forms";
     private static final SimpleDateFormat sdfFileSuffix = new SimpleDateFormat("yyyyMMddHHmm");
     private static final SimpleDateFormat sdfPdfDateHeader = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -35,21 +35,21 @@ public class PDFGeneratorService {
     }
 
     public void generatePDF(Form form) throws DocumentException, IOException {
-        createPDFDirectory();
-
         String pdfCreationDate = generatePDFCreationDate();
-        FormKeyData formKeyData = new FormKeyData(form, pdfCreationDate);
+        FormKeyData formKeyData = new FormKeyData(form, pdfCreationDate, pdfBasicDirPath);
         String pdfName = generatePDFName(
                 formKeyData.getPersonalData().getFirstName(),
                 formKeyData.getPersonalData().getSurname()
         );
 
-        PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
+        createPDFDirectory(formKeyData.getPdfDirPath());
+
+        PDFBuilder pdfBuilder = new PDFBuilder(formKeyData.getPdfDirPath());
         pdfBuilder.build(pdfName, formKeyData);
     }
 
-    private void createPDFDirectory() throws IOException {
-        Path pdfPath = Paths.get(pdfDirPath);
+    private void createPDFDirectory(String path) throws IOException {
+        Path pdfPath = Paths.get(path);
         boolean pdfDirExists = Files.exists(pdfPath);
         if (!pdfDirExists) {
             Files.createDirectories(pdfPath);

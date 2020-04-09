@@ -17,14 +17,19 @@ import java.util.List;
 
 public class PersonalDataContainer {
     private List<PersonalData> personalDataList;
-
+    private PersonalData purposeOfVisit;
 
     public PersonalDataContainer(Form form) {
         this.personalDataList = extractPersonalData(form);
+        this.purposeOfVisit = extractPurposeOfVisit(form);
     }
 
     public List<PersonalData> getPersonalDataList() {
         return personalDataList;
+    }
+
+    public PersonalData getPurposeOfVisit() {
+        return purposeOfVisit;
     }
 
     public String getSurname() {
@@ -58,7 +63,6 @@ public class PersonalDataContainer {
         extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));
         extractedPersonalData.add(extractPatternText(form, "Imię", "Imi"));
         extractedPersonalData.addAll(extractDerived(form));
-        extractedPersonalData.add(extractPatternChoice(form, "Cel wizyty", "Cel wizy"));
 
         return extractedPersonalData;
     }
@@ -85,15 +89,15 @@ public class PersonalDataContainer {
         return new PersonalData(title, value);
     }
 
-    private PersonalData extractPatternChoice(Form form, String defaultName, String pattern) {
+    private PersonalData extractPurposeOfVisit(Form form) {
         List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
 
-        String title = defaultName;
+        String title = "Cel wizyty";
         String value = "";
 
         for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
             ChoiceField choiceField = choiceFieldState.getField();
-            if (choiceField.getTitle().startsWith(pattern)) {
+            if (choiceField.getTitle().startsWith("Cel wizy")) {
                 List<String> choices = choiceField.getChoices();
                 List<Boolean> values = choiceFieldState.getValue();
                 for (int i = 0; i < values.size() && i < choices.size(); i++) {
@@ -102,10 +106,7 @@ public class PersonalDataContainer {
                 }
             }
         }
-
-        if (title.charAt(title.length() - 1) != ':') {
-            title = title + ':';
-        }
+        title = title + ':';
 
         return new PersonalData(title, value);
     }
