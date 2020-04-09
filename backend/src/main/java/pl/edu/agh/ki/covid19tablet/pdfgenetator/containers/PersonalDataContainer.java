@@ -37,6 +37,19 @@ public class PersonalDataContainer {
         return "";
     }
 
+    public String getFirstName() {
+        for (PersonalData personalData : personalDataList) {
+            if (personalData.getTitle().startsWith("Imi")) {
+                String firstName = personalData.getValue();
+                firstName = firstName.replaceAll(" ", "");
+                firstName = firstName.replaceAll(",", "");
+                return firstName;
+            }
+        }
+
+        return "";
+    }
+
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 

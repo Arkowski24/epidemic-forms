@@ -39,7 +39,10 @@ public class PDFGeneratorService {
 
         String pdfCreationDate = generatePDFCreationDate();
         FormKeyData formKeyData = new FormKeyData(form, pdfCreationDate);
-        String pdfName = generatePDFName(formKeyData.getPersonalData().getSurname());
+        String pdfName = generatePDFName(
+                formKeyData.getPersonalData().getFirstName(),
+                formKeyData.getPersonalData().getSurname()
+        );
 
         PDFBuilder pdfBuilder = new PDFBuilder(pdfDirPath);
         pdfBuilder.build(pdfName, formKeyData);
@@ -53,11 +56,11 @@ public class PDFGeneratorService {
         }
     }
 
-    private String generatePDFName(String surname) {
+    private String generatePDFName(String firstName, String surname) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String currentTime = sdfFileSuffix.format(timestamp);
 
-        return currentTime + "-" + surname + ".pdf";
+        return currentTime + "-" + surname + "_" + firstName + ".pdf";
     }
 
     private String generatePDFCreationDate() {
