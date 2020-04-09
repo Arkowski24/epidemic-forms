@@ -123,7 +123,7 @@ const sendInput = (newInput, index, formHandler) => {
   timeouts[index] = setTimeout(() => {
     if (webSocket.connected) { webSocket.publish({ destination: `/app/requests/${credentials.formId}`, body: request }); }
     timeouts[index] = null;
-  }, 500);
+  }, 1000);
 };
 
 const sendMove = (newStatus) => {
