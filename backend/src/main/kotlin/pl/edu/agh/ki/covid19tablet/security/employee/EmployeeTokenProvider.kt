@@ -37,6 +37,6 @@ class EmployeeTokenProvider(
             .getOrDefault(false)
 
     companion object {
-        private val TokenLifetime = Duration.ofDays(7)
+        private val TokenLifetime = Duration.ofDays(90)
     }
 }
