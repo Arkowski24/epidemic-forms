@@ -94,7 +94,7 @@ const ChoiceFormSingleChoice = ({
       </Row>
       <Row>
         <div className="w-100 pr-2">
-          <Form>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <Form.Group>
               <Form.Control
                 as="select"

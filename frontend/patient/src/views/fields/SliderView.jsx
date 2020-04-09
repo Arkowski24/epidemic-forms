@@ -47,7 +47,7 @@ const RangeForm = ({
         </Col>
       </Row>
       <Row>
-        <Form className="w-100">
+        <Form className="w-100" onSubmit={(e) => e.preventDefault()}>
           <Form.Group controlId="formRange">
             <Form.Control
               type="range"

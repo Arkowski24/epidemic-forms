@@ -18,7 +18,7 @@ const InfoMessage = ({ message }) => (
 
 const InputForm = ({ text, setText, isBlocked }) => (
   <div className="m-2 p-1">
-    <Form>
+    <Form onSubmit={(e) => e.preventDefault()}>
       <Form.Control
         as="input"
         rows={1}

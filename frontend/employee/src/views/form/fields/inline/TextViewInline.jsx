@@ -13,7 +13,7 @@ const InputForm = ({
   const dirty = text.length > 0;
   return (
     <div className="p-1">
-      <Form>
+      <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Control
           as={isMultiline ? 'textarea' : 'input'}
           size="lg"
