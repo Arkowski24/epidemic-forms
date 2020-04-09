@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.Nullable;
 import pl.edu.agh.ki.covid19tablet.form.Form;
+import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedType;
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
+import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
@@ -53,14 +55,15 @@ public class PersonalDataContainer {
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
-        extractedPersonalData.add(extractPattern(form, "Nazwisko", "Nazwis"));
-        extractedPersonalData.add(extractPattern(form, "Imię", "Imi"));
+        extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));
+        extractedPersonalData.add(extractPatternText(form, "Imię", "Imi"));
         extractedPersonalData.addAll(extractDerived(form));
+        extractedPersonalData.add(extractPatternChoice(form, "Cel wizyty", "Cel wizy"));
 
         return extractedPersonalData;
     }
 
-    private PersonalData extractPattern(Form form, String defaultName, String pattern) {
+    private PersonalData extractPatternText(Form form, String defaultName, String pattern) {
         List<TextFieldState> textFieldStates = form.getState().getText();
 
         String title = defaultName;
@@ -72,6 +75,31 @@ public class PersonalDataContainer {
                 title = textField.getTitle();
                 value = textFieldState.getValue();
                 break;
+            }
+        }
+
+        if (title.charAt(title.length() - 1) != ':') {
+            title = title + ':';
+        }
+
+        return new PersonalData(title, value);
+    }
+
+    private PersonalData extractPatternChoice(Form form, String defaultName, String pattern) {
+        List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
+
+        String title = defaultName;
+        String value = "";
+
+        for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
+            ChoiceField choiceField = choiceFieldState.getField();
+            if (choiceField.getTitle().startsWith(pattern)) {
+                List<String> choices = choiceField.getChoices();
+                List<Boolean> values = choiceFieldState.getValue();
+                for (int i = 0; i < values.size() && i < choices.size(); i++) {
+                    if (values.get(i))
+                        value = choices.get(i);
+                }
             }
         }
 

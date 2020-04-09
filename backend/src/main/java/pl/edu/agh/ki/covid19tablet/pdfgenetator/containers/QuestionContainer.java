@@ -115,7 +115,9 @@ public class QuestionContainer {
 
             answer = addUnits(title, answer);
 
-            extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
+            if (!title.startsWith("Cel wizy"))
+                extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
+
             if (fieldNumber > this.maxFieldNumber) {
                 this.maxFieldNumber = fieldNumber;
             }
