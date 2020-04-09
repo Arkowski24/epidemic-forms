@@ -13,6 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -54,14 +56,14 @@ public class PDFGeneratorService {
     }
 
     private String generatePDFName(String surname) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("CET")));
         String currentTime = sdfFileSuffix.format(timestamp);
 
         return currentTime + "-" + surname + ".pdf";
     }
 
     private String generatePDFCreationDate() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("CET")));
         return sdfPdfDateHeader.format(timestamp);
     }
 }
