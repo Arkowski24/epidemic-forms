@@ -24,7 +24,7 @@ const SubmitButton = ({ sendNewSignature, isBlocked }) => (
     <div className="w-100 m-1 p-1 border-top">
       <Button
         className="w-100"
-        variant="primary"
+        variant="success"
         type="submit"
         onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
         disabled={isBlocked}
@@ -50,7 +50,7 @@ const SignField = ({ setInput, setIsEmpty }) => {
           </div>
         </Row>
         <Row>
-          <div className="w-100">
+          <div className="w-100 border rounded border-warning" style={{ backgroundColor: '#FFF7D4' }}>
             <SignatureCanvas
               penColor="black"
               canvasProps={{ className: 'w-100 h-100 m-0' }}

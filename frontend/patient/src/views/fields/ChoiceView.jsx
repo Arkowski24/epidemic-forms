@@ -22,15 +22,17 @@ const ChoiceForm = ({
         onClick={() => setChecked(true)}
         key={c}
       >
-        <Form.Check
-          key={c}
-          type={isMultiChoice ? 'checkbox' : 'radio'}
-          name="choiceForm"
-          label={c}
-          checked={input[i]}
-          readOnly
-          disabled={isBlocked}
-        />
+        <Form onSubmit={(e) => e.preventDefault()}>
+          <Form.Check
+            key={c}
+            type={isMultiChoice ? 'checkbox' : 'radio'}
+            name="choiceForm"
+            label={c}
+            checked={input[i]}
+            readOnly
+            disabled={isBlocked}
+          />
+        </Form>
       </div>
     );
   });

@@ -12,7 +12,7 @@ const InputForm = ({
 }) => {
   const dirty = text.length > 0;
   return (
-    <Form>
+    <Form onSubmit={(e) => e.preventDefault()}>
       <Form.Control
         as="input"
         size="lg"
@@ -128,7 +128,7 @@ const DerivedViewInline = ({
   ));
 
   return (
-    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-danger shadow-sm' : ''}`}>
+    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-secondary' : ''}`}>
       {fields}
     </Container>
   );

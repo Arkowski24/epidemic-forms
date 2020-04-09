@@ -18,7 +18,7 @@ const InfoMessage = ({ message }) => (
 
 const InputForm = ({ text, setText, isBlocked }) => (
   <div className="m-2 p-1">
-    <Form>
+    <Form onSubmit={(e) => e.preventDefault()}>
       <Form.Control
         as="input"
         rows={1}
@@ -91,7 +91,7 @@ const DerivedView = ({
   ));
 
   return (
-    <Container className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-danger shadow-sm' : ''}`}>
+    <Container className={`w-100 m-1 p-1 rounded border ${highlighted ? 'border-secondary' : ''}`}>
       {fields}
     </Container>
   );

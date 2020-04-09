@@ -1,10 +1,12 @@
 import React from 'react';
 import {
-  Button, Col, Container, Form, Row,
+  Button, Col, Container, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import Slider from 'rc-slider';
 import SingleInputButton from './common/SingleInputButton';
 import SliderViewInline from './inline/SliderViewInline';
+import 'rc-slider/assets/index.css';
 
 const RangeForm = ({
   minValue, maxValue, step,
@@ -47,19 +49,21 @@ const RangeForm = ({
         </Col>
       </Row>
       <Row>
-        <Form className="w-100">
-          <Form.Group controlId="formRange">
-            <Form.Control
-              type="range"
-              min={minValue}
-              max={maxValue}
-              step={step}
-              value={value}
-              onChange={(event) => setValue(Number(event.target.value))}
-              disabled={isBlocked}
-            />
-          </Form.Group>
-        </Form>
+        <div className="w-100 mb-1 pl-2 pr-2">
+          <Slider
+            min={minValue}
+            max={maxValue}
+            step={step}
+            value={value}
+            onChange={(v) => setValue(v)}
+            disabled={isBlocked}
+            handleStyle={{
+              height: 20,
+              width: 20,
+              marginTop: -8,
+            }}
+          />
+        </div>
       </Row>
     </Container>
   );
@@ -106,15 +110,15 @@ const SliderView = ({
       isBlocked={isBlocked}
     >
       {!hidden && (
-      <RangeForm
-        minValue={minValue}
-        maxValue={maxValue}
-        step={step}
-        defaultValue={defaultValue}
-        value={input}
-        setValue={setInput}
-        isBlocked={isBlocked}
-      />
+        <RangeForm
+          minValue={minValue}
+          maxValue={maxValue}
+          step={step}
+          defaultValue={defaultValue}
+          value={input}
+          setValue={setInput}
+          isBlocked={isBlocked}
+        />
       )}
     </SingleInputButton>
   );
