@@ -16,12 +16,18 @@ public class FormKeyData {
     private QuestionContainer questions;
     private SignaturesContainer signatures;
 
-    public FormKeyData(Form form, String creationDate) {
+    private String pdfDirPath;
+
+    public FormKeyData(Form form, String creationDate, String pdfBasicDirPath) {
         this.title = form.getSchema().getName();
-        this.metadata = new MetadataContainer(creationDate);
+        this.metadata = new MetadataContainer(form, creationDate);
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);
         this.signatures = new SignaturesContainer(form);
+
+        String purposeOfVisit = metadata.getPurposeOfVisit();
+        purposeOfVisit = purposeOfVisit.replaceAll(" ", "_");
+        this.pdfDirPath = pdfBasicDirPath + "/" + purposeOfVisit;
     }
 
     public String getHospitalName() {
@@ -46,5 +52,9 @@ public class FormKeyData {
 
     public SignaturesContainer getSignatures() {
         return signatures;
+    }
+
+    public String getPdfDirPath() {
+        return pdfDirPath;
     }
 }

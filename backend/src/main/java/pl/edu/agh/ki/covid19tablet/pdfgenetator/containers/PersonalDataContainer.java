@@ -16,7 +16,6 @@ import java.util.List;
 public class PersonalDataContainer {
     private List<PersonalData> personalDataList;
 
-
     public PersonalDataContainer(Form form) {
         this.personalDataList = extractPersonalData(form);
     }
@@ -37,17 +36,30 @@ public class PersonalDataContainer {
         return "";
     }
 
+    public String getFirstName() {
+        for (PersonalData personalData : personalDataList) {
+            if (personalData.getTitle().startsWith("Imi")) {
+                String firstName = personalData.getValue();
+                firstName = firstName.replaceAll(" ", "");
+                firstName = firstName.replaceAll(",", "");
+                return firstName;
+            }
+        }
+
+        return "";
+    }
+
     private List<PersonalData> extractPersonalData(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
-        extractedPersonalData.add(extractPattern(form, "Nazwisko", "Nazwis"));
-        extractedPersonalData.add(extractPattern(form, "Imię", "Imi"));
+        extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));
+        extractedPersonalData.add(extractPatternText(form, "Imię", "Imi"));
         extractedPersonalData.addAll(extractDerived(form));
 
         return extractedPersonalData;
     }
 
-    private PersonalData extractPattern(Form form, String defaultName, String pattern) {
+    private PersonalData extractPatternText(Form form, String defaultName, String pattern) {
         List<TextFieldState> textFieldStates = form.getState().getText();
 
         String title = defaultName;

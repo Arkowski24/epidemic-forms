@@ -104,6 +104,14 @@ public class PDFBuilder {
         );
         document.add(creationDateParagraph);
 
+        Paragraph purposeOfVisitParagraph = new Paragraph(
+                metadataContainer.getPurposeOfVisitTitle()
+                        + ": "
+                        + metadataContainer.getPurposeOfVisit(),
+                standardFont
+        );
+        document.add(purposeOfVisitParagraph);
+
         addEmptyLine(document, standardFont);
     }
 
