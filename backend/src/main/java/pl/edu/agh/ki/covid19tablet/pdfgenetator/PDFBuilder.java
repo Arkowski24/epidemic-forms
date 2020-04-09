@@ -104,6 +104,14 @@ public class PDFBuilder {
         );
         document.add(creationDateParagraph);
 
+        Paragraph purposeOfVisitParagraph = new Paragraph(
+                metadataContainer.getPurposeOfVisitTitle()
+                        + ": "
+                        + metadataContainer.getPurposeOfVisit(),
+                standardFont
+        );
+        document.add(purposeOfVisitParagraph);
+
         addEmptyLine(document, standardFont);
     }
 
@@ -120,19 +128,6 @@ public class PDFBuilder {
 
             document.add(personalDataParagraph);
         }
-
-        PersonalData purposeOfVisit = personalDataContainer.getPurposeOfVisit();
-
-        Chunk titleChunk = new Chunk(purposeOfVisit.getTitle(), standardFont);
-        Chunk valueChunk = new Chunk(purposeOfVisit.getValue(), personalDataFont);
-
-        Paragraph personalDataParagraph = new Paragraph();
-        personalDataParagraph.add(titleChunk);
-        personalDataParagraph.add(" ");
-        personalDataParagraph.add(valueChunk);
-
-        document.add(personalDataParagraph);
-
         addEmptyLine(document, standardFont);
     }
 

@@ -20,12 +20,12 @@ public class FormKeyData {
 
     public FormKeyData(Form form, String creationDate, String pdfBasicDirPath) {
         this.title = form.getSchema().getName();
-        this.metadata = new MetadataContainer(creationDate);
+        this.metadata = new MetadataContainer(form, creationDate);
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);
         this.signatures = new SignaturesContainer(form);
 
-        String purposeOfVisit = personalData.getPurposeOfVisit().getValue();
+        String purposeOfVisit = metadata.getPurposeOfVisit();
         purposeOfVisit = purposeOfVisit.replaceAll(" ", "_");
         this.pdfDirPath = pdfBasicDirPath + "/" + purposeOfVisit;
     }

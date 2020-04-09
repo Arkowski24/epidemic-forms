@@ -4,11 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.Nullable;
 import pl.edu.agh.ki.covid19tablet.form.Form;
-import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedType;
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
-import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
@@ -17,19 +15,13 @@ import java.util.List;
 
 public class PersonalDataContainer {
     private List<PersonalData> personalDataList;
-    private PersonalData purposeOfVisit;
 
     public PersonalDataContainer(Form form) {
         this.personalDataList = extractPersonalData(form);
-        this.purposeOfVisit = extractPurposeOfVisit(form);
     }
 
     public List<PersonalData> getPersonalDataList() {
         return personalDataList;
-    }
-
-    public PersonalData getPurposeOfVisit() {
-        return purposeOfVisit;
     }
 
     public String getSurname() {
@@ -85,28 +77,6 @@ public class PersonalDataContainer {
         if (title.charAt(title.length() - 1) != ':') {
             title = title + ':';
         }
-
-        return new PersonalData(title, value);
-    }
-
-    private PersonalData extractPurposeOfVisit(Form form) {
-        List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
-
-        String title = "Cel wizyty";
-        String value = "";
-
-        for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
-            ChoiceField choiceField = choiceFieldState.getField();
-            if (choiceField.getTitle().startsWith("Cel wizy")) {
-                List<String> choices = choiceField.getChoices();
-                List<Boolean> values = choiceFieldState.getValue();
-                for (int i = 0; i < values.size() && i < choices.size(); i++) {
-                    if (values.get(i))
-                        value = choices.get(i);
-                }
-            }
-        }
-        title = title + ':';
 
         return new PersonalData(title, value);
     }
