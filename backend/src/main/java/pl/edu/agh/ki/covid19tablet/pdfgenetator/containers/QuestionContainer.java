@@ -99,7 +99,8 @@ public class QuestionContainer {
 
             boolean isHighlighted = isOutOfNorm(title, answer);
 
-            answer = addUnits(title, answer);
+            if (!answer.equals("B.D."))
+                answer = addUnits(title, answer);
 
             if (!title.startsWith("Cel wizy"))
                 extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
