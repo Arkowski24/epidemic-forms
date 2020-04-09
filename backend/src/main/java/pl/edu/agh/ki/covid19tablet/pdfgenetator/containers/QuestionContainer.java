@@ -13,16 +13,10 @@ import java.util.List;
 
 public class QuestionContainer {
 
-    private int maxFieldNumber;
     private List<Question> questions;
 
     public QuestionContainer(Form form) {
-        this.maxFieldNumber = 0;
         this.questions = extractQuestions(form);
-    }
-
-    public int getMaxFieldNumber() {
-        return maxFieldNumber;
     }
 
     public List<Question> getQuestions() {
@@ -61,10 +55,6 @@ public class QuestionContainer {
             }
 
             extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
-
-            if (fieldNumber > this.maxFieldNumber) {
-                this.maxFieldNumber = fieldNumber;
-            }
         }
 
         return extractedQuestions;
@@ -82,10 +72,6 @@ public class QuestionContainer {
                 String title = textField.getTitle();
                 String answer = textFieldState.getValue();
                 extractedQuestions.add(new Question(fieldNumber, title, answer, false, false));
-
-                if (fieldNumber > this.maxFieldNumber) {
-                    this.maxFieldNumber = fieldNumber;
-                }
             }
         }
 
@@ -117,10 +103,6 @@ public class QuestionContainer {
 
             if (!title.startsWith("Cel wizy"))
                 extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
-
-            if (fieldNumber > this.maxFieldNumber) {
-                this.maxFieldNumber = fieldNumber;
-            }
         }
 
         return extractedQuestions;
