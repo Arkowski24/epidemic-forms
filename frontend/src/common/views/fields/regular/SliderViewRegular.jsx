@@ -74,7 +74,7 @@ const SliderViewRegular = ({
   title, description,
   minValue, maxValue, step, defaultValue,
   input, setInput,
-  isHighlighted,
+  isHighlighted, isEmployee,
   isBlocked,
 }) => {
   const hidden = input < minValue;
@@ -89,6 +89,7 @@ const SliderViewRegular = ({
       title={title}
       description={description}
       isHighlighted={isHighlighted}
+      isEmployee={isEmployee}
       clicked={hidden}
       onClick={setHidden}
       isBlocked={isBlocked}

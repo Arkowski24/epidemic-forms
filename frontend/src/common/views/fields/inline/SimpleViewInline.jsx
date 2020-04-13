@@ -5,9 +5,9 @@ import InlineView from './common/InlineView';
 
 const SimpleViewInline = ({
   title,
-  isHighlighted,
+  isHighlighted, isEmployee,
 }) => (
-  <InlineView isHighlighted={isHighlighted}>
+  <InlineView isHighlighted={isHighlighted} isEmployee={isEmployee}>
     <div className="w-100 m-1">
       <h4>{title}</h4>
     </div>

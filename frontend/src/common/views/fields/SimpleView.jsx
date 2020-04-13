@@ -7,13 +7,14 @@ import SimpleViewRegular from './regular/SimpleViewRegular';
 const SimpleView = ({
   title, description,
   isInline,
-  isHighlighted,
+  isHighlighted, isEmployee,
 }) => {
   if (isInline) {
     return (
       <SimpleViewInline
         title={title}
         isHighlighted={isHighlighted}
+        isEmployee={isEmployee}
       />
     );
   }
@@ -24,6 +25,7 @@ const SimpleView = ({
       description={description}
       isInline={isInline}
       isHighlighted={isHighlighted}
+      isEmployee={isEmployee}
     />
   );
 };

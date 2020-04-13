@@ -29,11 +29,11 @@ const TextViewRegular = ({
   title, description,
   isMultiline,
   input, setInput,
-  isHighlighted,
+  isHighlighted, isEmployee,
   isBlocked,
   isInvalid,
 }) => (
-  <SingleInput title={title} description={description} isHighlighted={isHighlighted}>
+  <SingleInput title={title} description={description} isHighlighted={isHighlighted} isEmployee={isEmployee}>
     <InputForm
       text={input}
       setText={setInput}

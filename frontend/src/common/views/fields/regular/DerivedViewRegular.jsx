@@ -59,7 +59,7 @@ const DerivedViewRegular = ({
   derivedType,
   titles, descriptions,
   input, setInput,
-  isHighlighted,
+  isHighlighted, isEmployee,
   isBlocked,
 }) => {
   const fields = titles.map((t, i) => (
@@ -77,8 +77,9 @@ const DerivedViewRegular = ({
     </Row>
   ));
 
+  const highlightColor = isEmployee ? 'border-secondary' : 'border-danger';
   return (
-    <Container className={`w-100 m-1 p-1 rounded border ${isHighlighted ? 'border-secondary' : ''}`}>
+    <Container className={`w-100 m-1 p-1 rounded border ${isHighlighted ? highlightColor : ''}`}>
       {fields}
     </Container>
   );

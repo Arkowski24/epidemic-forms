@@ -9,7 +9,7 @@ const ChoiceView = ({
   isInline,
   choices, isMultiChoice,
   input, setInput,
-  isHighlighted,
+  isHighlighted, isEmployee,
   isBlocked,
 }) => {
   if (isInline) {
@@ -21,6 +21,7 @@ const ChoiceView = ({
         input={input}
         setInput={setInput}
         isHighlighted={isHighlighted}
+        isEmployee={isEmployee}
         isBlocked={isBlocked}
       />
     );
@@ -35,6 +36,7 @@ const ChoiceView = ({
       input={input}
       setInput={setInput}
       isHighlighted={isHighlighted}
+      isEmployee={isEmployee}
       isBlocked={isBlocked}
     />
   );

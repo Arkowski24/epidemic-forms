@@ -35,15 +35,18 @@ const InfoMessage = ({ message }) => (
 const SingleInputButton = ({
   title, description,
   children,
-  isHighlighted,
+  isHighlighted, isEmployee,
   clicked, onClick,
   isBlocked,
-}) => (
-  <div className={`w-100 ml-1 mr-1 mt-1 pl-1 pr-1 pt-1 rounded border ${isHighlighted ? 'border-secondary' : ''}`}>
-    <Header message={title} clicked={clicked} onClick={onClick} isBlocked={isBlocked} />
-    {description && (<InfoMessage message={description} />)}
-    {children}
-  </div>
-);
+}) => {
+  const highlightColor = isEmployee ? 'border-secondary' : 'border-danger';
+  return (
+    <div className={`w-100 ml-1 mr-1 mt-1 pl-1 pr-1 pt-1 rounded border ${isHighlighted ? highlightColor : ''}`}>
+      <Header message={title} clicked={clicked} onClick={onClick} isBlocked={isBlocked} />
+      {description && (<InfoMessage message={description} />)}
+      {children}
+    </div>
+  );
+};
 
 export default SingleInputButton;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Row , Container} from 'react-bootstrap';
+import { Button, Row, Container } from 'react-bootstrap';
 import SignatureCanvas from 'react-signature-canvas';
 
 

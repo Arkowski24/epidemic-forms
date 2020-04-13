@@ -16,13 +16,16 @@ const InfoMessage = ({ message }) => (
 const SinglePageForm = ({
   title, description,
   children,
-  isHighlighted,
-}) => (
-  <div className={`w-100 ml-1 mr-1 mt-1 pl-1 pr-1 pt-1 rounded border ${isHighlighted ? 'border-secondary' : ''}`}>
-    <Header message={title} />
-    {description && (<InfoMessage message={description} />)}
-    {children}
-  </div>
-);
+  isHighlighted, isEmployee,
+}) => {
+  const highlightColor = isEmployee ? 'border-secondary' : 'border-danger';
+  return (
+    <div className={`w-100 ml-1 mr-1 mt-1 pl-1 pr-1 pt-1 rounded border ${isHighlighted ? highlightColor : ''}`}>
+      <Header message={title} />
+      {description && (<InfoMessage message={description} />)}
+      {children}
+    </div>
+  );
+};
 
 export default SinglePageForm;
