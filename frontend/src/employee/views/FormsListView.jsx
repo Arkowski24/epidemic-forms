@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 import employeeService from '../services/EmployeeService';
 import formService from '../services/FormService';
 import schemaService from '../services/SchemaService';
@@ -66,7 +66,7 @@ const FormsTable = ({ forms, setForms }) => {
 
   const deleteForm = async (formId) => {
     await formService.deleteForm(formId);
-    deviceStreamService.sendCancelForm(formId);
+    await deviceStreamService.sendCancelForm(formId);
     const newForms = forms.filter((f) => f.id !== formId);
     setForms(newForms);
   };
@@ -228,7 +228,7 @@ const FormsListView = () => {
       const newToken = localStorage.getItem('token');
       if (!newToken) history.push('/employee/login');
 
-      authService.me(newToken)
+      authService.meEmployee(newToken)
         .then((employee) => {
           formService.setToken(newToken);
           schemaService.setToken(newToken);

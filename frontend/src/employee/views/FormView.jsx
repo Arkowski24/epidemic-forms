@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import { useParams, useHistory } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 import formService from '../services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
@@ -71,7 +71,7 @@ const FormView = () => {
       if (!newToken) history.push('/employee/login');
 
       try {
-        await authService.me(newToken);
+        await authService.meEmployee(newToken);
 
         formService.setToken(newToken);
         formStreamService.setCredentials({ token: newToken, formId });

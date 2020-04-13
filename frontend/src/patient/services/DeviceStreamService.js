@@ -1,6 +1,6 @@
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import { WS_URL } from '../../config';
-import authService from './AuthService';
+import authService from '../../common/services/AuthService';
 
 const url = `${WS_URL}/requests`;
 
@@ -18,7 +18,7 @@ const subscribe = async (history) => {
   try { await authService.meDevice(token); } catch (e) { localStorage.removeItem('device-token'); history.push('/'); return; }
 
   const setForm = (pinCode) => {
-    authService.login(pinCode)
+    authService.loginPatient(pinCode)
       .then((c) => localStorage.setItem('credentials', JSON.stringify(c)))
       .then(() => history.push('/form'));
   };

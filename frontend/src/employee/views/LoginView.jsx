@@ -3,7 +3,7 @@ import { Button, Form, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 
 const LoginView = () => {
   const [username, setUsername] = useState('');
@@ -16,7 +16,7 @@ const LoginView = () => {
       const newToken = localStorage.getItem('token');
       if (!newToken) return;
 
-      authService.me(newToken)
+      authService.meEmployee(newToken)
         .then(() => history.push('/employee/'))
         .catch(() => { localStorage.removeItem('token'); });
     };
@@ -28,7 +28,7 @@ const LoginView = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const credentials = await authService.login(username, password);
+      const credentials = await authService.loginEmployee(username, password);
       localStorage.setItem('token', credentials.token);
       history.push('/employee/');
     } catch (e) {

@@ -1,6 +1,6 @@
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
 import { WS_URL } from '../../config';
-import authService from './AuthService';
+import authService from '../../common/services/AuthService';
 
 const url = `${WS_URL}/requests`;
 
@@ -15,7 +15,7 @@ const subscribe = async (history) => {
 
   token = localStorage.getItem('token');
   if (!token) { return; }
-  try { await authService.me(token); } catch (e) { localStorage.removeItem('token'); history.push('/employee/login'); return; }
+  try { await authService.meEmployee(token); } catch (e) { localStorage.removeItem('token'); history.push('/employee/login'); return; }
   webSocket.connect({ Authorization: `Bearer ${token}` }, () => { });
 };
 

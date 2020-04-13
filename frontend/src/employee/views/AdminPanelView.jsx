@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
 import { FaTrash, FaArrowLeft } from 'react-icons/fa';
 
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 import employeeService from '../services/EmployeeService';
 
 import LoadingView from '../../common/views/utility/LoadingView';

@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 
 import { useHistory } from 'react-router-dom';
 import ClickNHold from 'react-click-n-hold';
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 import deviceStreamService from '../services/DeviceStreamService';
 import formStreamService from '../../common/services/FormsStreamService';
 import LoadingView from '../../common/views/utility/LoadingView';
@@ -33,7 +33,7 @@ const LoginView = () => {
     if (!rawCredentials) return;
     const credentials = JSON.parse(rawCredentials);
 
-    authService.me(credentials.token)
+    authService.mePatient(credentials.token)
       .then(() => history.push('/form'))
       .catch(() => localStorage.removeItem('credentials'));
   }, [history]);

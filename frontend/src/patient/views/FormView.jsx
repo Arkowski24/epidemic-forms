@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 import formService from '../services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
@@ -54,7 +54,7 @@ const FormView = () => {
       try {
         const credentials = JSON.parse(rawCredentials);
 
-        await authService.me(credentials.token);
+        await authService.mePatient(credentials.token);
         formStreamService.setCredentials(credentials);
         formService.setCredentials(credentials);
         formStreamService.subscribe((f) => setForm(f));

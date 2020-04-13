@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 
 import { FaArrowLeft, FaSignOutAlt } from 'react-icons/all';
-import authService from '../services/AuthService';
+import authService from '../../common/services/AuthService';
 
 const LoginDeviceView = () => {
   const [username, setUsername] = useState('');
