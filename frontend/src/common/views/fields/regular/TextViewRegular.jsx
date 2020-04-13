@@ -29,12 +29,18 @@ const TextViewRegular = ({
   title, description,
   isMultiline,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
   isInvalid,
 }) => (
-  <SingleInput title={title} description={description} highlighted={highlighted}>
-    <InputForm text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} isInvalid={isInvalid} />
+  <SingleInput title={title} description={description} isHighlighted={isHighlighted}>
+    <InputForm
+      text={input}
+      setText={setInput}
+      isMultiline={isMultiline}
+      isBlocked={isBlocked}
+      isInvalid={isInvalid}
+    />
   </SingleInput>
 );
 

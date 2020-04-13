@@ -128,7 +128,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
-          highlighted={isInvalid}
+          isHighlighted={isInvalid}
         />
       );
     }
@@ -142,7 +142,7 @@ const FormView = () => {
           isInline={fieldSchema.inline}
           input={input}
           setInput={setInput}
-          highlighted={isInvalid}
+          isHighlighted={isInvalid}
           isBlocked={blocked}
         />
       );
@@ -161,7 +161,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
-          highlighted={isInvalid}
+          isHighlighted={isInvalid}
         />
       );
     }
@@ -176,7 +176,7 @@ const FormView = () => {
           input={input}
           setInput={setInput}
           isBlocked={blocked}
-          highlighted={isInvalid}
+          isHighlighted={isInvalid}
           isInvalid={isInvalid}
         />
       );

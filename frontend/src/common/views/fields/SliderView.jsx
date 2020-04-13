@@ -9,7 +9,7 @@ const SliderView = ({
   isInline,
   minValue, maxValue, step, defaultValue,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => {
   if (isInline) {
@@ -22,7 +22,7 @@ const SliderView = ({
         defaultValue={defaultValue}
         input={input}
         setInput={setInput}
-        highlighted={highlighted}
+        isHighlighted={isHighlighted}
         isBlocked={isBlocked}
       />
     );
@@ -38,7 +38,7 @@ const SliderView = ({
       defaultValue={defaultValue}
       input={input}
       setInput={setInput}
-      highlighted={highlighted}
+      isHighlighted={isHighlighted}
       isBlocked={isBlocked}
     />
   );

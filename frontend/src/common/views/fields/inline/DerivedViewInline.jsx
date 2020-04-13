@@ -112,7 +112,7 @@ const DerivedViewInline = ({
   derivedType,
   titles,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => {
   const fields = titles.map((t, i) => (
@@ -130,7 +130,7 @@ const DerivedViewInline = ({
   ));
 
   return (
-    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${highlighted ? 'border-secondary' : ''}`}>
+    <Container className={`w-100 ml-1 mr-1 mt-1 p-1 rounded border ${isHighlighted ? 'border-secondary' : ''}`}>
       {fields}
     </Container>
   );

@@ -77,10 +77,10 @@ const SliderViewInline = ({
   title,
   minValue, maxValue, step, defaultValue,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => (
-  <InlineView highlighted={highlighted}>
+  <InlineView isHighlighted={isHighlighted}>
     <RangeForm
       title={title}
       minValue={minValue}

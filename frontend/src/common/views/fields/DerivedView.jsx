@@ -9,7 +9,7 @@ const DerivedView = ({
   titles, descriptions,
   isInline,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => {
   if (isInline) {
@@ -19,7 +19,7 @@ const DerivedView = ({
         titles={titles}
         input={input}
         setInput={setInput}
-        highlighted={highlighted}
+        isHighlighted={isHighlighted}
         isBlocked={isBlocked}
       />
     );
@@ -32,7 +32,7 @@ const DerivedView = ({
       descriptions={descriptions}
       input={input}
       setInput={setInput}
-      highlighted={highlighted}
+      isHighlighted={isHighlighted}
       isBlocked={isBlocked}
     />
   );

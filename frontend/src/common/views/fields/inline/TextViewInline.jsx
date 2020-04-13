@@ -34,12 +34,19 @@ const TextViewInline = ({
   title,
   isMultiline,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
   isInvalid,
 }) => (
-  <InlineView highlighted={highlighted}>
-    <InputForm title={title} text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} isInvalid={isInvalid} />
+  <InlineView isHighlighted={isHighlighted}>
+    <InputForm
+      title={title}
+      text={input}
+      setText={setInput}
+      isMultiline={isMultiline}
+      isBlocked={isBlocked}
+      isInvalid={isInvalid}
+    />
   </InlineView>
 );
 

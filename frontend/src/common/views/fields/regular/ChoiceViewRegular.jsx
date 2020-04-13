@@ -54,10 +54,10 @@ const ChoiceViewRegular = ({
   title, description,
   choices, isMultiChoice,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => (
-  <SingleInput title={title} description={description} highlighted={highlighted}>
+  <SingleInput title={title} description={description} isHighlighted={isHighlighted}>
     <ChoiceForm
       choices={choices}
       isMultiChoice={isMultiChoice}

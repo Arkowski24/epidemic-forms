@@ -165,10 +165,10 @@ const ChoiceViewInline = ({
   title, choices,
   isMultiChoice,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => (
-  <InlineView highlighted={highlighted}>
+  <InlineView isHighlighted={isHighlighted}>
     {isMultiChoice && (
       <ChoiceFormMultiChoice
         title={title}

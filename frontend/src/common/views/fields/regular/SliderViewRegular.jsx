@@ -74,7 +74,7 @@ const SliderViewRegular = ({
   title, description,
   minValue, maxValue, step, defaultValue,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
 }) => {
   const hidden = input < minValue;
@@ -88,7 +88,7 @@ const SliderViewRegular = ({
     <SingleInputButton
       title={title}
       description={description}
-      highlighted={highlighted}
+      isHighlighted={isHighlighted}
       clicked={hidden}
       onClick={setHidden}
       isBlocked={isBlocked}

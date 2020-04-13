@@ -7,19 +7,19 @@ import SimpleViewInline from '../inline/SimpleViewInline';
 const SimpleViewRegular = ({
   title, description,
   isInline,
-  highlighted,
+  isHighlighted,
 }) => {
   if (isInline) {
     return (
       <SimpleViewInline
         title={title}
-        highlighted={highlighted}
+        isHighlighted={isHighlighted}
       />
     );
   }
 
   return (
-    <SingleInput title={title} description={description} highlighted={highlighted} />
+    <SingleInput title={title} description={description} isHighlighted={isHighlighted} />
   );
 };
 

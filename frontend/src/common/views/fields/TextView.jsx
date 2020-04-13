@@ -9,7 +9,7 @@ const TextView = ({
   isInline,
   isMultiline,
   input, setInput,
-  highlighted,
+  isHighlighted,
   isBlocked,
   isInvalid,
 }) => {
@@ -20,7 +20,7 @@ const TextView = ({
         input={input}
         setInput={setInput}
         isMultiline={isMultiline}
-        highlighted={highlighted}
+        isHighlighted={isHighlighted}
         isBlocked={isBlocked}
         isInvalid={isInvalid}
       />
@@ -34,7 +34,7 @@ const TextView = ({
       input={input}
       setInput={setInput}
       isMultiline={isMultiline}
-      highlighted={highlighted}
+      isHighlighted={isHighlighted}
       isBlocked={isBlocked}
       isInvalid={isInvalid}
     />
