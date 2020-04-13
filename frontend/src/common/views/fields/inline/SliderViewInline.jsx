@@ -5,7 +5,7 @@ import {
 import {
   FaMinus, FaPlus, FaEye, FaEyeSlash,
 } from 'react-icons/fa';
-import InlineView from '../common/InlineView';
+import InlineView from './common/InlineView';
 
 const RangeForm = ({
   title,

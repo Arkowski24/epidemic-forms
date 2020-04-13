@@ -1,6 +1,7 @@
 import React from 'react';
-import SingleInput from './common/SingleInput';
+
 import SimpleViewInline from './inline/SimpleViewInline';
+import SimpleViewRegular from './regular/SimpleViewRegular';
 
 const SimpleView = ({
   title, description,
@@ -17,7 +18,12 @@ const SimpleView = ({
   }
 
   return (
-    <SingleInput title={title} description={description} highlighted={highlighted} />
+    <SimpleViewRegular
+      title={title}
+      description={description}
+      isInline={isInline}
+      highlighted={highlighted}
+    />
   );
 };
 

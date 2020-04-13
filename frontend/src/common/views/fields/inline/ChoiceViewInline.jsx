@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap';
 import React from 'react';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react';
-import InlineView from '../common/InlineView';
+import InlineView from './common/InlineView';
 
 const ChoiceFormTwoValues = ({
   title, choices,

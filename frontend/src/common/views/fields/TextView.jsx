@@ -1,29 +1,7 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 
-import SingleInput from './common/SingleInput';
 import TextViewInline from './inline/TextViewInline';
-
-const InputForm = ({
-  text, setText, isMultiline, isBlocked,
-  isInvalid,
-}) => {
-  const dirty = text.length > 0;
-  return (
-    <div className="p-1">
-      <Form onSubmit={(e) => e.preventDefault()}>
-        <Form.Control
-          as={isMultiline ? 'textarea' : 'input'}
-          rows={isMultiline ? 10 : 1}
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          disabled={isBlocked}
-          isInvalid={dirty && isInvalid}
-        />
-      </Form>
-    </div>
-  );
-};
+import TextViewRegular from './regular/TextViewRegular';
 
 const TextView = ({
   title, description,
@@ -49,9 +27,16 @@ const TextView = ({
   }
 
   return (
-    <SingleInput title={title} description={description} highlighted={highlighted}>
-      <InputForm text={input} setText={setInput} isMultiline={isMultiline} isBlocked={isBlocked} isInvalid={isInvalid} />
-    </SingleInput>
+    <TextViewRegular
+      title={title}
+      description={description}
+      input={input}
+      setInput={setInput}
+      isMultiline={isMultiline}
+      highlighted={highlighted}
+      isBlocked={isBlocked}
+      isInvalid={isInvalid}
+    />
   );
 };
 

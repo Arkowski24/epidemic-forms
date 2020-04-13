@@ -1,5 +1,5 @@
 import React from 'react';
-import InlineView from '../common/InlineView';
+import InlineView from './common/InlineView';
 
 const SimpleViewInline = ({
   title,
