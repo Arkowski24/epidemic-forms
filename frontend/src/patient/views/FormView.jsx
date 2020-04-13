@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 import authService from '../services/AuthService';
 import formService from '../services/FormService';
-import formStreamService from '../services/FormsStreamService';
+import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
 
 import dataValidator from '../../common/helpers/DataValidator';

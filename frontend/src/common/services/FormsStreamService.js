@@ -1,5 +1,5 @@
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp';
-import webSocketsHelper from '../../common/helpers/WebSocketsHelper';
+import webSocketsHelper from '../helpers/WebSocketsHelper';
 import { WS_URL } from '../../config';
 
 const url = `${WS_URL}/requests`;

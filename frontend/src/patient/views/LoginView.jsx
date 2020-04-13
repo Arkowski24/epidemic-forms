@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import ClickNHold from 'react-click-n-hold';
 import authService from '../services/AuthService';
 import deviceStreamService from '../services/DeviceStreamService';
-import formStreamService from '../services/FormsStreamService';
+import formStreamService from '../../common/services/FormsStreamService';
 import LoadingView from '../../common/views/utility/LoadingView';
 
 import hospitalLogo from '../../common/public/hospital_logo.png';
