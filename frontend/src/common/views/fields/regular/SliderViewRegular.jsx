@@ -40,8 +40,8 @@ const RangeForm = ({
           <div className="w-25 float-right">
             <Button
               className="btn float-right"
+              variant="primary"
               onClick={incValue}
-              variant="success"
               disabled={isBlocked || value + step > maxValue}
             >
               <FaPlus />

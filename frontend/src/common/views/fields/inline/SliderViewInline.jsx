@@ -32,7 +32,7 @@ const RangeForm = ({
         </div>
       </Col>
       <Col xs="auto">
-        <Button type="button" disabled={isBlocked} onClick={(e) => { e.preventDefault(); setHidden(); }}>
+        <Button type="button" variant="info" disabled={isBlocked} onClick={(e) => { e.preventDefault(); setHidden(); }}>
           {hidden && (<FaEyeSlash />)}
           {!hidden && (<FaEye />)}
         </Button>
@@ -60,7 +60,7 @@ const RangeForm = ({
             <Button
               className="btn float-right"
               onClick={incValue}
-              variant="success"
+              variant="primary"
               disabled={isBlocked || value + step > maxValue}
             >
               <FaPlus />

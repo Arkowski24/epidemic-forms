@@ -16,7 +16,7 @@ const Header = ({
       </Col>
       <Col xs="auto">
         <div className="pr-2">
-          <Button type="button" disabled={isBlocked} onClick={(e) => { e.preventDefault(); onClick(); }}>
+          <Button type="button" variant="info" disabled={isBlocked} onClick={(e) => { e.preventDefault(); onClick(); }}>
             {clicked && (<FaEyeSlash />)}
             {!clicked && (<FaEye />)}
           </Button>
