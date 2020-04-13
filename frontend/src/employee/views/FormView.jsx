@@ -8,7 +8,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 
 import authService from '../../common/services/AuthService';
-import formService from '../services/FormService';
+import formService from '../../common/services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
 import dataValidator from '../../common/helpers/DataValidator';
@@ -37,7 +37,7 @@ const FormView = () => {
   };
 
   const sendSignature = (signature) => {
-    formService.createSignature(form.id, signature)
+    formService.createSignatureEmployee(form.id, signature)
       .then(() => formStreamService.sendMove('CLOSED'));
   };
 

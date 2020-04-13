@@ -36,13 +36,26 @@ const deleteForm = (formId) => axios
     { headers: { Authorization: `Bearer ${token}` } },
   );
 
-const createSignature = (formId, signature) => axios
+const createSignatureEmployee = (formId, signature) => axios
   .post(
     `${baseUrl}/${formId}/signature/employee`,
     { signature },
     { headers: { Authorization: `Bearer ${token}` } },
   );
 
+const createSignaturePatient = (formId, signature) => axios
+  .post(
+    `${baseUrl}/${formId}/signature/patient`,
+    { signature },
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+
 export default {
-  setToken, getForms, getForm, createForm, deleteForm, createSignature,
+  setToken,
+  getForms,
+  getForm,
+  createForm,
+  deleteForm,
+  createSignatureEmployee,
+  createSignaturePatient,
 };

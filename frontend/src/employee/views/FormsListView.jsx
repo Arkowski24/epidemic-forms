@@ -9,7 +9,7 @@ import { FaTrash } from 'react-icons/fa';
 
 import authService from '../../common/services/AuthService';
 import employeeService from '../services/EmployeeService';
-import formService from '../services/FormService';
+import formService from '../../common/services/FormService';
 import schemaService from '../services/SchemaService';
 import deviceStreamService from '../services/DeviceStreamService';
 import formStreamService from '../../common/services/FormsStreamService';

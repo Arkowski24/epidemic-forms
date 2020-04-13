@@ -6,7 +6,7 @@ import {
 import { useHistory } from 'react-router-dom';
 
 import authService from '../../common/services/AuthService';
-import formService from '../services/FormService';
+import formService from '../../common/services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
 
@@ -39,7 +39,8 @@ const FormView = () => {
   };
 
   const sendSignature = (signature) => {
-    formService.createSignature(form.id, signature)
+    formService
+      .createSignaturePatient(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
 
@@ -56,7 +57,7 @@ const FormView = () => {
 
         await authService.mePatient(credentials.token);
         formStreamService.setCredentials(credentials);
-        formService.setCredentials(credentials);
+        formService.setCredentials(credentials.token);
         formStreamService.subscribe((f) => setForm(f));
       } catch (e) {
         localStorage.removeItem('credentials');
