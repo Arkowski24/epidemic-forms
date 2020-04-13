@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Form } from 'react-bootstrap';
 import InlineView from './common/InlineView';
+
 
 const InputForm = ({
   title,

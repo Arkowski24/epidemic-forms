@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Form } from 'react-bootstrap';
 import SingleInput from './common/SingleInput';
+
 
 const ChoiceForm = ({
   choices,

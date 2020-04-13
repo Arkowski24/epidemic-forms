@@ -3,6 +3,7 @@ import React from 'react';
 import SliderViewInline from './inline/SliderViewInline';
 import SliderViewRegular from './regular/SliderViewRegular';
 
+
 const SliderView = ({
   title, description,
   isInline,

@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Form, Col, Image, Row,
-} from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-
 import { useHistory } from 'react-router-dom';
+
+import {
+  Button, Form, Col, Row, Container,
+} from 'react-bootstrap';
 import ClickNHold from 'react-click-n-hold';
+import { LoadingView } from '../../common/views';
+import { HospitalIcon } from '../../common/public';
+
 import authService from '../../common/services/AuthService';
-import deviceStreamService from '../services/DeviceStreamService';
 import formStreamService from '../../common/services/FormsStreamService';
-import LoadingView from '../../common/views/utility/LoadingView';
-
-import hospitalLogo from '../../common/public/hospital_logo.png';
-
-const HospitalIcon = () => (
-  <Image src={hospitalLogo} style={{ height: '40px' }} alt="Logo of the hospital" fluid />
-);
+import deviceStreamService from '../services/DeviceStreamService';
 
 
 const LoginView = () => {
@@ -45,7 +40,7 @@ const LoginView = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const credentials = await authService.login(text);
+      const credentials = await authService.loginPatient(text);
       localStorage.setItem('credentials', JSON.stringify(credentials));
       history.push('/form');
     } catch (e) {
@@ -62,7 +57,7 @@ const LoginView = () => {
           onClickNHold={() => history.push('/device')}
         >
           <div className="w-100 m-1 p-1 border-bottom text-center">
-            <HospitalIcon />
+            <HospitalIcon height="40px" />
             <h4>{' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}</h4>
           </div>
         </ClickNHold>

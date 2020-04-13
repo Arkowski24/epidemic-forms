@@ -3,6 +3,7 @@ import React from 'react';
 import DerivedViewInline from './inline/DerivedViewInline';
 import DerivedViewRegular from './regular/DerivedViewRegular';
 
+
 const DerivedView = ({
   derivedType,
   titles, descriptions,

@@ -3,6 +3,7 @@ import React from 'react';
 import ChoiceViewInline from './inline/ChoiceViewInline';
 import ChoiceViewRegular from './regular/ChoiceViewRegular';
 
+
 const ChoiceView = ({
   title, description,
   isInline,

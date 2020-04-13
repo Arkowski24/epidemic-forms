@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Container, Dropdown, Form, Row, Table,
-} from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
+
+import {
+  Button, Container, Col, Dropdown, Form, Row, Table, Modal,
+} from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
+import { LoadingView } from '../../common/views';
 
 import authService from '../../common/services/AuthService';
-import employeeService from '../services/EmployeeService';
 import formService from '../../common/services/FormService';
-import schemaService from '../services/SchemaService';
-import deviceStreamService from '../services/DeviceStreamService';
 import formStreamService from '../../common/services/FormsStreamService';
+import deviceStreamService from '../services/DeviceStreamService';
+import employeeService from '../services/EmployeeService';
+import schemaService from '../services/SchemaService';
 
-import LoadingView from '../../common/views/utility/LoadingView';
 
 const Header = ({ setVisible, employee, handleLogout }) => {
   const history = useHistory();

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Container, Spinner } from 'react-bootstrap';
 import ClickNHold from 'react-click-n-hold';
+
 
 const LoadingView = ({
   message = 'Formularz zaraz się załaduje.',

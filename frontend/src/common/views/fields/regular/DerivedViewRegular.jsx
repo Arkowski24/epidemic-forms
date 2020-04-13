@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { Container, Form, Row } from 'react-bootstrap';
 
 import derivedHelper from '../../../helpers/DerivedHelper';
+
 
 const Header = ({ message }) => (
   <div className="m-2 p-1 border-bottom">

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Button, Col, Row,
 } from 'react-bootstrap';
@@ -6,6 +7,7 @@ import {
   FaMinus, FaPlus, FaEye, FaEyeSlash,
 } from 'react-icons/fa';
 import InlineView from './common/InlineView';
+
 
 const RangeForm = ({
   title,

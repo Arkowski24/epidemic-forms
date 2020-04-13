@@ -1,32 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
-  Button, Container, Image, Row, Spinner,
+  Button, Container, Row, Spinner,
 } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import {
+  ChoiceView,
+  DerivedView,
+  SimpleView,
+  SliderView,
+  TextView,
+  SignatureView,
+  LoadingView,
+} from '../../common/views';
+import { HospitalIcon } from '../../common/public';
+import EndView from './EndView';
 
 import authService from '../../common/services/AuthService';
 import formService from '../../common/services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
 import deviceStreamService from '../services/DeviceStreamService';
-
 import dataValidator from '../../common/helpers/DataValidator';
 
-import ChoiceView from '../../common/views/fields/ChoiceView';
-import TextView from '../../common/views/fields/TextView';
-import SimpleView from '../../common/views/fields/SimpleView';
-import LoadingView from '../../common/views/utility/LoadingView';
-import EndView from './EndView';
-import SliderView from '../../common/views/fields/SliderView';
-
-import SignatureView from '../../common/views/signature/SignatureView';
-import DerivedView from '../../common/views/fields/DerivedView';
-
-import hospitalLogo from '../../common/public/hospital_logo.png';
-
-const HospitalIcon = () => (
-  <Image src={hospitalLogo} style={{ height: '20px' }} alt="Logo of the hospital" fluid />
-);
 
 const FormView = () => {
   const [form, setForm] = useState(null);
@@ -57,7 +52,7 @@ const FormView = () => {
 
         await authService.mePatient(credentials.token);
         formStreamService.setCredentials(credentials);
-        formService.setCredentials(credentials.token);
+        formService.setToken(credentials.token);
         formStreamService.subscribe((f) => setForm(f));
       } catch (e) {
         localStorage.removeItem('credentials');
@@ -205,7 +200,7 @@ const FormView = () => {
     const header = (
       <Row>
         <div className="w-100 m-1 p-1 border-bottom text-center">
-          <HospitalIcon />
+          <HospitalIcon height="20px" />
           {' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}
         </div>
       </Row>

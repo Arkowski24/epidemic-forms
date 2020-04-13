@@ -1,27 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
 import {
-  Button, Col, Container, Modal, Spinner,
+  Button, Col, Container, Modal, Spinner, Row,
 } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row';
-import { useParams, useHistory } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
+import {
+  ChoiceView,
+  DerivedView,
+  SimpleView,
+  SliderView,
+  TextView,
+  SignatureView,
+  LoadingView,
+} from '../../common/views';
+import EndView from './EndView';
 
 import authService from '../../common/services/AuthService';
 import formService from '../../common/services/FormService';
 import formStreamService from '../../common/services/FormsStreamService';
-import deviceStreamService from '../services/DeviceStreamService';
 import dataValidator from '../../common/helpers/DataValidator';
-
-import ChoiceView from '../../common/views/fields/ChoiceView';
-import TextView from '../../common/views/fields/TextView';
-import SimpleView from '../../common/views/fields/SimpleView';
-import LoadingView from '../../common/views/utility/LoadingView';
-import EndView from './EndView';
-import SliderView from '../../common/views/fields/SliderView';
-
-import SignatureView from '../../common/views/signature/SignatureView';
-import DerivedView from '../../common/views/fields/DerivedView';
+import deviceStreamService from '../services/DeviceStreamService';
 
 
 const FormView = () => {

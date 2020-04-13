@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const Header = ({ message }) => (
   <div className="ml-2 mr-2 mb-1 border-bottom">
     <h4>{message}</h4>

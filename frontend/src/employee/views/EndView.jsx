@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+
+import { Container } from 'react-bootstrap';
+
 import formStreamService from '../../common/services/FormsStreamService';
+
 
 const EndView = () => {
   const history = useHistory();

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Container, Form, Row, Table,
-} from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 import { useHistory } from 'react-router-dom';
+
+import {
+  Button, Container, Form, Row, Table, Col, Modal,
+} from 'react-bootstrap';
 import { FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { LoadingView } from '../../common/views';
 
 import authService from '../../common/services/AuthService';
 import employeeService from '../services/EmployeeService';
 
-import LoadingView from '../../common/views/utility/LoadingView';
 
 const CreateEmployeeModal = ({
   createModalVisible, setCreateModalVisible,
@@ -274,7 +273,7 @@ const FormsListView = () => {
       const newToken = localStorage.getItem('token');
       if (!newToken) history.push('/employee/login');
 
-      authService.me(newToken)
+      authService.meEmployee(newToken)
         .then((employee) => {
           if (employee.role !== 'ADMIN') {
             history.push('/employee');

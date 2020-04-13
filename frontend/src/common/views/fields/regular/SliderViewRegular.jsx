@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Button, Col, Container, Row,
 } from 'react-bootstrap';
@@ -6,6 +7,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 import Slider from 'rc-slider';
 import SingleInputButton from './common/SingleInputButton';
 import 'rc-slider/assets/index.css';
+
 
 const RangeForm = ({
   minValue, maxValue, step,

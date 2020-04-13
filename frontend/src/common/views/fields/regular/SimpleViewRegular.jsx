@@ -1,6 +1,8 @@
 import React from 'react';
+
 import SingleInput from './common/SingleInput';
 import SimpleViewInline from '../inline/SimpleViewInline';
+
 
 const SimpleViewRegular = ({
   title, description,

@@ -3,6 +3,7 @@ import React from 'react';
 import TextViewInline from './inline/TextViewInline';
 import TextViewRegular from './regular/TextViewRegular';
 
+
 const TextView = ({
   title, description,
   isInline,

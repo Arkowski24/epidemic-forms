@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Form, Col, Row,
-} from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 
+import {
+  Button, Form, Col, Row, Container,
+} from 'react-bootstrap';
 import { FaArrowLeft, FaSignOutAlt } from 'react-icons/all';
+
 import authService from '../../common/services/AuthService';
+
 
 const LoginDeviceView = () => {
   const [username, setUsername] = useState('');

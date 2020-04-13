@@ -1,10 +1,12 @@
 import React from 'react';
+
 import {
   Col, Container, Form, Row,
 } from 'react-bootstrap';
 
 import dataValidator from '../../../helpers/DataValidator';
 import derivedHelper from '../../../helpers/DerivedHelper';
+
 
 const InputForm = ({
   title, text, setText, isInvalid,

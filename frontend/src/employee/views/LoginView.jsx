@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Col } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 
+import {
+  Button, Form, Col, Container,
+} from 'react-bootstrap';
+
 import authService from '../../common/services/AuthService';
+
 
 const LoginView = () => {
   const [username, setUsername] = useState('');
