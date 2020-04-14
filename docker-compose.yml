@@ -28,6 +28,8 @@ services:
       - "8080"
     networks:
       - internal
+    volumes:
+      - ./forms:/tmp/forms
     depends_on:
       - database
 
