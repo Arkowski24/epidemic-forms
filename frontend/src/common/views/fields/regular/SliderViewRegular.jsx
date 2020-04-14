@@ -18,7 +18,7 @@ const RangeForm = ({
   const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
 
   return (
-    <Container>
+    <div className="w-100 pl-3 pr-3">
       <Row>
         <Col>
           <div className="w-25">
@@ -66,7 +66,7 @@ const RangeForm = ({
           />
         </div>
       </Row>
-    </Container>
+    </div>
   );
 };
 

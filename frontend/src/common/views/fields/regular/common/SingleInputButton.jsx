@@ -9,7 +9,7 @@ const Header = ({
   clicked, onClick,
   isBlocked,
 }) => (
-  <div className="ml-2 mr-2 mb-1 pb-1 border-bottom">
+  <div className="pl-2 pr-2 mb-1 pb-1 border-bottom">
     <Row>
       <Col>
         <h4>{message}</h4>
