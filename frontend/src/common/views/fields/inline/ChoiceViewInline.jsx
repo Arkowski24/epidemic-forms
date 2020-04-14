@@ -30,7 +30,7 @@ const ChoiceFormTwoValues = ({
           </div>
         </Col>
         <Col sm="3">
-          <div className="w-100 pt-1 pb-1">
+          <div className="w-100 pb-1">
             <ButtonGroup bsPrefix="w-100 btn-group btn-group-justified">
               <Button
                 type="button"
