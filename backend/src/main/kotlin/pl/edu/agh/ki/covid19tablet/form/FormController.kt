@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
@@ -58,6 +59,8 @@ class FormController(
             ResponseEntity(form, HttpStatus.OK)
         } catch (ex: SchemaNotFoundException) {
             ResponseEntity(HttpStatus.BAD_REQUEST)
+        } catch (ex: DeviceNotFoundException) {
+            ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
     @PostMapping("{formId}/signature/patient")
@@ -80,10 +83,11 @@ class FormController(
     @PreAuthorize("hasAuthority('$FORM_MODIFY')")
     fun createEmployeeSign(
         @PathVariable formId: FormId,
-        @Valid @RequestBody request: CreateSignatureRequest
+        @Valid @RequestBody request: CreateSignatureRequest,
+        @AuthenticationPrincipal employeeDetails: EmployeeDetails
     ): ResponseEntity<Nothing> =
         try {
-            formService.createEmployeeSignature(formId, request)
+            formService.createEmployeeSignature(formId, request, employeeDetails)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)

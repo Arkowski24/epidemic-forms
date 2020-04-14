@@ -3,6 +3,4 @@ spring.datasource:
   username: postgres
   password: mysecretpassword
 
-spring.jpa.hibernate.ddl-auto: create
-
 app.security.tokenSecretKey: MjM0Njc4OTY3ODkyMzQ2Nzg5MjM0MjM0Njc4OTIzNDY3ODkyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQ=

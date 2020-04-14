@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.form
 
+import pl.edu.agh.ki.covid19tablet.device.Device
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
 import pl.edu.agh.ki.covid19tablet.form.signature.Signature
 import pl.edu.agh.ki.covid19tablet.schema.Schema
@@ -40,6 +41,11 @@ data class Form(
     val createdBy: Employee,
     val createdAt: Instant = Instant.now(),
 
+    @ManyToOne
+    val device: Device? = null,
+    @ManyToOne
+    val signedBy: Employee? = null,
+
     @OneToOne(cascade = [CascadeType.ALL])
     val patientSignature: Signature? = null,
     @OneToOne(cascade = [CascadeType.ALL])
@@ -54,5 +60,6 @@ fun Form.toDTO() = FormDTO(
     state = state.toDTO(),
     patient = patient.toDTO(),
     createdBy = createdBy.toDTO(),
-    createdAt = createdAt
+    createdAt = createdAt,
+    device = device?.toDTO()
 )

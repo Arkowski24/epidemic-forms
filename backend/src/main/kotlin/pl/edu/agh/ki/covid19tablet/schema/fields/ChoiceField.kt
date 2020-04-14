@@ -24,6 +24,7 @@ data class ChoiceField(
     @ElementCollection
     val choices: List<String> = listOf(),
     val multiChoice: Boolean = false,
+    val unit: String = "",
 
     val required: Boolean = false
 )
@@ -38,6 +39,7 @@ fun ChoiceField.toDTO() =
         inline = inline,
         choices = choices,
         multiChoice = multiChoice,
+        unit = unit,
         required = required
     )
 

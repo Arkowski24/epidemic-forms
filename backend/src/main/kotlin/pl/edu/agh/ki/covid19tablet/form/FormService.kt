@@ -1,9 +1,11 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import org.springframework.stereotype.Service
+import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
+import pl.edu.agh.ki.covid19tablet.device.Device
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
@@ -29,7 +31,7 @@ interface FormService {
     fun deleteForm(formId: FormId)
 
     fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String)
-    fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest)
+    fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest, employeeDetails: EmployeeDetails)
 }
 
 @Service
@@ -63,6 +65,13 @@ class FormServiceImpl(
             .findById(employeeDetails.employee.id!!)
             .get()
 
+        val device = request.deviceId
+            ?.let {
+                employeeRepository
+                    .findById(it)
+                    .orElseThrow { DeviceNotFoundException() } as Device
+            }
+
         val patient = Patient()
         val form = formRepository.save(
             Form(
@@ -70,6 +79,7 @@ class FormServiceImpl(
                 formName = request.formName,
                 patient = patient,
                 createdBy = employeeDetails.employee,
+                device = device,
                 state = schema.fields.buildInitialState()
             )
         )
@@ -98,7 +108,11 @@ class FormServiceImpl(
         formRepository.delete(form)
     }
 
-    override fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String) {
+    override fun createPatientSignature(
+        formId: FormId,
+        request: CreateSignatureRequest,
+        token: String
+    ) {
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
@@ -116,7 +130,11 @@ class FormServiceImpl(
         formRepository.save(newForm)
     }
 
-    override fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest) {
+    override fun createEmployeeSignature(
+        formId: FormId,
+        request: CreateSignatureRequest,
+        employeeDetails: EmployeeDetails
+    ) {
         val signature = signatureRepository.save(
             Signature(value = serializeImage(request.signature))
         )
@@ -124,7 +142,10 @@ class FormServiceImpl(
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
-            .copy(employeeSignature = signature)
+            .copy(
+                signedBy = employeeDetails.employee,
+                employeeSignature = signature
+            )
 
         pdfGeneratorService.generatePDF(form)
         formRepository.save(form)

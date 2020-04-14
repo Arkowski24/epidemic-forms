@@ -29,6 +29,9 @@ data class DerivedField(
     val inline: Boolean = true,
 
     @ElementCollection
+    val units: List<String> = listOf(),
+
+    @ElementCollection
     val required: List<Boolean> = titles.map { false }
 )
 
@@ -41,6 +44,7 @@ fun DerivedField.toDTO() =
         titles = titles,
         descriptions = descriptions,
         inline = inline,
+        units = units,
         required = required
     )
 

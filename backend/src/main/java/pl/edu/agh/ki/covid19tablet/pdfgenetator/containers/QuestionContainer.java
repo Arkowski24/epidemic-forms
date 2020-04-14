@@ -87,23 +87,25 @@ public class QuestionContainer {
 
             int fieldNumber = choiceField.getFieldNumber();
             String title = choiceField.getTitle();
-            String answer = "";
+            StringBuilder answer = new StringBuilder();
 
+            boolean isSingleChoice = !choiceField.getMultiChoice();
             List<Boolean> fieldAnswers = choiceFieldState.getValue();
+            List<String> choices = choiceField.getChoices();
             for (int j = 0; j < fieldAnswers.size(); j++) {
                 if (fieldAnswers.get(j)) {
-                    answer = choiceFieldState.getField().getChoices().get(j);
-                    break;
+                    answer.append(choices.get(j)).append(" ");
+                    if (isSingleChoice) break;
                 }
             }
+            if (answer.length() > 0) answer.deleteCharAt(answer.length() - 1);
 
-            boolean isHighlighted = isOutOfNorm(title, answer);
-
-            if (!answer.equals("B.D."))
-                answer = addUnits(title, answer);
+            boolean isHighlighted = isOutOfNorm(title, answer.toString());
+            if (!answer.toString().equals("B.D."))
+                answer = new StringBuilder(addUnits(title, answer.toString()));
 
             if (!title.startsWith("Cel wizy"))
-                extractedQuestions.add(new Question(fieldNumber, title, answer, isHighlighted, true));
+                extractedQuestions.add(new Question(fieldNumber, title, answer.toString(), isHighlighted, true));
         }
 
         return extractedQuestions;

@@ -3,6 +3,4 @@ spring.datasource:
   username: ${DB_USERNAME}
   password: ${DB_PASSWORD}
 
-spring.jpa.hibernate.ddl-auto: update
-
 app.security.tokenSecretKey: ${TOKEN_SECRET_KEY}

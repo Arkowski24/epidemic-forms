@@ -2,6 +2,7 @@ package pl.edu.agh.ki.covid19tablet.form.signature
 
 import org.hibernate.annotations.Type
 import pl.edu.agh.ki.covid19tablet.form.signature.dto.SignatureDTO
+import java.time.Instant
 import java.util.Base64
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -15,6 +16,7 @@ data class Signature(
     @Id
     @GeneratedValue
     val id: SignatureId? = null,
+    val createdAt: Instant = Instant.now(),
 
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
