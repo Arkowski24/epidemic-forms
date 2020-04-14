@@ -31,7 +31,11 @@ const LoginView = () => {
     const rawFormCredentials = localStorage.getItem('form-credentials');
     if (rawFormCredentials) { history.push('/form'); }
 
-    if (staffCredentials && staffCredentials.employee.role !== 'DEVICE') { history.push(/employee/); }
+    if (!staffCredentials) return;
+    if (staffCredentials.employee.role !== 'DEVICE') { history.push(/employee/); return; }
+
+    authService.meDevice(staffCredentials.token)
+      .catch(() => { localStorage.removeItem('staff-credentials'); history.push('/'); });
   }, [history, staffCredentials]);
 
   useEffect(() => {
