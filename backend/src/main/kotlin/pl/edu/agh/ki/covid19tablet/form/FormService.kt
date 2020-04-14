@@ -31,7 +31,7 @@ interface FormService {
     fun deleteForm(formId: FormId)
 
     fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String)
-    fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest)
+    fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest, employeeDetails: EmployeeDetails)
 }
 
 @Service
@@ -108,7 +108,11 @@ class FormServiceImpl(
         formRepository.delete(form)
     }
 
-    override fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String) {
+    override fun createPatientSignature(
+        formId: FormId,
+        request: CreateSignatureRequest,
+        token: String
+    ) {
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
@@ -126,7 +130,11 @@ class FormServiceImpl(
         formRepository.save(newForm)
     }
 
-    override fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest) {
+    override fun createEmployeeSignature(
+        formId: FormId,
+        request: CreateSignatureRequest,
+        employeeDetails: EmployeeDetails
+    ) {
         val signature = signatureRepository.save(
             Signature(value = serializeImage(request.signature))
         )
@@ -134,7 +142,10 @@ class FormServiceImpl(
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
-            .copy(employeeSignature = signature)
+            .copy(
+                signedBy = employeeDetails.employee,
+                employeeSignature = signature
+            )
 
         pdfGeneratorService.generatePDF(form)
         formRepository.save(form)

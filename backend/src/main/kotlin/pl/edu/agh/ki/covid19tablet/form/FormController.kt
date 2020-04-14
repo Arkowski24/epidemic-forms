@@ -83,10 +83,11 @@ class FormController(
     @PreAuthorize("hasAuthority('$FORM_MODIFY')")
     fun createEmployeeSign(
         @PathVariable formId: FormId,
-        @Valid @RequestBody request: CreateSignatureRequest
+        @Valid @RequestBody request: CreateSignatureRequest,
+        @AuthenticationPrincipal employeeDetails: EmployeeDetails
     ): ResponseEntity<Nothing> =
         try {
-            formService.createEmployeeSignature(formId, request)
+            formService.createEmployeeSignature(formId, request, employeeDetails)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
