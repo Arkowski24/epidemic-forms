@@ -24,9 +24,10 @@ const SubmitButton = ({ sendNewSignature, isBlocked }) => (
   <Row>
     <div className="w-100 m-1 p-1 border-top">
       <Button
-        className="w-100"
         variant="success"
         type="submit"
+        size="lg"
+        block
         onClick={(e) => { e.preventDefault(); sendNewSignature(); }}
         disabled={isBlocked}
       >

@@ -257,9 +257,10 @@ const FormView = () => {
     <Row>
       <div className="w-100 m-2 p-1 border-top">
         <Button
-          className="w-100"
           variant="success"
           type="submit"
+          size="lg"
+          block
           onClick={(e) => { e.preventDefault(); sendFormResponse(); }}
           disabled={form.status !== 'FILLED'}
         >
