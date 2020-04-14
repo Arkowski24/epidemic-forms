@@ -12,27 +12,33 @@ const LoginView = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+
   const history = useHistory();
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      const newToken = localStorage.getItem('token');
-      if (!newToken) return;
 
-      authService.meEmployee(newToken)
-        .then(() => history.push('/employee/'))
-        .catch(() => { localStorage.removeItem('token'); });
+  useEffect(() => {
+    const fetchCredentials = () => {
+      const rawCredentials = localStorage.getItem('staff-credentials');
+      if (!rawCredentials) return;
+
+      const credentials = JSON.parse(rawCredentials);
+      authService.meEmployee(credentials.token)
+        .then(() => (credentials.employee.role === 'DEVICE' ? history.push('/') : history.push('/employee/')))
+        .catch(() => { localStorage.removeItem('staff-credentials'); });
     };
 
-    fetchToken();
+    fetchCredentials();
   },
   [history]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const credentials = await authService.loginEmployee(username, password);
-      localStorage.setItem('token', credentials.token);
+      const { token } = await authService.loginEmployee(username, password);
+      const employee = await authService.meEmployee(token);
+      const credentials = { employee, token };
+
+      localStorage.setItem('staff-credentials', JSON.stringify(credentials));
       history.push('/employee/');
     } catch (e) {
       setError(true);

@@ -26,10 +26,53 @@ import deviceStreamService from '../services/DeviceStreamService';
 const FormView = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [form, setForm] = useState(null);
-  const [token, setToken] = useState(null);
+
   const formId = Number(useParams().formId);
   const history = useHistory();
   const signatureViewRef = useRef();
+
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+
+
+  useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
+
+  useEffect(() => {
+    const setupServices = () => {
+      formService.setToken(staffCredentials.token);
+      formStreamService.setFormCredentials({ token: staffCredentials.token, formId });
+      const setNewForm = (newForm) => setForm(newForm);
+      formStreamService.subscribe(setNewForm);
+    };
+
+    const fetchTokenAndData = () => {
+      if (!staffCredentials) { history.push('/employee/login'); return; }
+      if (staffCredentials.employee.role === 'DEVICE') { history.push('/'); return; }
+
+      authService
+        .meEmployee(staffCredentials.token)
+        .catch(() => { localStorage.removeItem('staff-credentials'); history.push('/employee/login'); })
+        .then(() => formService.getForm(formId).catch(() => { history.push('/employee/'); }))
+        .then(() => setupServices());
+    };
+
+    if (!form) { fetchTokenAndData(); }
+  }, [history, staffCredentials, formId, form]);
+
+  useEffect(() => {
+    const scrollToSigned = () => {
+      if (signatureViewRef.current && form.status === 'SIGNED') {
+        window.scrollTo({ behavior: 'smooth', top: signatureViewRef.current.offsetTop });
+      }
+    };
+    scrollToSigned();
+  }, [form]);
+
+  if (form === null) { return (<LoadingView />); }
+  if (form.status === 'CLOSED') { return (<EndView history={history} />); }
+
 
   const sendFormResponse = () => {
     formStreamService.sendMove('ACCEPTED');
@@ -39,54 +82,6 @@ const FormView = () => {
     formService.createSignatureEmployee(form.id, signature)
       .then(() => formStreamService.sendMove('CLOSED'));
   };
-
-  useEffect(() => {
-    deviceStreamService.subscribe(history);
-  }, [history]);
-
-  useEffect(() => {
-    if (token !== null) {
-      formService.getForm(formId)
-        .catch(() => history.push('/employee/'));
-    }
-  }, [token, history, formId]);
-
-  useEffect(
-    () => {
-      if (signatureViewRef.current && form.status === 'SIGNED') {
-        window.scrollTo({
-          behavior: 'smooth',
-          top: signatureViewRef.current.offsetTop,
-        });
-      }
-    },
-    [form],
-  );
-
-  useEffect(() => {
-    const fetchTokenAndData = async () => {
-      if (token !== null) return;
-      const newToken = localStorage.getItem('token');
-      if (!newToken) history.push('/employee/login');
-
-      try {
-        await authService.meEmployee(newToken);
-
-        formService.setToken(newToken);
-        formStreamService.setCredentials({ token: newToken, formId });
-        const setNewForm = (newForm) => setForm(newForm);
-        formStreamService.subscribe(setNewForm);
-        setToken(newToken);
-      } catch (e) {
-        localStorage.removeItem('token');
-        history.push('/employee/login');
-      }
-    };
-    fetchTokenAndData();
-  }, [formId, token, history]);
-
-  if (form === null || token === null) { return (<LoadingView />); }
-  if (form.status === 'CLOSED') { return (<EndView history={history} />); }
 
   const isValidField = (fieldSchema, fieldIndex) => {
     if (fieldSchema.fieldType === 'HIDDEN') return true;

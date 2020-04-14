@@ -8,15 +8,21 @@ const webSocket = new Stomp.client(url);
 webSocket.debug = () => {};
 webSocket.reconnect_delay = 1000;
 
-let token = null;
 
 const subscribe = async (history) => {
   if (webSocket.connected) return;
 
-  token = localStorage.getItem('token');
-  if (!token) { return; }
-  try { await authService.meEmployee(token); } catch (e) { localStorage.removeItem('token'); history.push('/employee/login'); return; }
-  webSocket.connect({ Authorization: `Bearer ${token}` }, () => { });
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+
+  if (!staffCredentials || staffCredentials.employee.role === 'DEVICE') { return; }
+  try {
+    await authService.meEmployee(staffCredentials.token);
+    webSocket.connect({ Authorization: `Bearer ${staffCredentials.token}` }, () => { });
+  } catch (e) {
+    localStorage.removeItem('staff-credentials');
+    history.push('/employee/login');
+  }
 };
 
 const sendNewForm = (deviceId, pinCode) => {

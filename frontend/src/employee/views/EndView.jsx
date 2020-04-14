@@ -8,6 +8,7 @@ import formStreamService from '../../common/services/FormsStreamService';
 
 const EndView = () => {
   const history = useHistory();
+
   useEffect(() => {
     formStreamService.disconnect();
     setTimeout(() => { history.push('/employee/'); }, 2000);

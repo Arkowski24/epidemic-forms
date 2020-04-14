@@ -57,18 +57,11 @@ const Header = ({ setVisible, employee, handleLogout }) => {
   );
 };
 
-const FormsTable = ({ forms, setForms }) => {
+const FormsTable = ({ forms, deleteForm }) => {
   const history = useHistory();
 
   const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Kod jednorazowy', '']
     .map((h) => <th key={h}>{h}</th>);
-
-  const deleteForm = async (formId) => {
-    await formService.deleteForm(formId);
-    await deviceStreamService.sendCancelForm(formId);
-    const newForms = forms.filter((f) => f.id !== formId);
-    setForms(newForms);
-  };
 
   const moveToForm = (formId) => {
     history.push(`/employee/forms/${formId}`);
@@ -190,28 +183,14 @@ const NewFormModal = ({
 };
 
 const FormsListView = () => {
-  const [credentials, setCredentials] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [forms, setForms] = useState([]);
-  const [schemas, setSchemas] = useState([]);
-  const [devices, setDevices] = useState([]);
+  const [formsData, setFormsData] = useState(null);
+
   const history = useHistory();
 
-  const createForm = async (schemaId, formName, deviceId) => {
-    const form = await formService.createForm(schemaId, formName);
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
 
-    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
-    const newForms = forms.concat(form);
-    setForms(newForms);
-    history.push(`/employee/forms/${form.id}`);
-  };
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem('token');
-    history.push('/employee/login');
-    setCredentials(null);
-  };
 
   useEffect(() => {
     deviceStreamService.subscribe(history);
@@ -222,56 +201,80 @@ const FormsListView = () => {
   }, []);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      if (credentials !== null) return;
-      const newToken = localStorage.getItem('token');
-      if (!newToken) history.push('/employee/login');
-
-      authService.meEmployee(newToken)
-        .then((employee) => {
-          formService.setToken(newToken);
-          schemaService.setToken(newToken);
-          employeeService.setToken(newToken);
-          setCredentials({ employee, token: newToken });
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-          history.push('/employee/login');
-        });
+    const setupServices = () => {
+      const newToken = staffCredentials.token;
+      formService.setToken(newToken);
+      schemaService.setToken(newToken);
+      employeeService.setToken(newToken);
     };
 
     const fetchData = async () => {
-      if (credentials === null) return;
-      const formsResponse = await formService.getForms();
-      setForms(formsResponse);
-
-      const schemaResponse = await schemaService.getSchemas();
-      setSchemas(schemaResponse);
-
-
-      const devicesResponse = await employeeService.getEmployees();
-      setDevices(devicesResponse.filter((e) => e.role === 'DEVICE'));
+      Promise.all([
+        formService.getForms(),
+        schemaService.getSchemas(),
+        employeeService.getEmployees(),
+      ]).then(
+        (res) => setFormsData({
+          forms: res[0],
+          schemas: res[1],
+          devices: res[2].filter((e) => e.role === 'DEVICE'),
+        }),
+      );
     };
 
-    fetchToken()
-      .then(() => fetchData());
-  }, [history, credentials]);
+    const fetchTokenAndData = () => {
+      if (!staffCredentials) { history.push('/employee/login'); return; }
+      if (staffCredentials.employee.role === 'DEVICE') { history.push('/'); return; }
 
-  if (credentials === null) { return (<LoadingView />); }
+      authService.meEmployee(staffCredentials.token)
+        .catch(() => {
+          localStorage.removeItem('staff-credentials');
+          history.push('/employee/login');
+        })
+        .then(() => setupServices())
+        .then(() => fetchData());
+    };
+
+    if (!formsData) { fetchTokenAndData(); }
+  }, [history, staffCredentials, formsData]);
+
+  if (formsData === null) { return (<LoadingView />); }
+
+  const createForm = async (schemaId, formName, deviceId) => {
+    const form = await formService.createForm(schemaId, formName);
+
+    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
+    const newForms = formsData.forms.concat(form);
+    setFormsData({ ...formsData, forms: newForms });
+    history.push(`/employee/forms/${form.id}`);
+  };
+
+  const deleteForm = async (formId) => {
+    await formService.deleteForm(formId);
+    await deviceStreamService.sendCancelForm(formId);
+    const newForms = formsData.forms.filter((f) => f.id !== formId);
+    setFormsData({ ...formsData, forms: newForms });
+  };
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('staff-credentials');
+    history.push('/employee/login');
+  };
 
   return (
     <Container>
       <Header
         setVisible={setModalVisible}
-        employee={credentials.employee}
+        employee={staffCredentials.employee}
         handleLogout={handleLogout}
       />
-      <FormsTable forms={forms} setForms={setForms} />
+      <FormsTable forms={formsData.forms} deleteForm={deleteForm} />
       <NewFormModal
         visible={modalVisible}
         setVisible={setModalVisible}
-        schemas={schemas}
-        devices={devices}
+        schemas={formsData.schemas}
+        devices={formsData.devices}
         createForm={createForm}
       />
     </Container>

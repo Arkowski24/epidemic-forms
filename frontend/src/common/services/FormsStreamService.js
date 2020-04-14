@@ -12,7 +12,7 @@ let credentials = null;
 let internalForms = null;
 let timeouts = null;
 
-const setCredentials = (newCredentials) => {
+const setFormCredentials = (newCredentials) => {
   credentials = newCredentials;
 };
 
@@ -134,5 +134,5 @@ const sendMove = (newStatus) => {
 };
 
 export default {
-  setCredentials, subscribe, disconnect, sendInput, sendMove,
+  setFormCredentials, subscribe, disconnect, sendInput, sendMove,
 };

@@ -10,7 +10,6 @@ import { LoadingView } from '../../common/views';
 import authService from '../../common/services/AuthService';
 import employeeService from '../services/EmployeeService';
 
-
 const CreateEmployeeModal = ({
   createModalVisible, setCreateModalVisible,
   createEmployee,
@@ -249,9 +248,42 @@ const EmployeeTable = ({
 };
 
 const FormsListView = () => {
-  const [credentials, setCredentials] = useState(null);
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState(null);
+
   const history = useHistory();
+
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+
+
+  useEffect(() => {
+    const setupServices = () => {
+      const newToken = staffCredentials.token;
+      employeeService.setToken(newToken);
+    };
+
+    const fetchData = async () => {
+      const response = await employeeService.getEmployees();
+      setEmployees(response);
+    };
+
+    const fetchTokenAndData = () => {
+      if (!staffCredentials) { history.push('/employee/login'); return; }
+      if (staffCredentials.employee.role !== 'ADMIN') { history.push('/employee/'); return; }
+
+      authService.meEmployee(staffCredentials.token)
+        .catch(() => {
+          localStorage.removeItem('staff-credentials');
+          history.push('/employee/login');
+        })
+        .then(() => setupServices())
+        .then(() => fetchData());
+    };
+
+    if (!employees) { fetchTokenAndData(); }
+  }, [history, staffCredentials, employees]);
+
+  if (employees === null) { return (<LoadingView />); }
 
   const createEmployee = (username, fullName, password, role) => {
     employeeService
@@ -267,44 +299,11 @@ const FormsListView = () => {
       .then((e) => setEmployees(e));
   };
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      if (credentials !== null) return;
-      const newToken = localStorage.getItem('token');
-      if (!newToken) history.push('/employee/login');
-
-      authService.meEmployee(newToken)
-        .then((employee) => {
-          if (employee.role !== 'ADMIN') {
-            history.push('/employee');
-            return;
-          }
-          employeeService.setToken(newToken);
-          setCredentials({ employee, token: newToken });
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-          history.push('/employee/login');
-        });
-    };
-
-    const fetchData = async () => {
-      if (credentials === null) return;
-      const response = await employeeService.getEmployees();
-      setEmployees(response);
-    };
-
-    fetchToken()
-      .then(() => fetchData());
-  }, [history, credentials]);
-
-  if (credentials === null) { return (<LoadingView />); }
-
   return (
     <Container>
       <Header createEmployee={createEmployee} />
       <EmployeeTable
-        currentUser={credentials.employee}
+        currentUser={staffCredentials.employee}
         employees={employees}
         deleteEmployee={deleteEmployee}
       />

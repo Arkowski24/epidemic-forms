@@ -51,7 +51,7 @@ const FormView = () => {
         const credentials = JSON.parse(rawCredentials);
 
         await authService.mePatient(credentials.token);
-        formStreamService.setCredentials(credentials);
+        formStreamService.setFormCredentials(credentials);
         formService.setToken(credentials.token);
         formStreamService.subscribe((f) => setForm(f));
       } catch (e) {
