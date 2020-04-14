@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button,
+  Button, ButtonGroup,
   Col,
   Container, Form, Row,
 } from 'react-bootstrap';
@@ -21,24 +21,6 @@ const ChoiceFormTwoValues = ({
     setInput(newInput);
   };
 
-  const firstInteraction = !input[0] && !input[1];
-  const getFieldValue = () => {
-    if (firstInteraction) return 'B.D.';
-    return input[0] ? choices[0] : choices[1];
-  };
-  const getButtonVariant = () => {
-    if (firstInteraction) return 'light';
-    return input[0] ? 'primary' : 'secondary';
-  };
-
-
-  const blockedField = (
-    <div className="w-100">
-      <Button disabled className="w-100 border" variant={getButtonVariant()}>{getFieldValue()}</Button>
-    </div>
-  );
-
-  const checked = input[0];
   return (
     <div className="mt-1 ml-1 mr-1">
       <Row>
@@ -48,27 +30,27 @@ const ChoiceFormTwoValues = ({
           </div>
         </Col>
         <Col sm="3">
-          <div className="pb-1">
-            {isBlocked && blockedField}
-            {!isBlocked && firstInteraction && (
-              <BootstrapSwitchButton
-                checked={checked}
-                onlabel={choices[0]}
-                offlabel="Kliknij"
-                style="w-100 float-right"
-                onChange={(c) => { setChecked(c); }}
-              />
-            )}
-            {!isBlocked && !firstInteraction && (
-              <BootstrapSwitchButton
-                checked={checked}
-                onlabel={choices[0]}
-                offlabel={choices[1]}
-                style="w-100 float-right"
-                offstyle="secondary"
-                onChange={(c) => { setChecked(c); }}
-              />
-            )}
+          <div className="w-100 pt-1 pb-1">
+            <ButtonGroup bsPrefix="w-100 btn-group btn-group-justified">
+              <Button
+                type="button"
+                size="lg"
+                variant={input[0] ? 'primary' : 'outline-secondary'}
+                onClick={(e) => { e.preventDefault(); setChecked(true); }}
+                disabled={isBlocked}
+              >
+                {choices[0]}
+              </Button>
+              <Button
+                type="button"
+                size="lg"
+                variant={input[1] ? 'primary' : 'outline-secondary'}
+                onClick={(e) => { e.preventDefault(); setChecked(false); }}
+                disabled={isBlocked}
+              >
+                {choices[1]}
+              </Button>
+            </ButtonGroup>
           </div>
         </Col>
       </Row>
