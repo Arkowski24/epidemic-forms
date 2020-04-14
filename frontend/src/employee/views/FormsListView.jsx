@@ -111,8 +111,8 @@ const NewFormModal = ({
   createForm,
 }) => {
   const [formName, setFormName] = useState('');
-  const [schemaId, setSchemaId] = useState('');
-  const [deviceId, setDeviceId] = useState('');
+  const [schemaId, setSchemaId] = useState(null);
+  const [deviceId, setDeviceId] = useState(null);
 
   const handleClose = () => setVisible(false);
   const schemaOptions = schemas.map((s) => <option value={s.id} key={s.id}>{s.name}</option>);
@@ -121,13 +121,18 @@ const NewFormModal = ({
   const createNewForm = (event) => {
     event.preventDefault();
     let formSchemaId = schemaId;
+    let formDeviceId = deviceId;
 
-    if (formSchemaId === '') {
+    if (!formSchemaId) {
       if (schemas.length > 0) formSchemaId = schemas[0].id;
       else return;
     }
+    if (!formDeviceId) {
+      if (devices.length > 0) formDeviceId = devices[0].id;
+      else return;
+    }
 
-    createForm(Number(formSchemaId), formName, Number(deviceId));
+    createForm(Number(formSchemaId), formName, Number(formDeviceId));
     handleClose();
   };
 

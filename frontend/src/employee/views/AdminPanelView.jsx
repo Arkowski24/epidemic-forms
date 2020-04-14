@@ -149,11 +149,11 @@ const DeleteEmployeeModal = ({
 }) => {
   if (!selectedEmployee) return null;
   const handleClosedCase = (e) => {
-    e.preventDefault();
+    if (e) { e.preventDefault(); }
     setDeleteModalVisible(false);
   };
   const handleConfirmedCase = (e) => {
-    e.preventDefault();
+    if (e) { e.preventDefault(); }
     deleteEmployee(selectedEmployee.id);
     setDeleteModalVisible(false);
   };

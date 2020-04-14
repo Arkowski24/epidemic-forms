@@ -28,13 +28,17 @@ const subscribe = async (history) => {
   const handleRequest = (message) => {
     const request = JSON.parse(message.body);
     const rawCredentials = localStorage.getItem('form-credentials');
+
     if (request.requestType === 'FORM_NEW') {
       if (rawCredentials) return;
-      setForm(request.pinCode);
+
+      const deviceId = staffCredentials.employee.id;
+      if (request.deviceId === deviceId) { setForm(request.pinCode); }
     } else if (request.requestType === 'FORM_CANCEL') {
       if (!rawCredentials) return;
+
       const credentials = JSON.parse(rawCredentials);
-      if (request.formId === credentials.formId) cancelForm();
+      if (request.formId === credentials.formId) { cancelForm(); }
     }
   };
 
