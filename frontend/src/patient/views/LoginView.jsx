@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import {
   Button, Form, Col, Row, Container,
 } from 'react-bootstrap';
-import ClickNHold from 'react-click-n-hold';
 import { LoadingView } from '../../common/views';
 import { HospitalIcon } from '../../common/public';
 
@@ -14,6 +13,7 @@ import deviceStreamService from '../services/DeviceStreamService';
 
 
 const LoginView = () => {
+  const [clicks, setClicks] = useState(0);
   const [patientToken, setPatientToken] = useState('');
   const [error, setError] = useState(false);
 
@@ -57,15 +57,16 @@ const LoginView = () => {
   const header = (
     <Row>
       <Col className="m-0">
-        <ClickNHold
-          time={2}
-          onClickNHold={() => history.push('/device')}
+        <div
+          className="w-100 m-1 p-1 border-bottom text-center"
+          onClick={(e) => {
+            e.preventDefault();
+            if (clicks > 1) { setClicks(0); history.push('/device'); } else { setClicks(clicks + 1); }
+          }}
         >
-          <div className="w-100 m-1 p-1 border-bottom text-center">
-            <HospitalIcon height="40px" />
-            <h4>{' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}</h4>
-          </div>
-        </ClickNHold>
+          <HospitalIcon height="40px" />
+          <h4>{' Krakowski Szpital Specjalistyczny im. Jana Pawła II'}</h4>
+        </div>
       </Col>
     </Row>
   );
