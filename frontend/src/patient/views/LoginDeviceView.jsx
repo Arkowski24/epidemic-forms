@@ -13,33 +13,34 @@ const LoginDeviceView = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
-  const [user, setUser] = useState('');
 
   const history = useHistory();
-  const isLoggedIn = localStorage.getItem('device-token') !== null;
+
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+  const isLoggedIn = staffCredentials !== null;
+
 
   useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        const token = localStorage.getItem('device-token');
-        const response = await authService.meDevice(token);
-        setUser(response.fullName);
-      } catch (e) {
-        localStorage.removeItem('device-token');
-      }
+    const fetchCredentials = () => {
+      authService.meEmployee(staffCredentials.token)
+        .then(() => { if (staffCredentials.employee.role !== 'DEVICE') history.push('/employee/'); })
+        .catch(() => { localStorage.removeItem('staff-credentials'); });
     };
 
-    if (isLoggedIn) {
-      fetchInfo();
-    }
-  }, [isLoggedIn, history]);
+    if (isLoggedIn) { fetchCredentials(); }
+  },
+  [history, staffCredentials, isLoggedIn]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const credentials = await authService.loginDevice(username, password);
-      localStorage.setItem('device-token', credentials.token);
-      history.push('/');
+      const { token } = await authService.loginEmployee(username, password);
+      const employee = await authService.meEmployee(token);
+      const credentials = { employee, token };
+
+      localStorage.setItem('staff-credentials', JSON.stringify(credentials));
+      history.push('/device');
     } catch (e) {
       setError(true);
       setTimeout(() => setError(false), 1000);
@@ -48,8 +49,8 @@ const LoginDeviceView = () => {
 
   const handleLogout = async (event) => {
     event.preventDefault();
-    localStorage.removeItem('device-token');
-    history.push('/');
+    localStorage.removeItem('staff-credentials');
+    history.push('/device');
   };
 
   if (!isLoggedIn) {
@@ -99,7 +100,7 @@ const LoginDeviceView = () => {
             <Button type="button" onClick={(e) => { e.preventDefault(); history.push('/'); }}><FaArrowLeft /></Button>
           </Col>
           <Col>
-            <h4>{`Zalogowany jako ${user}`}</h4>
+            <h4>{`Zalogowany jako ${staffCredentials.employee.fullName}`}</h4>
           </Col>
           <Col xs="auto">
             <Button type="button" onClick={handleLogout} variant="light">

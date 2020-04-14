@@ -14,24 +14,25 @@ import deviceStreamService from '../services/DeviceStreamService';
 
 
 const LoginView = () => {
-  const [text, setText] = useState('');
+  const [patientToken, setPatientToken] = useState('');
   const [error, setError] = useState(false);
+
   const history = useHistory();
-  const isContinuous = localStorage.getItem('device-token') !== null;
+
+  const rawStaffCredentials = localStorage.getItem('staff-credentials');
+  const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+
 
   useEffect(() => {
     formStreamService.disconnect();
   }, []);
 
   useEffect(() => {
-    const rawCredentials = localStorage.getItem('credentials');
-    if (!rawCredentials) return;
-    const credentials = JSON.parse(rawCredentials);
+    const rawFormCredentials = localStorage.getItem('form-credentials');
+    if (rawFormCredentials) { history.push('/form'); }
 
-    authService.mePatient(credentials.token)
-      .then(() => history.push('/form'))
-      .catch(() => localStorage.removeItem('credentials'));
-  }, [history]);
+    if (staffCredentials && staffCredentials.employee.role !== 'DEVICE') { history.push(/employee/); }
+  }, [history, staffCredentials]);
 
   useEffect(() => {
     deviceStreamService.subscribe(history);
@@ -40,8 +41,8 @@ const LoginView = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const credentials = await authService.loginPatient(text);
-      localStorage.setItem('credentials', JSON.stringify(credentials));
+      const credentials = await authService.loginPatient(patientToken);
+      localStorage.setItem('form-credentials', JSON.stringify(credentials));
       history.push('/form');
     } catch (e) {
       setError(true);
@@ -78,8 +79,8 @@ const LoginView = () => {
                 <Col>
                   <Form.Control
                     type="text"
-                    value={text}
-                    onChange={(event) => setText(event.target.value)}
+                    value={patientToken}
+                    onChange={(event) => setPatientToken(event.target.value)}
                     isInvalid={error}
                   />
                 </Col>
@@ -94,7 +95,7 @@ const LoginView = () => {
     </Row>
   );
 
-  if (isContinuous) {
+  if (staffCredentials) {
     return (
       <LoadingView message="Oczekiwanie na rozpoczęcie." redirectHandler={() => history.push('/device')} />
     );

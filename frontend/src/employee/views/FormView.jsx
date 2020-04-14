@@ -62,12 +62,12 @@ const FormView = () => {
   }, [history, staffCredentials, formId, form]);
 
   useEffect(() => {
-    const scrollToSigned = () => {
+    const scrollToSignature = () => {
       if (signatureViewRef.current && form.status === 'SIGNED') {
         window.scrollTo({ behavior: 'smooth', top: signatureViewRef.current.offsetTop });
       }
     };
-    scrollToSigned();
+    scrollToSignature();
   }, [form]);
 
   if (form === null) { return (<LoadingView />); }

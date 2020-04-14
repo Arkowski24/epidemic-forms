@@ -14,8 +14,8 @@ const subscribe = async (history) => {
 
   const rawStaffCredentials = localStorage.getItem('staff-credentials');
   const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
-
   if (!staffCredentials || staffCredentials.employee.role === 'DEVICE') { return; }
+
   try {
     await authService.meEmployee(staffCredentials.token);
     webSocket.connect({ Authorization: `Bearer ${staffCredentials.token}` }, () => { });

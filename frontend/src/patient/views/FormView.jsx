@@ -14,7 +14,6 @@ import {
   LoadingView,
 } from '../../common/views';
 import { HospitalIcon } from '../../common/public';
-import EndView from './EndView';
 
 import authService from '../../common/services/AuthService';
 import formService from '../../common/services/FormService';
@@ -27,7 +26,57 @@ const FormView = () => {
   const [form, setForm] = useState(null);
   const [formTouched, setFormTouched] = useState(false);
   const signatureViewRef = useRef();
+
   const history = useHistory();
+
+  const rawFormCredentials = localStorage.getItem('form-credentials');
+  const formCredentials = rawFormCredentials ? JSON.parse(rawFormCredentials) : null;
+
+
+  useEffect(() => {
+    deviceStreamService.subscribe(history);
+  }, [history]);
+
+  useEffect(() => {
+    const setupServices = () => {
+      formService.setToken(formCredentials.token);
+      formStreamService.setFormCredentials(formCredentials);
+      formStreamService.subscribe((f) => setForm(f));
+    };
+
+    const fetchTokenAndData = () => {
+      if (!formCredentials) { history.push('/'); return; }
+
+      authService
+        .mePatient(formCredentials.token)
+        .catch(() => { localStorage.removeItem('form-credentials'); history.push('/'); })
+        .then(() => setupServices());
+    };
+
+    if (!form) { fetchTokenAndData(); }
+  }, [history, formCredentials, form]);
+
+  useEffect(() => {
+    const scrollToSignature = () => {
+      if (signatureViewRef.current && form.status === 'ACCEPTED') {
+        window.scrollTo({ behavior: 'smooth', top: signatureViewRef.current.offsetTop });
+      }
+    };
+    scrollToSignature();
+  }, [form]);
+
+  useEffect(() => {
+    const clearForm = () => {
+      localStorage.removeItem('form-credentials');
+      setForm(null);
+      history.push('/thanks');
+    };
+
+    if (!form) { return; }
+    if (form.status === 'SIGNED' || form.status === 'CLOSED') { clearForm(); }
+  }, [form, history]);
+
+  if (form === null) { return (<LoadingView />); }
 
   const sendFormResponse = () => {
     formStreamService.sendMove('FILLED');
@@ -38,51 +87,6 @@ const FormView = () => {
       .createSignaturePatient(form.id, signature)
       .then(() => formStreamService.sendMove('SIGNED'));
   };
-
-  useEffect(() => {
-    deviceStreamService.subscribe(history);
-  }, [history]);
-
-  useEffect(() => {
-    const rawCredentials = localStorage.getItem('credentials');
-    if (rawCredentials === null) { history.push('/'); return; }
-    const fetchData = async () => {
-      try {
-        const credentials = JSON.parse(rawCredentials);
-
-        await authService.mePatient(credentials.token);
-        formStreamService.setFormCredentials(credentials);
-        formService.setToken(credentials.token);
-        formStreamService.subscribe((f) => setForm(f));
-      } catch (e) {
-        localStorage.removeItem('credentials');
-        history.push('/');
-      }
-    };
-    fetchData();
-  }, [history]);
-
-  useEffect(() => {
-    if (signatureViewRef.current && form.status === 'ACCEPTED') {
-      window.scrollTo({
-        behavior: 'smooth',
-        top: signatureViewRef.current.offsetTop,
-      });
-    }
-  },
-  [form]);
-
-  useEffect(() => {
-    if (!form) return;
-    if (form.status === 'SIGNED' || form.status === 'CLOSED') {
-      localStorage.removeItem('credentials');
-      setForm(null);
-      history.push('/thanks');
-    }
-  }, [form, history]);
-
-  if (form === null) { return (<LoadingView />); }
-  if (form.status === 'SIGNED' || form.status === 'CLOSED') { return (<EndView setForm={setForm} />); }
 
   const isValidField = (fieldSchema, fieldIndex) => {
     if (fieldSchema.fieldType === 'HIDDEN') return true;
