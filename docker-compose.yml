@@ -11,7 +11,7 @@ services:
     networks:
       - internal
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - ./database_data:/var/lib/postgresql/data
 
   api:
     build:
@@ -23,6 +23,7 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: secretpassword
       TOKEN_SECRET_KEY: MjM0Njc4OTY3ODkyMzQ2Nzg5MjM0MjM0Njc4OTIzNDY3ODkyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQyMzQ=
+    command: ["./wait-for-it.sh", "database:5432", "--", "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
     expose:
       - "8080"
     networks:
@@ -62,6 +63,3 @@ services:
 
 networks:
   internal:
-
-volumes:
-  database_data:
