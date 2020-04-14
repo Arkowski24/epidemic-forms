@@ -1,9 +1,11 @@
 package pl.edu.agh.ki.covid19tablet.form
 
 import org.springframework.stereotype.Service
+import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
+import pl.edu.agh.ki.covid19tablet.device.Device
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateFormRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.CreateSignatureRequest
 import pl.edu.agh.ki.covid19tablet.form.dto.FormDTO
@@ -63,6 +65,13 @@ class FormServiceImpl(
             .findById(employeeDetails.employee.id!!)
             .get()
 
+        val device = request.deviceId
+            ?.let {
+                employeeRepository
+                    .findById(it)
+                    .orElseThrow { DeviceNotFoundException() } as Device
+            }
+
         val patient = Patient()
         val form = formRepository.save(
             Form(
@@ -70,6 +79,7 @@ class FormServiceImpl(
                 formName = request.formName,
                 patient = patient,
                 createdBy = employeeDetails.employee,
+                device = device,
                 state = schema.fields.buildInitialState()
             )
         )

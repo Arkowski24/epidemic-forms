@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
@@ -57,6 +58,8 @@ class FormController(
             val form = formService.createForm(request, employeeDetails)
             ResponseEntity(form, HttpStatus.OK)
         } catch (ex: SchemaNotFoundException) {
+            ResponseEntity(HttpStatus.BAD_REQUEST)
+        } catch (ex: DeviceNotFoundException) {
             ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
