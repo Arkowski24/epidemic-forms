@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button, Col, Container, Row,
+  Button, Col, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import Slider from 'rc-slider';

@@ -5,7 +5,6 @@ import {
   Col,
   Container, Form, Row,
 } from 'react-bootstrap';
-import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 import InlineView from './common/InlineView';
 
 
