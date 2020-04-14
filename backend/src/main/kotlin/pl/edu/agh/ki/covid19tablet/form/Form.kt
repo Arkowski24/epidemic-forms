@@ -40,8 +40,11 @@ data class Form(
     @ManyToOne
     val createdBy: Employee,
     val createdAt: Instant = Instant.now(),
+
     @ManyToOne
     val device: Device? = null,
+    @ManyToOne
+    val signedBy: Employee? = null,
 
     @OneToOne(cascade = [CascadeType.ALL])
     val patientSignature: Signature? = null,
