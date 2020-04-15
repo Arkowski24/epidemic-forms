@@ -33,17 +33,9 @@ services:
     depends_on:
       - database
 
-  patient:
+  frontend:
     build:
-      context: ./frontend/patient
-    expose:
-      - "80"
-    networks:
-      - internal
-
-  employee:
-    build:
-      context: ./frontend/employee
+      context: ./frontend
     expose:
       - "80"
     networks:
@@ -60,8 +52,7 @@ services:
       - internal
     depends_on:
       - api
-      - patient
-      - employee
+      - frontend
 
 networks:
   internal:

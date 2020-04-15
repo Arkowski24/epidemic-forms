@@ -18,7 +18,9 @@ public class MetadataContainer {
     private String purposeOfVisit;
 
     public MetadataContainer(Form form, String creationDate) {
-        this.usedDevice = "Educatorium";
+        String deviceName = (form.getDevice() == null || form.getDevice().getFullName() == null) ? "" : form.getDevice().getFullName();
+
+        this.usedDevice = deviceName.length() > 0 ? deviceName : "Educatorium";
         this.creationDate = creationDate;
         this.purposeOfVisit = extractPurposeOfVisit(form);
     }

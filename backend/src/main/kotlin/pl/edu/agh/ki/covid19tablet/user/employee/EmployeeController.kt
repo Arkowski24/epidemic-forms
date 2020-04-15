@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pl.edu.agh.ki.covid19tablet.EmployeeNotFoundException
 import pl.edu.agh.ki.covid19tablet.EmployeeSelfDeletionException
+import pl.edu.agh.ki.covid19tablet.device.DeviceDTO
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.user.dto.CreateEmployeeRequest
 import pl.edu.agh.ki.covid19tablet.user.dto.EmployeeDTO
@@ -39,6 +40,11 @@ class EmployeeController(
         } catch (ex: EmployeeNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
         }
+
+    @GetMapping("/devices")
+    @PreAuthorize("hasAuthority('${Authorities.DEVICE_READ}')")
+    fun getAllDevices(): List<DeviceDTO> =
+        employeeService.getAllDevices()
 
     @PostMapping
     @PreAuthorize("hasAuthority('${Authorities.EMPLOYEE_CREATE}')")

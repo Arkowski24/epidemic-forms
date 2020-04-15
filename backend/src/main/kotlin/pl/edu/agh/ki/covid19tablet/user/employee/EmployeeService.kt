@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.EmployeeNotFoundException
 import pl.edu.agh.ki.covid19tablet.EmployeeSelfDeletionException
+import pl.edu.agh.ki.covid19tablet.device.DeviceDTO
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.user.dto.CreateEmployeeRequest
 import pl.edu.agh.ki.covid19tablet.user.dto.EmployeeDTO
@@ -12,6 +13,8 @@ import pl.edu.agh.ki.covid19tablet.user.dto.ModifyEmployeeRequest
 interface EmployeeService {
     fun getAllEmployees(): List<EmployeeDTO>
     fun getEmployee(employeeId: EmployeeId): EmployeeDTO
+
+    fun getAllDevices(): List<DeviceDTO>
 
     fun createEmployee(request: CreateEmployeeRequest): EmployeeDTO
     fun modifyEmployee(employeeId: EmployeeId, request: ModifyEmployeeRequest): EmployeeDTO
@@ -34,6 +37,12 @@ class EmployeeServiceImpl(
             .findById(employeeId)
             .orElseThrow { EmployeeNotFoundException() }
             .toDTO()
+
+    override fun getAllDevices(): List<DeviceDTO> =
+        employeeRepository
+            .findAll()
+            .filter { it.role == EmployeeRole.DEVICE }
+            .map { it.toDTO() }
 
     override fun createEmployee(request: CreateEmployeeRequest): EmployeeDTO {
         return employeeRepository.save(
