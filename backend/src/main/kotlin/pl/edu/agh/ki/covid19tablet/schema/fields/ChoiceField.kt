@@ -44,7 +44,7 @@ fun ChoiceField.toDTO() =
     )
 
 fun ChoiceField.buildInitialState(): ChoiceFieldState {
-    val firstValue = (inline && choices.size > 2)
+    val firstValue = (inline && !multiChoice && choices.size > 2)
     return ChoiceFieldState(
         field = this,
         value = (listOf(firstValue) + choices.map { false }).dropLast(1)

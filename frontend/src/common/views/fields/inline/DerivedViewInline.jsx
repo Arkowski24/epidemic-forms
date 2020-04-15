@@ -1,33 +1,15 @@
 import React from 'react';
 
+import { Container, Row } from 'react-bootstrap';
 import {
-  Col, Container, Form, Row,
-} from 'react-bootstrap';
+  InputForm,
+  PersonalInfoField,
+  PostcodeCityField,
+  ChoiceInfoField,
+} from './derived';
 
-import dataValidator from '../../../helpers/DataValidator';
 import derivedHelper from '../../../helpers/DerivedHelper';
 
-
-const InputForm = ({
-  title, text, setText, isInvalid,
-  isBlocked,
-}) => {
-  const dirty = text.length > 0;
-  return (
-    <Form onSubmit={(e) => e.preventDefault()}>
-      <Form.Control
-        as="input"
-        size="lg"
-        rows={1}
-        value={text}
-        placeholder={title}
-        onChange={(event) => setText(event.target.value)}
-        isInvalid={dirty && isInvalid}
-        disabled={isBlocked}
-      />
-    </Form>
-  );
-};
 
 const OneField = ({
   derivedType, index,
@@ -36,61 +18,38 @@ const OneField = ({
   isBlocked,
 }) => {
   if (derivedType === 'BIRTHDAY_PESEL' && index === 0) {
-    const textAndValidator = input[index] ? JSON.parse(input[index]) : { type: 'PESEL', value: input[index] };
-    const text = textAndValidator.value;
-    const fieldValidator = textAndValidator.type;
-
-    const validators = ['PESEL', 'Nr dow. os.', 'Nr paszportu', 'Inne'];
-    const options = validators
-      .map((o, i) => (<option key={o} value={validators[i]}>{o}</option>));
-
-    const setNewInput = (value) => {
-      const newInput = input.slice();
-      newInput[index] = value;
-      const newValues = fieldValidator === 'PESEL' ? derivedHelper.calculateDerived(derivedType, index, newInput) : newInput;
-      newValues[index] = JSON.stringify({ type: fieldValidator, value });
-      setInput(newValues);
-    };
-
-    const setValidator = (validator) => {
-      const newInput = input.slice();
-      const newValues = validator === 'PESEL' ? derivedHelper.calculateDerived(derivedType, index, newInput) : newInput;
-      newValues[index] = JSON.stringify({ type: validator, value: text });
-      setInput(newValues);
-    };
-
-    const isValid = dataValidator.validateDerivedField(input[index], index, derivedType);
     return (
-      <>
-        <Col>
-          <div className="w-100">
-            <InputForm
-              title={fieldValidator}
-              text={text}
-              setText={setNewInput}
-              isInvalid={!isValid}
-              isBlocked={isBlocked}
-            />
-          </div>
-        </Col>
-        <Col sm="auto">
-          <div className="w-100">
-            <Form>
-              <Form.Group>
-                <Form.Control
-                  as="select"
-                  size="lg"
-                  onChange={(event) => setValidator(event.target.value)}
-                  value={fieldValidator}
-                  disabled={isBlocked}
-                >
-                  {options}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-          </div>
-        </Col>
-      </>
+      <PersonalInfoField
+        input={input}
+        setInput={setInput}
+        index={index}
+        derivedType={derivedType}
+        isBlocked={isBlocked}
+      />
+    );
+  }
+
+  if (derivedType === 'CHOICE_INFO' && index === 0) {
+    return (
+      <ChoiceInfoField
+        title={title}
+        index={index}
+        input={input}
+        setInput={setInput}
+        isBlocked={isBlocked}
+      />
+    );
+  }
+
+  if (derivedType === 'ADDRESS' && index === 1) {
+    return (
+      <PostcodeCityField
+        input={input}
+        setInput={setInput}
+        index={index}
+        derivedType={derivedType}
+        isBlocked={isBlocked}
+      />
     );
   }
 
@@ -101,9 +60,11 @@ const OneField = ({
     setInput(newValues);
   };
 
+  const isBlockedChoice = derivedType === 'CHOICE_INFO' && (input[0].length === 0 || input[0] === 'NIE');
+  const isBlockedField = isBlocked || isBlockedChoice;
   return (
-    <div className="w-100 ml-2 mr-2 pl-2 pr-2">
-      <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlocked} />
+    <div className="w-100 ml-2 mr-2 pl-2 pr-2 pb-1">
+      <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlockedField} />
     </div>
   );
 };
