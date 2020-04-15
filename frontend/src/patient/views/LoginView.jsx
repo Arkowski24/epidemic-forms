@@ -32,7 +32,7 @@ const LoginView = () => {
     if (rawFormCredentials) { history.push('/form'); }
 
     if (!staffCredentials) return;
-    if (staffCredentials.employee.role !== 'DEVICE') { history.push(/employee/); return; }
+    if (staffCredentials.employee.role !== 'DEVICE') { history.push('/employee/'); return; }
 
     authService.meDevice(staffCredentials.token)
       .catch(() => { localStorage.removeItem('staff-credentials'); history.push('/'); });

@@ -14,7 +14,6 @@ import deviceStreamService from '../services/DeviceStreamService';
 import employeeService from '../services/EmployeeService';
 import schemaService from '../services/SchemaService';
 
-
 const Header = ({ setVisible, employee, handleLogout }) => {
   const history = useHistory();
   const handleAdminClick = (e) => {
@@ -77,7 +76,11 @@ const FormsTable = ({ forms, deleteForm }) => {
       <td style={{ width: '5%' }}>
         <Button
           type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteForm(form.id); }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            deleteForm(form.id);
+          }}
         >
           <FaTrash />
         </Button>
@@ -110,9 +113,20 @@ const NewFormModal = ({
   devices,
   createForm,
 }) => {
-  const [formName, setFormName] = useState('');
-  const [schemaId, setSchemaId] = useState(null);
-  const [deviceId, setDeviceId] = useState(null);
+  const extractInitialForm = () => {
+    const rawCreationSettings = localStorage.getItem('form-creation-settings');
+    let creationSettings = rawCreationSettings ? JSON.parse(rawCreationSettings) : { formName: '', schemaId: null, deviceId: null };
+    const isOwnDevice = creationSettings.deviceId === '-1';
+
+    if (!schemas.filter((s) => s.id === creationSettings.schemaId).length) { creationSettings = { ...creationSettings, schemaId: null }; }
+    if (!isOwnDevice && !devices.filter((d) => d.id === creationSettings.deviceId).length) { creationSettings = { ...creationSettings, deviceId: null }; }
+    return creationSettings;
+  };
+  const creationSettings = extractInitialForm();
+
+  const [formName, setFormName] = useState(creationSettings.formName);
+  const [schemaId, setSchemaId] = useState(creationSettings.schemaId);
+  const [deviceId, setDeviceId] = useState(creationSettings.deviceId);
 
   const handleClose = () => setVisible(false);
   const schemaOptions = schemas.map((s) => <option value={s.id} key={s.id}>{s.name}</option>);
@@ -133,6 +147,7 @@ const NewFormModal = ({
     }
 
     createForm(Number(formSchemaId), formName, Number(formDeviceId));
+    localStorage.setItem('form-creation-settings', JSON.stringify({ formName, schemaId, deviceId }));
     handleClose();
   };
 
@@ -196,7 +211,6 @@ const FormsListView = () => {
   const rawStaffCredentials = localStorage.getItem('staff-credentials');
   const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
 
-
   useEffect(() => {
     deviceStreamService.subscribe(history);
   }, [history]);
@@ -228,8 +242,14 @@ const FormsListView = () => {
     };
 
     const fetchTokenAndData = () => {
-      if (!staffCredentials) { history.push('/employee/login'); return; }
-      if (staffCredentials.employee.role === 'DEVICE') { history.push('/'); return; }
+      if (!staffCredentials) {
+        history.push('/employee/login');
+        return;
+      }
+      if (staffCredentials.employee.role === 'DEVICE') {
+        history.push('/');
+        return;
+      }
 
       authService.meEmployee(staffCredentials.token)
         .catch(() => {
