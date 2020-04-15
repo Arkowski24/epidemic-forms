@@ -110,34 +110,25 @@ const ChoiceFormMultiChoice = ({
       setInput(newInput);
     };
     return (
-      <div
-        className="border rounded p-1 m-1"
-        onClick={() => setChecked(true)}
-        key={c}
+      <Button
+        key={i}
+        size="lg"
+        type="button"
+        variant={input[i] ? 'primary' : 'outline-secondary'}
+        onClick={(e) => { e.preventDefault(); setChecked(); }}
+        disabled={isBlocked}
       >
-        <Form.Check
-          key={c}
-          type={isMultiChoice ? 'checkbox' : 'radio'}
-          name="choiceForm"
-          label={c}
-          checked={input[i]}
-          readOnly
-          disabled={isBlocked}
-        />
-      </div>
+        {c}
+      </Button>
     );
   });
 
   return (
     <div className="m-1">
       <h4>{title}</h4>
-      <Form>
-        <fieldset>
-          <Form.Group className="mb-0" size="lg">
-            {buttons}
-          </Form.Group>
-        </fieldset>
-      </Form>
+      <ButtonGroup bsPrefix="w-100 btn-group btn-group-justified">
+        {buttons}
+      </ButtonGroup>
     </div>
   );
 };

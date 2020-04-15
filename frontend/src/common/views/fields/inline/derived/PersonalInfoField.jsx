@@ -37,7 +37,7 @@ const PersonalInfoField = ({
   return (
     <>
       <Col>
-        <div className="w-100">
+        <div className="w-100 mb-1">
           <InputForm
             title={fieldValidator}
             text={text}
@@ -50,7 +50,7 @@ const PersonalInfoField = ({
       <Col sm="auto">
         <div className="w-100">
           <Form onSubmit={(e) => e.preventDefault()}>
-            <Form.Group>
+            <Form.Group className="mb-1">
               <Form.Control
                 as="select"
                 size="lg"

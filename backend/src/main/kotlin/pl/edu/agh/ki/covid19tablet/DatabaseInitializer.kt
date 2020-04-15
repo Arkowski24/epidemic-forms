@@ -12,6 +12,7 @@ import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedType
 import pl.edu.agh.ki.covid19tablet.schema.fields.FieldType
 import pl.edu.agh.ki.covid19tablet.schema.fields.SchemaFields
+import pl.edu.agh.ki.covid19tablet.schema.fields.SimpleField
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField
 import pl.edu.agh.ki.covid19tablet.schema.signature.SignatureField
@@ -184,7 +185,309 @@ class DatabaseInitializer {
                         )
                     )
                 )
+
+                schemaRepository.save(
+                    Schema(
+                        name = "Formularz epidemiczny 2",
+                        multiPage = false,
+                        fields = SchemaFields(
+                            simple = listOf(
+                                SimpleField(
+                                    fieldNumber = 4,
+                                    title = "Adres zamieszkania lub pobytu"
+                                ),
+                                SimpleField(
+                                    fieldNumber = 13,
+                                    title = "Czy w ciągu ostatnich 24 godzin występowały u Pani/Pana poniższe objawy?"
+                                )
+                            ),
+                            choice = listOf(
+                                ChoiceField(
+                                    fieldNumber = 0,
+                                    fieldType = FieldType.HIDDEN,
+                                    title = "Cel wizyty",
+                                    choices = listOf("Pacjent", "Odwiedziny", "Pracownik")
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 7,
+                                    fieldType = FieldType.HIDDEN,
+                                    title = "Częstość oddechu",
+                                    choices = listOf("B.D.", "10-20", "20-30", "30-40", ">40")
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 14,
+                                    title = "Gorączka (powyżej 38 °C)",
+                                    choices = listOf("TAK", "NIE"),
+                                    required = true
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 15,
+                                    title = "Kaszel",
+                                    choices = listOf("TAK", "NIE"),
+                                    required = true
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 16,
+                                    title = "Bóle mięśniowe",
+                                    choices = listOf("TAK", "NIE"),
+                                    required = true
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 17,
+                                    title = "Dreszcze",
+                                    choices = listOf("TAK", "NIE"),
+                                    required = true
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 18,
+                                    title = "Duszność",
+                                    choices = listOf("TAK", "NIE"),
+                                    required = true
+                                )
+                            ),
+                            derived = listOf(
+                                DerivedField(
+                                    fieldNumber = 3,
+                                    derivedType = DerivedType.BIRTHDAY_PESEL,
+                                    titles = listOf("PESEL", "Data urodzenia"),
+                                    required = listOf(true, false)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 5,
+                                    derivedType = DerivedType.ADDRESS,
+                                    titles = listOf("Ulica", "Miejscowość"),
+                                    required = listOf(true, true)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 11,
+                                    derivedType = DerivedType.CHOICE_INFO,
+                                    titles = listOf(
+                                        "Czy w ciągu ostatnich 14 dni przebywał(a) Pan(i) za granicą?",
+                                        "W których krajach?"
+                                    ),
+                                    required = listOf(true, true)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 12,
+                                    derivedType = DerivedType.CHOICE_INFO,
+                                    titles = listOf(
+                                        "Czy miał(a) Pan(i) kontakt z osobą, u której potwierdzono zakażenie koronawirusem?",
+                                        "Kiedy?",
+                                        "Z kim?"
+                                    ),
+                                    required = listOf(true, true, true)
+                                )
+                            ),
+                            slider = listOf(
+                                SliderField(
+                                    fieldNumber = 8,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Temperatura",
+                                    minValue = 34.0,
+                                    maxValue = 43.0,
+                                    defaultValue = 36.6,
+                                    step = 0.1
+                                ),
+                                SliderField(
+                                    fieldNumber = 9,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Tętno",
+                                    minValue = 20.0,
+                                    maxValue = 200.0,
+                                    defaultValue = 70.0,
+                                    step = 10.0
+                                ),
+                                SliderField(
+                                    fieldNumber = 10,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Saturacja",
+                                    minValue = 80.0,
+                                    maxValue = 100.0,
+                                    defaultValue = 95.0,
+                                    step = 1.0
+                                )
+                            ),
+                            text = listOf(
+                                TextField(
+                                    fieldNumber = 1,
+                                    title = "Nazwisko",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 2,
+                                    title = "Imię",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 6,
+                                    title = "Telefon kontaktowy",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 19,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Dodatkowe objawy i informacje",
+                                    multiLine = true
+                                )
+                            )
+                        ),
+                        patientSignature = SignatureField(
+                            title = "Podpis - Pacjent",
+                            description = "Oświadczam, że podane przeze mnie informacje są prawdziwe.\n" +
+                                    "Wyrażam zgodę na przekazanie wyniku badania drogą telefoniczną lub elektroniczną."
+                        ),
+                        employeeSignature = SignatureField(
+                            title = "Podpis - Pracownik",
+                            description = "Oświadczenie: potwierdzam prawidłowość wprowadzonych informacji."
+                        )
+                    )
+                )
+
+                schemaRepository.save(
+                    Schema(
+                        name = "Formularz epidemiczny 2b",
+                        multiPage = false,
+                        fields = SchemaFields(
+                            simple = listOf(
+                                SimpleField(
+                                    fieldNumber = 4,
+                                    title = "Adres zamieszkania lub pobytu"
+                                )
+                            ),
+                            choice = listOf(
+                                ChoiceField(
+                                    fieldNumber = 0,
+                                    fieldType = FieldType.HIDDEN,
+                                    title = "Cel wizyty",
+                                    choices = listOf("Pacjent", "Odwiedziny", "Pracownik")
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 7,
+                                    fieldType = FieldType.HIDDEN,
+                                    title = "Częstość oddechu",
+                                    choices = listOf("B.D.", "10-20", "20-30", "30-40", ">40")
+                                ),
+                                ChoiceField(
+                                    fieldNumber = 13,
+                                    title = "Czy w ciągu ostatnich 24 godzin występowały u Pani/Pana poniższe objawy?",
+                                    choices = listOf(
+                                        "Gorączka (powyżej 38 °C)",
+                                        "Kaszel",
+                                        "Bóle mięśniowe",
+                                        "Dreszcze",
+                                        "Duszność"
+                                    ),
+                                    multiChoice = true,
+                                    required = false
+                                )
+                            ),
+                            derived = listOf(
+                                DerivedField(
+                                    fieldNumber = 3,
+                                    derivedType = DerivedType.BIRTHDAY_PESEL,
+                                    titles = listOf("PESEL", "Data urodzenia"),
+                                    required = listOf(true, false)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 5,
+                                    derivedType = DerivedType.ADDRESS,
+                                    titles = listOf("Ulica", "Miejscowość"),
+                                    required = listOf(true, true)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 11,
+                                    derivedType = DerivedType.CHOICE_INFO,
+                                    titles = listOf(
+                                        "Czy w ciągu ostatnich 14 dni przebywał(a) Pan(i) za granicą?",
+                                        "W których krajach?"
+                                    ),
+                                    required = listOf(true, true)
+                                ),
+                                DerivedField(
+                                    fieldNumber = 12,
+                                    derivedType = DerivedType.CHOICE_INFO,
+                                    titles = listOf(
+                                        "Czy miał(a) Pan(i) kontakt z osobą, u której potwierdzono zakażenie koronawirusem?",
+                                        "Kiedy?",
+                                        "Z kim?"
+                                    ),
+                                    required = listOf(true, true, true)
+                                )
+                            ),
+                            slider = listOf(
+                                SliderField(
+                                    fieldNumber = 8,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Temperatura",
+                                    minValue = 34.0,
+                                    maxValue = 43.0,
+                                    defaultValue = 36.6,
+                                    step = 0.1
+                                ),
+                                SliderField(
+                                    fieldNumber = 9,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Tętno",
+                                    minValue = 20.0,
+                                    maxValue = 200.0,
+                                    defaultValue = 70.0,
+                                    step = 10.0
+                                ),
+                                SliderField(
+                                    fieldNumber = 10,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Saturacja",
+                                    minValue = 80.0,
+                                    maxValue = 100.0,
+                                    defaultValue = 95.0,
+                                    step = 1.0
+                                )
+                            ),
+                            text = listOf(
+                                TextField(
+                                    fieldNumber = 1,
+                                    title = "Nazwisko",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 2,
+                                    title = "Imię",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 6,
+                                    title = "Telefon kontaktowy",
+                                    required = true
+                                ),
+                                TextField(
+                                    fieldNumber = 14,
+                                    fieldType = FieldType.HIDDEN,
+                                    inline = false,
+                                    title = "Dodatkowe objawy i informacje",
+                                    multiLine = true
+                                )
+                            )
+                        ),
+                        patientSignature = SignatureField(
+                            title = "Podpis - Pacjent",
+                            description = "Oświadczam, że podane przeze mnie informacje są prawdziwe.\n" +
+                                    "Wyrażam zgodę na przekazanie wyniku badania drogą telefoniczną lub elektroniczną."
+                        ),
+                        employeeSignature = SignatureField(
+                            title = "Podpis - Pracownik",
+                            description = "Oświadczenie: potwierdzam prawidłowość wprowadzonych informacji."
+                        )
+                    )
+                )
             }
+
             if (employeeRepository.count() == 0L) {
                 employeeRepository.save(
                     Employee(

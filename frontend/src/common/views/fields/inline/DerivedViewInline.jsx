@@ -1,8 +1,12 @@
 import React from 'react';
 
 import { Container, Row } from 'react-bootstrap';
-import InputForm from './derived/InputForm';
-import PersonalInfoField from './derived/PersonalInfoField';
+import {
+  InputForm,
+  PersonalInfoField,
+  PostcodeCityField,
+  ChoiceInfoField,
+} from './derived';
 
 import derivedHelper from '../../../helpers/DerivedHelper';
 
@@ -25,6 +29,30 @@ const OneField = ({
     );
   }
 
+  if (derivedType === 'CHOICE_INFO' && index === 0) {
+    return (
+      <ChoiceInfoField
+        title={title}
+        index={index}
+        input={input}
+        setInput={setInput}
+        isBlocked={isBlocked}
+      />
+    );
+  }
+
+  if (derivedType === 'ADDRESS' && index === 1) {
+    return (
+      <PostcodeCityField
+        input={input}
+        setInput={setInput}
+        index={index}
+        derivedType={derivedType}
+        isBlocked={isBlocked}
+      />
+    );
+  }
+
   const setNewInput = (value) => {
     const newInput = input.slice();
     newInput[index] = value;
@@ -33,7 +61,7 @@ const OneField = ({
   };
 
   return (
-    <div className="w-100 ml-2 mr-2 pl-2 pr-2">
+    <div className="w-100 ml-2 mr-2 pl-2 pr-2 pb-1">
       <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlocked} />
     </div>
   );

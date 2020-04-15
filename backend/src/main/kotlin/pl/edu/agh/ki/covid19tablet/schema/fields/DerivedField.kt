@@ -10,7 +10,9 @@ import javax.persistence.Id
 typealias DerivedFieldId = Long
 
 enum class DerivedType {
-    BIRTHDAY_PESEL
+    BIRTHDAY_PESEL,
+    CHOICE_INFO,
+    ADDRESS
 }
 
 @Entity
