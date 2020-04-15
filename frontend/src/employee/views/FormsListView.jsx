@@ -118,11 +118,11 @@ const NewFormModal = ({
     let creationSettings = rawCreationSettings ? JSON.parse(rawCreationSettings) : { formName: '', schemaId: null, deviceId: null };
 
     const isOwnDevice = creationSettings.deviceId === '-1';
-    const isCurrentSchema = schemas.filter((s) => s.id === creationSettings.schemaId).length > 0;
-    const isCurrentDevice = !isOwnDevice && devices.filter((d) => d.id === creationSettings.deviceId).length > 0;
+    const isCurrentSchema = schemas.filter((s) => s.id === Number(creationSettings.schemaId)).length > 0;
+    const isCurrentDevice = devices.filter((d) => d.id === Number(creationSettings.deviceId)).length > 0;
 
     if (!isCurrentSchema) { creationSettings = { ...creationSettings, schemaId: null }; }
-    if (!isCurrentDevice) { creationSettings = { ...creationSettings, deviceId: null }; }
+    if (!isOwnDevice && !isCurrentDevice) { creationSettings = { ...creationSettings, deviceId: null }; }
     return creationSettings;
   };
   const creationSettings = extractInitialForm();
