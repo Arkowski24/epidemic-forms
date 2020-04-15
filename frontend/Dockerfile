@@ -3,7 +3,8 @@ ARG ENVIRONMENT=staging
 WORKDIR /source
 COPY package.json yarn.lock /source/
 RUN yarn install
-COPY src /source
+COPY public /source/public
+COPY src /source/src
 RUN yarn build
 
 FROM nginx:1.17.7
