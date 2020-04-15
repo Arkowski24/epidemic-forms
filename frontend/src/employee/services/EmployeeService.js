@@ -22,6 +22,13 @@ const getEmployee = (employeeId) => axios
   )
   .then((res) => res.data);
 
+const getDevices = () => axios
+  .get(
+    `${baseUrl}/devices`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  .then((res) => res.data);
+
 const createEmployee = (username, fullName, password, role) => axios
   .post(
     `${baseUrl}/`,
@@ -49,5 +56,5 @@ const deleteEmployee = (employeeId) => axios
   );
 
 export default {
-  setToken, getEmployees, getEmployee, createEmployee, modifyEmployee, deleteEmployee,
+  setToken, getEmployees, getEmployee, getDevices, createEmployee, modifyEmployee, deleteEmployee,
 };

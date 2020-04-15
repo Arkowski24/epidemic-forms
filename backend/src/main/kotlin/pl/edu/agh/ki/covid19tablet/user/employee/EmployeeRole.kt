@@ -1,5 +1,6 @@
 package pl.edu.agh.ki.covid19tablet.user.employee
 
+import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_READ
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.DEVICE_SUBSCRIBE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_CREATE
 import pl.edu.agh.ki.covid19tablet.user.employee.Authorities.EMPLOYEE_DELETE
@@ -27,6 +28,8 @@ object Authorities {
     const val EMPLOYEE_MODIFY = "EMPLOYEE_MODIFY"
     const val EMPLOYEE_DELETE = "EMPLOYEE_DELETE"
 
+    const val DEVICE_READ = "DEVICE_READ"
+
     const val DEVICE_SUBSCRIBE = "DEVICE_SUBSCRIBE"
 }
 
@@ -44,7 +47,7 @@ enum class EmployeeRole(val authorities: List<String>) {
             FORM_MODIFY,
             FORM_DELETE,
             SCHEMA_READ,
-            EMPLOYEE_READ
+            DEVICE_READ
         )
     ),
     ADMIN(
@@ -58,7 +61,8 @@ enum class EmployeeRole(val authorities: List<String>) {
             EMPLOYEE_READ,
             EMPLOYEE_CREATE,
             EMPLOYEE_MODIFY,
-            EMPLOYEE_DELETE
+            EMPLOYEE_DELETE,
+            DEVICE_READ
         )
     ),
     DEVICE(

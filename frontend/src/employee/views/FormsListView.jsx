@@ -231,12 +231,12 @@ const FormsListView = () => {
       Promise.all([
         formService.getForms(),
         schemaService.getSchemas(),
-        employeeService.getEmployees(),
+        employeeService.getDevices(),
       ]).then(
         (res) => setFormsData({
           forms: res[0],
           schemas: res[1],
-          devices: res[2].filter((e) => e.role === 'DEVICE'),
+          devices: res[2],
         }),
       );
     };
