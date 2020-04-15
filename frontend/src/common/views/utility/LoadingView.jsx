@@ -16,7 +16,7 @@ const LoadingView = ({
           className="m-1 p-1 border-bottom d-flex justify-content-center align-items-center"
           onClick={(e) => {
             e.preventDefault();
-            if (clicks > 1) { setClicks(0); redirectHandler(); } else { setClicks(clicks + 1); }
+            if (clicks > 3) { setClicks(0); redirectHandler(); } else { setClicks(clicks + 1); }
           }}
         >
           <Spinner animation="border" />

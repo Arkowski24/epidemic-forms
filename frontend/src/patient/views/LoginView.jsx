@@ -61,7 +61,7 @@ const LoginView = () => {
           className="w-100 m-1 p-1 border-bottom text-center"
           onClick={(e) => {
             e.preventDefault();
-            if (clicks > 1) { setClicks(0); history.push('/device'); } else { setClicks(clicks + 1); }
+            if (clicks > 3) { setClicks(0); history.push('/device'); } else { setClicks(clicks + 1); }
           }}
         >
           <HospitalIcon height="40px" />
