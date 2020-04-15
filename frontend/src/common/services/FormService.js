@@ -22,10 +22,10 @@ const getForm = (formId) => axios
   )
   .then((res) => res.data);
 
-const createForm = (schemaId, formName) => axios
+const createForm = (schemaId, formName, deviceId) => axios
   .post(
     `${baseUrl}/`,
-    { schemaId, formName },
+    { schemaId, formName, deviceId },
     { headers: { Authorization: `Bearer ${token}` } },
   )
   .then((res) => res.data);

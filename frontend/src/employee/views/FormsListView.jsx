@@ -269,9 +269,10 @@ const FormsListView = () => {
   if (formsData === null) { return (<LoadingView />); }
 
   const createForm = async (schemaId, formName, deviceId) => {
-    const form = await formService.createForm(schemaId, formName);
+    const requestDeviceId = deviceId === -1 ? null : deviceId;
+    const form = await formService.createForm(schemaId, formName, requestDeviceId);
 
-    if (deviceId !== -1) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
+    if (requestDeviceId !== null) { deviceStreamService.sendNewForm(deviceId, form.patient.id); }
     const newForms = formsData.forms.concat(form);
     setFormsData({ ...formsData, forms: newForms });
     history.push(`/employee/forms/${form.id}`);
