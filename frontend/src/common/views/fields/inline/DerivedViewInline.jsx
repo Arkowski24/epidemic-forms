@@ -60,9 +60,11 @@ const OneField = ({
     setInput(newValues);
   };
 
+  const isBlockedChoice = derivedType === 'CHOICE_INFO' && (input[0].length === 0 || input[0] === 'NIE');
+  const isBlockedField = isBlocked || isBlockedChoice;
   return (
     <div className="w-100 ml-2 mr-2 pl-2 pr-2 pb-1">
-      <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlocked} />
+      <InputForm title={title} text={input[index]} setText={setNewInput} isBlocked={isBlockedField} />
     </div>
   );
 };

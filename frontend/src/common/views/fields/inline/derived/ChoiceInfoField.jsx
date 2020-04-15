@@ -12,7 +12,8 @@ const ChoiceInfoField = ({
 }) => {
   const choices = ['TAK', 'NIE'];
   const setChecked = (checked) => {
-    const newInput = input.slice();
+    if (checked && input[index] === choices[0]) { return; }
+    const newInput = checked ? input.map(() => '') : input.map(() => 'N.D.');
     newInput[index] = checked ? choices[0] : choices[1];
     setInput(newInput);
   };

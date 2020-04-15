@@ -21,8 +21,7 @@ const validatePassport = (passportNumber) => {
   return result % 10 === 0;
 };
 
-const validateDerivedField = (input, index, derivedType) => {
-  if (derivedType !== 'BIRTHDAY_PESEL') return input.length > 0;
+const validateBirthdayPesel = (input, index) => {
   if (index !== 0) return input.length > 0;
   if (input.length === 0) return false;
 
@@ -32,6 +31,23 @@ const validateDerivedField = (input, index, derivedType) => {
   if (field.type === 'Nr paszportu') return validatePassport(field.value);
   if (field.type === 'Inne') return field.value.length > 0;
   return field.value.length > 0;
+};
+
+const validateChoiceInfo = (input, index) => input.length > 0;
+
+const validateAddress = (input, index) => {
+  if (index !== 1) return input.length > 0;
+  if (input.length === 0) return false;
+
+  const field = JSON.parse(input);
+  return field.city.length > 0;
+};
+
+const validateDerivedField = (input, index, derivedType) => {
+  if (derivedType === 'BIRTHDAY_PESEL') return validateBirthdayPesel(input, index);
+  if (derivedType === 'CHOICE_INFO') return validateChoiceInfo(input, index);
+  if (derivedType === 'ADDRESS') return validateAddress(input, index);
+  return input.length > 0;
 };
 
 export default {
