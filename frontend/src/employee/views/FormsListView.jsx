@@ -116,10 +116,13 @@ const NewFormModal = ({
   const extractInitialForm = () => {
     const rawCreationSettings = localStorage.getItem('form-creation-settings');
     let creationSettings = rawCreationSettings ? JSON.parse(rawCreationSettings) : { formName: '', schemaId: null, deviceId: null };
-    const isOwnDevice = creationSettings.deviceId === '-1';
 
-    if (!schemas.filter((s) => s.id === creationSettings.schemaId).length) { creationSettings = { ...creationSettings, schemaId: null }; }
-    if (!isOwnDevice && !devices.filter((d) => d.id === creationSettings.deviceId).length) { creationSettings = { ...creationSettings, deviceId: null }; }
+    const isOwnDevice = creationSettings.deviceId === '-1';
+    const isCurrentSchema = schemas.filter((s) => s.id === creationSettings.schemaId).length > 0;
+    const isCurrentDevice = !isOwnDevice && devices.filter((d) => d.id === creationSettings.deviceId).length > 0;
+
+    if (!isCurrentSchema) { creationSettings = { ...creationSettings, schemaId: null }; }
+    if (!isCurrentDevice) { creationSettings = { ...creationSettings, deviceId: null }; }
     return creationSettings;
   };
   const creationSettings = extractInitialForm();
