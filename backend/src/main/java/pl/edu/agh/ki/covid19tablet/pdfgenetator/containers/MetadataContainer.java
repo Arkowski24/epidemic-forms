@@ -11,6 +11,9 @@ public class MetadataContainer {
     private static final String usedDeviceTitle = "Punkt wstępnej oceny pacjentów";
     private String usedDevice;
 
+    private static final String schemaNameTitle = "Nazwa schematu";
+    private String schemaName;
+
     private static final String creationDateTitle = "Data wypełnienia";
     private String creationDate;
 
@@ -21,6 +24,7 @@ public class MetadataContainer {
         String deviceName = (form.getDevice() == null || form.getDevice().getFullName() == null) ? "" : form.getDevice().getFullName();
 
         this.usedDevice = deviceName.length() > 0 ? deviceName : "Educatorium";
+        this.schemaName = form.getSchema().getName();
         this.creationDate = creationDate;
         this.purposeOfVisit = extractPurposeOfVisit(form);
     }
@@ -30,6 +34,13 @@ public class MetadataContainer {
     }
     public String getUsedDevice() {
         return usedDevice;
+    }
+
+    public String getSchemaNameTitle() {
+        return schemaNameTitle;
+    }
+    public String getSchemaName() {
+        return schemaName;
     }
 
     public String getCreationDateTitle() {

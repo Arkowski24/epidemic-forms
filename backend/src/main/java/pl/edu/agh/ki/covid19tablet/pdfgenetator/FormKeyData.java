@@ -19,7 +19,7 @@ public class FormKeyData {
     private String pdfDirPath;
 
     public FormKeyData(Form form, String creationDate, String pdfBasicDirPath) {
-        this.title = form.getSchema().getName();
+        this.title = form.getFormName();
         this.metadata = new MetadataContainer(form, creationDate);
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);

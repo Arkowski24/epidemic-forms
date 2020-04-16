@@ -90,13 +90,21 @@ public class PDFBuilder {
     }
 
     private void addMetadata(Document document, MetadataContainer metadataContainer) throws DocumentException {
-        Paragraph deviceParagraph = new Paragraph(
+        Paragraph usedDeviceParagraph = new Paragraph(
                 metadataContainer.getUsedDeviceTitle()
                 + ": "
                 + metadataContainer.getUsedDevice(),
                 standardFont
         );
-        document.add(deviceParagraph);
+        document.add(usedDeviceParagraph);
+
+        Paragraph schemaNameParagraph = new Paragraph(
+                metadataContainer.getSchemaNameTitle()
+                        + ": "
+                        + metadataContainer.getSchemaName(),
+                standardFont
+        );
+        document.add(schemaNameParagraph);
 
         Paragraph creationDateParagraph = new Paragraph(
                 metadataContainer.getCreationDateTitle()
