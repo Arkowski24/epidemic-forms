@@ -54,7 +54,9 @@ public class PersonalDataContainer {
 
         extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));
         extractedPersonalData.add(extractPatternText(form, "Imię", "Imi"));
-        extractedPersonalData.add(extractPatternText(form, "Telefon Kontaktowy", "Telefon"));
+        PersonalData phoneNumber = extractPatternText(form, "Telefon Kontaktowy", "Telefon");
+        if (phoneNumber != null)
+            extractedPersonalData.add(phoneNumber);
         extractedPersonalData.addAll(extractDerived(form));
 
         return extractedPersonalData;
@@ -79,7 +81,9 @@ public class PersonalDataContainer {
             title = title + ':';
         }
 
-        return new PersonalData(title, value);
+        if (!value.equals(""))
+            return new PersonalData(title, value);
+        return null;
     }
 
     private List<PersonalData> extractDerived(Form form) {

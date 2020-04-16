@@ -9,8 +9,8 @@ import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 public class FormKeyData {
 
     private final String hospitalName = "Krakowski Szpital Specjalistyczny im. Jana Pawła II";
+    private String title = "Formularz epidemiczny";
 
-    private String title;
     private MetadataContainer metadata;
     private PersonalDataContainer personalData;
     private QuestionContainer questions;
@@ -19,7 +19,6 @@ public class FormKeyData {
     private String pdfDirPath;
 
     public FormKeyData(Form form, String creationDate, String pdfBasicDirPath) {
-        this.title = form.getFormName();
         this.metadata = new MetadataContainer(form, creationDate);
         this.personalData = new PersonalDataContainer(form);
         this.questions = new QuestionContainer(form);
