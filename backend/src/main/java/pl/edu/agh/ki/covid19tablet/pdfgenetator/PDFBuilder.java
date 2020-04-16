@@ -19,14 +19,15 @@ public class PDFBuilder {
     private final static int hospitalLogoWidth = 30;
     private final static int hospitalLogoHeight = 30;
 
-    private final static int signatureWidth = 160;
-    private final static int signatureHeight = 120;
+    private final static int signatureWidth = 120;
+    private final static int signatureHeight = 90;
 
     private Font hospitalNameFont;
     private Font titleFont;
     private Font standardFont;
     private Font answerInTableFont;
     private Font answerHighlightedFont;
+    private Font subquestionFont;
     private Font personalDataFont;
     private Font answerFont;
 
@@ -36,10 +37,11 @@ public class PDFBuilder {
         this.hospitalNameFont = createRegularFont(15);
         this.titleFont = createBoldFont(20);
         this.standardFont = createRegularFont(10);
-        this.answerInTableFont = createItalicFont(8);
+        this.answerInTableFont = createItalicLightFont(8);
         this.answerHighlightedFont = createItalicBoldFont(8);
-        this.personalDataFont = createItalicFont(10);
-        this.answerFont = createItalicFont(10);
+        this.subquestionFont = createItalicBoldFont(10);
+        this.personalDataFont = createItalicLightFont(10);
+        this.answerFont = createItalicLightFont(10);
 
         this.dirPath = dirPath;
     }
@@ -56,7 +58,7 @@ public class PDFBuilder {
         addTitle(document, formKeyData.getTitle());
         addMetadata(document, formKeyData.getMetadata());
         addPersonalData(document, formKeyData.getPersonalData());
-        addQuestions(document, formKeyData.getQuestions());
+        addAllQuestions(document, formKeyData.getQuestions());
         addSignatures(document, formKeyData.getSignatures());
 
         document.close();
@@ -88,13 +90,21 @@ public class PDFBuilder {
     }
 
     private void addMetadata(Document document, MetadataContainer metadataContainer) throws DocumentException {
-        Paragraph deviceParagraph = new Paragraph(
+        Paragraph usedDeviceParagraph = new Paragraph(
                 metadataContainer.getUsedDeviceTitle()
                 + ": "
                 + metadataContainer.getUsedDevice(),
                 standardFont
         );
-        document.add(deviceParagraph);
+        document.add(usedDeviceParagraph);
+
+        Paragraph schemaNameParagraph = new Paragraph(
+                metadataContainer.getSchemaNameTitle()
+                        + ": "
+                        + metadataContainer.getSchemaName(),
+                standardFont
+        );
+        document.add(schemaNameParagraph);
 
         Paragraph creationDateParagraph = new Paragraph(
                 metadataContainer.getCreationDateTitle()
@@ -131,21 +141,36 @@ public class PDFBuilder {
         addEmptyLine(document, standardFont);
     }
 
-    private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
+    private void addAllQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
         List<Question> questions = questionContainer.getQuestions();
+        List<ComplexQuestion> complexQuestions = questionContainer.getComplexQuestions();
+
+        addQuestions(document, questions, 0, questions.size() - 1);
+        addEmptyLine(document, standardFont);
+        addComplexQuestions(document, complexQuestions, 0, complexQuestions.size());
+        addQuestions(document, questions, questions.size() - 1, questions.size());
+    }
+
+    private void addQuestions(
+            Document document,
+            List<Question> questions,
+            int beg,
+            int end
+    ) throws DocumentException {
+
         questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
-        for (Question question : questions) {
-            if (question.isInTable()) {
+        for (int i = beg; i < end; i++) {
+            if (questions.get(i).isInTable()) {
                 float[] widths = {0.85f, 0.15f};
                 PdfPTable questionTable = new PdfPTable(widths);
                 questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);    // xDDDD
                 questionTable.setLockedWidth(true);
 
-                PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
-                PdfPCell answerCell = new PdfPCell(new Phrase("    " + question.getAnswer(), answerInTableFont));
-                if (question.isHighlighted())
-                    answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
+                PdfPCell questionCell = new PdfPCell(new Phrase(questions.get(i).getTitle(), standardFont));
+                PdfPCell answerCell = new PdfPCell(new Phrase("    " + questions.get(i).getAnswer(), answerInTableFont));
+                if (questions.get(i).isHighlighted())
+                    answerCell = new PdfPCell(new Phrase("    " + questions.get(i).getAnswer() + " (!)", answerHighlightedFont));
 
                 questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -156,23 +181,81 @@ public class PDFBuilder {
                 document.add(questionTable);
             }
             else {
-                Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-                Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-                if (question.isHighlighted())
-                    answerParagraph = new Paragraph("    " + question.getAnswer() + " (!)", answerHighlightedFont);
+                Paragraph questionParagraph = new Paragraph(questions.get(i).getTitle(), standardFont);
+                Paragraph answerParagraph = new Paragraph("    " + questions.get(i).getAnswer(), answerFont);
+                if (questions.get(i).isHighlighted())
+                    answerParagraph = new Paragraph("    " + questions.get(i).getAnswer() + " (!)", answerHighlightedFont);
 
                 questionParagraph.setSpacingBefore(10);
 
                 document.add(questionParagraph);
                 document.add(answerParagraph);
             }
+        }
+    }
 
+    private void addComplexQuestions(
+            Document document,
+            List<ComplexQuestion> complexQuestions,
+            int beg,
+            int end
+    ) throws DocumentException {
+
+        complexQuestions.sort((final ComplexQuestion a, final ComplexQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+
+        for (int i = beg; i < end; i++) {
+            PdfPTable questionTable;
+            if (complexQuestions.get(i).getAnswer().equals("")){
+                float[] widths = {1.0f};
+                questionTable = new PdfPTable(widths);
+            }
+            else {
+                float[] widths = {0.85f, 0.15f};
+                questionTable = new PdfPTable(widths);
+            }
+            questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+            questionTable.setLockedWidth(true);
+            PdfPCell questionCell = new PdfPCell(new Phrase(complexQuestions.get(i).getTitle(), standardFont));
+            PdfPCell answerCell = new PdfPCell(new Phrase(complexQuestions.get(i).getAnswer(), answerInTableFont));
+            if (complexQuestions.get(i).isComplex()) {
+                answerCell = new PdfPCell(new Phrase("    " + complexQuestions.get(i).getAnswer() + " (!)", answerHighlightedFont));
+            }
+            questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            questionTable.addCell(questionCell);
+            if (!complexQuestions.get(i).getAnswer().equals(""))
+                questionTable.addCell(answerCell);
+            document.add(questionTable);
+
+            if (complexQuestions.get(i).isComplex()) {
+                for (int j = 0; j < complexQuestions.get(i).getSubanwsers().size(); j++) {
+                    float[] subwidths = {0.3f, 0.7f};
+                    PdfPTable subquestionTable = new PdfPTable(subwidths);
+                    subquestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+                    subquestionTable.setLockedWidth(true);
+                    PdfPCell subquestionCell = new PdfPCell(new Phrase(complexQuestions.get(i).getSubtitles().get(j), subquestionFont));
+                    PdfPCell subanswerCell = new PdfPCell(new Phrase(complexQuestions.get(i).getSubanwsers().get(j), answerInTableFont));
+                    if (complexQuestions.get(i).getSubanwsers().get(j).equals("TAK"))
+                        subanswerCell = new PdfPCell(new Phrase("TAK (!)", answerHighlightedFont));
+                    subquestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    subanswerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    subquestionTable.addCell(subquestionCell);
+                    subquestionTable.addCell(subanswerCell);
+                    document.add(subquestionTable);
+                }
+            }
         }
     }
 
     private void addSignatures(Document document, SignaturesContainer signaturesContainer)
             throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
+
+        PdfPTable describtionTable = new PdfPTable(2);
+        describtionTable.setTotalWidth(document.getPageSize().getWidth());
+        describtionTable.addCell(getTextCell(new Phrase("", standardFont)));
+        describtionTable.addCell(getTextCell(new Phrase(signaturesContainer.getPatientSignatureDescription(), standardFont)));
+        document.add(describtionTable);
 
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
@@ -188,15 +271,9 @@ public class PDFBuilder {
 
         PdfPTable titleTable = new PdfPTable(2);
         titleTable.setTotalWidth(document.getPageSize().getWidth());
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
+        titleTable.addCell(getTextCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
+        titleTable.addCell(getTextCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
         document.add(titleTable);
-
-        PdfPTable employeeNameTable = new PdfPTable(2);
-        employeeNameTable.setTotalWidth(document.getPageSize().getWidth());
-        employeeNameTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeFullName(), standardFont)));
-        employeeNameTable.addCell(getTitleCell(new Phrase("", standardFont)));
-        document.add(employeeNameTable);
     }
 
     private PdfPCell getImageCell(Image image) {
@@ -206,7 +283,7 @@ public class PDFBuilder {
         return cell;
     }
 
-    private PdfPCell getTitleCell(Phrase phrase) {
+    private PdfPCell getTextCell(Phrase phrase) {
         PdfPCell cell = new PdfPCell(phrase);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -227,6 +304,10 @@ public class PDFBuilder {
         return new Font(baseFont, size);
     }
     private Font createItalicFont(int size) throws DocumentException, IOException {
+        BaseFont baseFont = BaseFont.createFont("aller_italic.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        return new Font(baseFont, size);
+    }
+    private Font createItalicLightFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }

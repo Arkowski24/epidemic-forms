@@ -5,20 +5,24 @@ import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
 
 public class SignaturesContainer {
 
+    private String patientSignatureDescription;
+
     private Signature employeeSignature;
     private Signature patientSignature;
 
     private String employeeSignatureTitle;
     private String patientSignatureTitle;
 
-    private String employeeFullName;
-
     public SignaturesContainer(Form form) {
+        this.patientSignatureDescription = form.getSchema().getPatientSignature().getDescription();
         this.employeeSignature = form.getEmployeeSignature();
         this.patientSignature = form.getPatientSignature();
         this.employeeSignatureTitle = form.getSchema().getEmployeeSignature().getTitle();
         this.patientSignatureTitle = form.getSchema().getPatientSignature().getTitle();
-        this.employeeFullName = form.getCreatedBy().getFullName();
+    }
+
+    public String getPatientSignatureDescription() {
+        return patientSignatureDescription;
     }
 
     public Signature getEmployeeSignature() {
@@ -33,9 +37,5 @@ public class SignaturesContainer {
     }
     public String getPatientSignatureTitle() {
         return patientSignatureTitle;
-    }
-
-    public String getEmployeeFullName() {
-        return employeeFullName;
     }
 }

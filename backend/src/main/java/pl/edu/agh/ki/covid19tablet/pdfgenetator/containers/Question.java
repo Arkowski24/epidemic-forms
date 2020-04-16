@@ -8,7 +8,13 @@ public class Question {
     private boolean highlighted;
     private boolean inTable;
 
-    public Question(int fieldNumber, String title, String answer, boolean highlighted, boolean inTable) {
+    public Question(
+            int fieldNumber,
+            String title,
+            String answer,
+            boolean highlighted,
+            boolean inTable
+    ) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
