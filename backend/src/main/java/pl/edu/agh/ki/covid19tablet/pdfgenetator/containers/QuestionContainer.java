@@ -145,14 +145,26 @@ public class QuestionContainer {
 
             if (derivedField.getDerivedType() == DerivedType.CHOICE_INFO) {
                 if (answer.equals("TAK")) {
-                    extractedQuestions.add(new ComplexQuestion(
-                            fieldNumber,
-                            title,
-                            answer,
-                            new ArrayList<> (Arrays.asList(derivedField.getTitles().get(1))),
-                            new ArrayList<> (Arrays.asList(derivedFieldState.getValue().get(1))),
-                            true
-                    ));
+                    if (title.startsWith("Czy w ciągu")) {
+                        extractedQuestions.add(new ComplexQuestion(
+                                fieldNumber,
+                                title,
+                                answer,
+                                new ArrayList<> (Arrays.asList(derivedField.getTitles().get(1))),
+                                new ArrayList<> (Arrays.asList(derivedFieldState.getValue().get(1))),
+                                true
+                        ));
+                    }
+                    else {
+                        extractedQuestions.add(new ComplexQuestion(
+                                fieldNumber,
+                                title,
+                                answer,
+                                new ArrayList<> (Arrays.asList(derivedField.getTitles().get(1), derivedField.getTitles().get(2))),
+                                new ArrayList<> (Arrays.asList(derivedFieldState.getValue().get(1), derivedFieldState.getValue().get(2))),
+                                true
+                        ));
+                    }
                 }
                 else {
                     extractedQuestions.add(new ComplexQuestion(
