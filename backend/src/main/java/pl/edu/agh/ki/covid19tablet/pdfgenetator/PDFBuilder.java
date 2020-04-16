@@ -132,6 +132,40 @@ public class PDFBuilder {
     }
 
     private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
+        List<DerivedQuestion> derivedQuestions = questionContainer.getDerivedQuestions();
+        derivedQuestions.sort((final DerivedQuestion a, final DerivedQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+
+        for(DerivedQuestion question : derivedQuestions) {
+            float[] widths = {0.85f, 0.15f};
+            PdfPTable questionTable = new PdfPTable(widths);
+            questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+            questionTable.setLockedWidth(true);
+            PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
+            PdfPCell answerCell = new PdfPCell(new Phrase(question.getAnswer(), answerInTableFont));
+            if (question.isHighlighted()) {
+                answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
+            }
+            questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            questionTable.addCell(questionCell);
+            questionTable.addCell(answerCell);
+            document.add(questionTable);
+
+            if (question.isHighlighted()) {
+                float[] subwidths = {0.3f, 0.7f};
+                PdfPTable subquestionTable = new PdfPTable(subwidths);
+                subquestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+                subquestionTable.setLockedWidth(true);
+                PdfPCell subquestionCell = new PdfPCell(new Phrase(question.getSubtitle(), standardFont));
+                PdfPCell subanswerCell = new PdfPCell(new Phrase(question.getSubanwser(), answerInTableFont));
+                subquestionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                subanswerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                subquestionTable.addCell(subquestionCell);
+                subquestionTable.addCell(subanswerCell);
+                document.add(subquestionTable);
+            }
+        }
+
         List<Question> questions = questionContainer.getQuestions();
         questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
@@ -166,7 +200,6 @@ public class PDFBuilder {
                 document.add(questionParagraph);
                 document.add(answerParagraph);
             }
-
         }
     }
 

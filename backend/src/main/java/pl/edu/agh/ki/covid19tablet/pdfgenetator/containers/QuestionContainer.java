@@ -1,10 +1,13 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
+import org.springframework.security.core.parameters.P;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
+import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
 import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
+import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
@@ -14,13 +17,18 @@ import java.util.List;
 public class QuestionContainer {
 
     private List<Question> questions;
+    private List<DerivedQuestion> derivedQuestions;
 
     public QuestionContainer(Form form) {
         this.questions = extractQuestions(form);
+        this.derivedQuestions = extractDerivedQuestions(form);
     }
 
     public List<Question> getQuestions() {
         return questions;
+    }
+    public List<DerivedQuestion> getDerivedQuestions() {
+        return derivedQuestions;
     }
 
     private List<Question> extractQuestions(Form form) {
@@ -110,6 +118,43 @@ public class QuestionContainer {
 
             if (!title.startsWith("Cel wizy"))
                 extractedQuestions.add(new Question(fieldNumber, title, answer.toString(), isHighlighted, true));
+        }
+
+        return extractedQuestions;
+    }
+
+    private List<DerivedQuestion> extractDerivedQuestions(Form form) {
+        List<DerivedQuestion> extractedQuestions = new ArrayList<>();
+
+        List<DerivedFieldState> derivedFieldStates = form.getState().getDerived();
+        for (DerivedFieldState derivedFieldState : derivedFieldStates) {
+            DerivedField derivedField = derivedFieldState.getField();
+
+            int fieldNumber = derivedField.getFieldNumber();
+            String title = derivedField.getTitles().get(0);
+            String answer = derivedFieldState.getValue().get(0);
+
+            if (title.startsWith("Czy")) {
+                if (answer.equals("TAK")) {
+                    extractedQuestions.add(new DerivedQuestion(
+                            fieldNumber,
+                            title,
+                            answer,
+                            derivedField.getTitles().get(1),
+                            derivedFieldState.getValue().get(1),
+                            true)
+                    );
+                }
+                else {
+                    extractedQuestions.add(new DerivedQuestion(
+                            fieldNumber,
+                            title,
+                            answer,
+                            "NIE",
+                            "N.D.",
+                            false));
+                }
+            }
         }
 
         return extractedQuestions;

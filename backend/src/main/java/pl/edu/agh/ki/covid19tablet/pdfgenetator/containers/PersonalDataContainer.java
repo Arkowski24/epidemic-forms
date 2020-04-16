@@ -91,30 +91,32 @@ public class PersonalDataContainer {
 
             List<String> titles = derivedField.getTitles();
             List<String> values = derivedFieldState.getValue();
-            for (int j = 0; j < titles.size() && j < values.size(); j++) {
-                String value = values.get(j);
+            if (!titles.get(0).startsWith("Czy")) {
+                for (int j = 0; j < titles.size() && j < values.size(); j++) {
+                    String value = values.get(j);
 
-                if (j == 0 && derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
-                    if (value.isEmpty()) {
-                        extractedPersonalData.add(new PersonalData("PESEL" + ':', "B.D."));
-                    } else {
-                        DerivedPolishTypeData data = extractPersonal(value);
-                        if (data == null) continue;
+                    if (j == 0 && derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
+                        if (value.isEmpty()) {
+                            extractedPersonalData.add(new PersonalData("PESEL" + ':', "B.D."));
+                        } else {
+                            DerivedPolishTypeData data = extractPersonal(value);
+                            if (data == null) continue;
 
-                        String newValue = data.getValue();
-                        if (newValue.isEmpty()) newValue = "B.D";
-                        extractedPersonalData.add(new PersonalData(data.getType() + ':', newValue));
+                            String newValue = data.getValue();
+                            if (newValue.isEmpty()) newValue = "B.D";
+                            extractedPersonalData.add(new PersonalData(data.getType() + ':', newValue));
+                        }
+                        continue;
                     }
-                    continue;
-                }
-                if (value.isEmpty()) value = "B.D.";
+                    if (value.isEmpty()) value = "B.D.";
 
-                String title = titles.get(j);
-                if (title.charAt(title.length() - 1) != ':') {
-                    title = title + ':';
-                }
+                    String title = titles.get(j);
+                    if (title.charAt(title.length() - 1) != ':') {
+                        title = title + ':';
+                    }
 
-                extractedPersonalData.add(new PersonalData(title, value));
+                    extractedPersonalData.add(new PersonalData(title, value));
+                }
             }
         }
 
