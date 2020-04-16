@@ -39,7 +39,7 @@ public class PDFBuilder {
         this.standardFont = createRegularFont(10);
         this.answerInTableFont = createItalicLightFont(8);
         this.answerHighlightedFont = createItalicBoldFont(8);
-        this.subquestionFont = createItalicFont(10);
+        this.subquestionFont = createItalicBoldFont(10);
         this.personalDataFont = createItalicLightFont(10);
         this.answerFont = createItalicLightFont(10);
 
@@ -58,7 +58,7 @@ public class PDFBuilder {
         addTitle(document, formKeyData.getTitle());
         addMetadata(document, formKeyData.getMetadata());
         addPersonalData(document, formKeyData.getPersonalData());
-        addQuestions(document, formKeyData.getQuestions());
+        addAllQuestions(document, formKeyData.getQuestions());
         addSignatures(document, formKeyData.getSignatures());
 
         document.close();
@@ -133,57 +133,36 @@ public class PDFBuilder {
         addEmptyLine(document, standardFont);
     }
 
-    private void addQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
-        List<ComplexQuestion> complexQuestions = questionContainer.getComplexQuestions();
-        complexQuestions.sort((final ComplexQuestion a, final ComplexQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
-
-        for(ComplexQuestion question : complexQuestions) {
-            float[] widths = {0.85f, 0.15f};
-            PdfPTable questionTable = new PdfPTable(widths);
-            questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
-            questionTable.setLockedWidth(true);
-            PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
-            PdfPCell answerCell = new PdfPCell(new Phrase(question.getAnswer(), answerInTableFont));
-            if (question.isHighlighted()) {
-                answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
-            }
-            questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-            answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            questionTable.addCell(questionCell);
-            questionTable.addCell(answerCell);
-            document.add(questionTable);
-
-            if (question.isHighlighted()) {
-                for (int i = 0; i < question.getSubanwsers().size(); i++) {
-                    float[] subwidths = {0.3f, 0.7f};
-                    PdfPTable subquestionTable = new PdfPTable(subwidths);
-                    subquestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
-                    subquestionTable.setLockedWidth(true);
-                    PdfPCell subquestionCell = new PdfPCell(new Phrase(question.getSubtitles().get(i), subquestionFont));
-                    PdfPCell subanswerCell = new PdfPCell(new Phrase(question.getSubanwsers().get(i), answerInTableFont));
-                    subquestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    subanswerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    subquestionTable.addCell(subquestionCell);
-                    subquestionTable.addCell(subanswerCell);
-                    document.add(subquestionTable);
-                }
-            }
-        }
-
+    private void addAllQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
         List<Question> questions = questionContainer.getQuestions();
+        List<ComplexQuestion> complexQuestions = questionContainer.getComplexQuestions();
+
+        addQuestions(document, questions, 0, questions.size() - 1);
+        addEmptyLine(document, standardFont);
+        addComplexQuestions(document, complexQuestions, 0, complexQuestions.size());
+        addQuestions(document, questions, questions.size() - 1, questions.size());
+    }
+
+    private void addQuestions(
+            Document document,
+            List<Question> questions,
+            int beg,
+            int end
+    ) throws DocumentException {
+
         questions.sort((final Question a, final Question b) -> a.getFieldNumber() - b.getFieldNumber());
 
-        for (Question question : questions) {
-            if (question.isInTable()) {
+        for (int i = beg; i < end; i++) {
+            if (questions.get(i).isInTable()) {
                 float[] widths = {0.85f, 0.15f};
                 PdfPTable questionTable = new PdfPTable(widths);
                 questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);    // xDDDD
                 questionTable.setLockedWidth(true);
 
-                PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
-                PdfPCell answerCell = new PdfPCell(new Phrase("    " + question.getAnswer(), answerInTableFont));
-                if (question.isHighlighted())
-                    answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
+                PdfPCell questionCell = new PdfPCell(new Phrase(questions.get(i).getTitle(), standardFont));
+                PdfPCell answerCell = new PdfPCell(new Phrase("    " + questions.get(i).getAnswer(), answerInTableFont));
+                if (questions.get(i).isHighlighted())
+                    answerCell = new PdfPCell(new Phrase("    " + questions.get(i).getAnswer() + " (!)", answerHighlightedFont));
 
                 questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -194,15 +173,68 @@ public class PDFBuilder {
                 document.add(questionTable);
             }
             else {
-                Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
-                Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-                if (question.isHighlighted())
-                    answerParagraph = new Paragraph("    " + question.getAnswer() + " (!)", answerHighlightedFont);
+                Paragraph questionParagraph = new Paragraph(questions.get(i).getTitle(), standardFont);
+                Paragraph answerParagraph = new Paragraph("    " + questions.get(i).getAnswer(), answerFont);
+                if (questions.get(i).isHighlighted())
+                    answerParagraph = new Paragraph("    " + questions.get(i).getAnswer() + " (!)", answerHighlightedFont);
 
                 questionParagraph.setSpacingBefore(10);
 
                 document.add(questionParagraph);
                 document.add(answerParagraph);
+            }
+        }
+    }
+
+    private void addComplexQuestions(
+            Document document,
+            List<ComplexQuestion> complexQuestions,
+            int beg,
+            int end
+    ) throws DocumentException {
+
+        complexQuestions.sort((final ComplexQuestion a, final ComplexQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+
+        for (int i = beg; i < end; i++) {
+            PdfPTable questionTable;
+            if (complexQuestions.get(i).getAnswer().equals("")){
+                float[] widths = {1.0f};
+                questionTable = new PdfPTable(widths);
+            }
+            else {
+                float[] widths = {0.85f, 0.15f};
+                questionTable = new PdfPTable(widths);
+            }
+            questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+            questionTable.setLockedWidth(true);
+            PdfPCell questionCell = new PdfPCell(new Phrase(complexQuestions.get(i).getTitle(), standardFont));
+            PdfPCell answerCell = new PdfPCell(new Phrase(complexQuestions.get(i).getAnswer(), answerInTableFont));
+            if (complexQuestions.get(i).isComplex()) {
+                answerCell = new PdfPCell(new Phrase("    " + complexQuestions.get(i).getAnswer() + " (!)", answerHighlightedFont));
+            }
+            questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            questionTable.addCell(questionCell);
+            if (!complexQuestions.get(i).getAnswer().equals(""))
+                questionTable.addCell(answerCell);
+            document.add(questionTable);
+
+            if (complexQuestions.get(i).isComplex()) {
+                for (int j = 0; j < complexQuestions.get(i).getSubanwsers().size(); j++) {
+                    float[] subwidths = {0.3f, 0.7f};
+                    PdfPTable subquestionTable = new PdfPTable(subwidths);
+                    subquestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
+                    subquestionTable.setLockedWidth(true);
+                    PdfPCell subquestionCell = new PdfPCell(new Phrase(complexQuestions.get(i).getSubtitles().get(j), subquestionFont));
+                    PdfPCell subanswerCell = new PdfPCell(new Phrase(complexQuestions.get(i).getSubanwsers().get(j), answerInTableFont));
+                    if (complexQuestions.get(i).getSubanwsers().get(j).equals("TAK"))
+                        subanswerCell = new PdfPCell(new Phrase("TAK (!)", answerHighlightedFont));
+                    subquestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    subanswerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    subquestionTable.addCell(subquestionCell);
+                    subquestionTable.addCell(subanswerCell);
+                    document.add(subquestionTable);
+                }
             }
         }
     }

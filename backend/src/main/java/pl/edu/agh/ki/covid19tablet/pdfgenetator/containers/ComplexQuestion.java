@@ -9,7 +9,7 @@ public class ComplexQuestion {
     private String answer;
     private List<String> subtitles;
     private List<String> subanwsers;
-    private boolean highlighted;
+    private boolean complex;
 
     public ComplexQuestion(
             int fieldNumber,
@@ -17,14 +17,14 @@ public class ComplexQuestion {
             String answer,
             List<String> subtitles,
             List<String> subanwsers,
-            boolean highlighted
+            boolean complex
     ) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
         this.subtitles = subtitles;
         this.subanwsers = subanwsers;
-        this.highlighted = highlighted;
+        this.complex = complex;
     }
 
     public int getFieldNumber() {
@@ -42,7 +42,7 @@ public class ComplexQuestion {
     public List<String> getSubanwsers() {
         return subanwsers;
     }
-    public boolean isHighlighted() {
-        return highlighted;
+    public boolean isComplex() {
+        return complex;
     }
 }

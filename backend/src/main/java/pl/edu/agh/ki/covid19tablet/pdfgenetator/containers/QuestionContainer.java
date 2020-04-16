@@ -34,9 +34,18 @@ public class QuestionContainer {
     private List<Question> extractQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
-        extractedQuestions.addAll(extractChoiceQuestions(form));
+        extractedQuestions.addAll(extractSingleChoiceQuestions(form));
         extractedQuestions.addAll(extractSliderQuestions(form));
         extractedQuestions.addAll(extractTextQuestions(form));
+
+        return extractedQuestions;
+    }
+
+    private List<ComplexQuestion> extractComplexQuestions(Form form) {
+        List<ComplexQuestion> extractedQuestions = new ArrayList<>();
+
+        extractedQuestions.addAll(extractDerivedQuestions(form));
+        extractedQuestions.addAll(extractMultiChoiceQuestions(form));
 
         return extractedQuestions;
     }
@@ -90,12 +99,15 @@ public class QuestionContainer {
         return extractedQuestions;
     }
 
-    private List<Question> extractChoiceQuestions(Form form) {
+    private List<Question> extractSingleChoiceQuestions(Form form) {
         List<Question> extractedQuestions = new ArrayList<>();
 
         List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
         for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
             ChoiceField choiceField = choiceFieldState.getField();
+
+            if (choiceField.getMultiChoice())
+                continue;
 
             int fieldNumber = choiceField.getFieldNumber();
             String title = choiceField.getTitle();
@@ -123,7 +135,7 @@ public class QuestionContainer {
         return extractedQuestions;
     }
 
-    private List<ComplexQuestion> extractComplexQuestions(Form form) {
+    private List<ComplexQuestion> extractDerivedQuestions(Form form) {
         List<ComplexQuestion> extractedQuestions = new ArrayList<>();
 
         List<DerivedFieldState> derivedFieldStates = form.getState().getDerived();
@@ -142,8 +154,8 @@ public class QuestionContainer {
                             answer,
                             new ArrayList<> (Arrays.asList(derivedField.getTitles().get(1))),
                             new ArrayList<> (Arrays.asList(derivedFieldState.getValue().get(1))),
-                            true)
-                    );
+                            true
+                    ));
                 }
                 else {
                     extractedQuestions.add(new ComplexQuestion(
@@ -152,9 +164,46 @@ public class QuestionContainer {
                             answer,
                             new ArrayList<> (Arrays.asList("NIE")),
                             new ArrayList<> (Arrays.asList("")),
-                            false));
+                            false
+                    ));
                 }
             }
+        }
+
+        return extractedQuestions;
+    }
+
+    private List<ComplexQuestion> extractMultiChoiceQuestions(Form form) {
+        List<ComplexQuestion> extractedQuestions = new ArrayList<>();
+
+        List<ChoiceFieldState> choiceFieldStates = form.getState().getChoice();
+        for (ChoiceFieldState choiceFieldState : choiceFieldStates) {
+            ChoiceField choiceField = choiceFieldState.getField();
+
+            if (!choiceField.getMultiChoice())
+                continue;
+
+            int fieldNumber = choiceField.getFieldNumber();
+            String title = choiceField.getTitle();
+            String answer = "";
+            List<String> subtitles = choiceField.getChoices();
+            List<Boolean> values = choiceFieldState.getValue();
+            ArrayList<String> subanswers = new ArrayList<>();
+            for (int i = 0; i < subtitles.size(); i++) {
+                if (values.get(i))
+                    subanswers.add("TAK");
+                else
+                    subanswers.add("NIE");
+            }
+
+            extractedQuestions.add(new ComplexQuestion(
+                    fieldNumber,
+                    title,
+                    answer,
+                    subtitles,
+                    subanswers,
+                    true
+            ));
         }
 
         return extractedQuestions;
