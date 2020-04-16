@@ -208,7 +208,7 @@ public class QuestionContainer {
 
     private String addUnits(String title, String answer) {
         if (title.startsWith("Tempera"))
-            answer += " C";
+            answer += " °C";
 
         else if (title.startsWith("Tętn"))
             answer += " /min";
