@@ -50,7 +50,7 @@ class FormServiceImpl(
     override fun getAllForms(employeeDetails: EmployeeDetails): List<FormDTO> {
         val forms =
             if (employeeDetails.employee.role == EmployeeRole.ADMIN) formRepository.findAll()
-            else formRepository.findAllByCreatedBy(employeeDetails.employee)
+            else formRepository.findAllByCreatedBy_Id(employeeDetails.employee.id!!)
 
         return forms.map { it.toDTO() }
     }
