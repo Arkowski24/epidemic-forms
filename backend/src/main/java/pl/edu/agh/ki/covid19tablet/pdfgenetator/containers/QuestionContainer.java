@@ -1,10 +1,7 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
 import pl.edu.agh.ki.covid19tablet.form.Form;
-import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
-import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
-import pl.edu.agh.ki.covid19tablet.schema.fields.SliderField;
-import pl.edu.agh.ki.covid19tablet.schema.fields.TextField;
+import pl.edu.agh.ki.covid19tablet.schema.fields.*;
 import pl.edu.agh.ki.covid19tablet.state.fields.ChoiceFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.DerivedFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState;
@@ -146,7 +143,7 @@ public class QuestionContainer {
             String title = derivedField.getTitles().get(0);
             String answer = derivedFieldState.getValue().get(0);
 
-            if (title.startsWith("Czy")) {
+            if (derivedField.getDerivedType() == DerivedType.CHOICE_INFO) {
                 if (answer.equals("TAK")) {
                     extractedQuestions.add(new ComplexQuestion(
                             fieldNumber,
