@@ -56,14 +56,25 @@ const Header = ({ setVisible, employee, handleLogout }) => {
   );
 };
 
-const FormsTable = ({ forms, deleteForm }) => {
+const FormsTable = ({ forms, deleteForm, isAdmin }) => {
   const history = useHistory();
 
-  const headers = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Kod jednorazowy', '']
+  const employeeHeaders = ['#', 'Nazwa formularza', 'Schemat', 'Data utworzenia', 'Kod jednorazowy', ''];
+  const adminHeaders = ['#', 'Nazwa formularza', 'Schemat', 'Stworzony przez', 'Data utworzenia', 'Kod jednorazowy', ''];
+  const headersList = isAdmin ? adminHeaders : employeeHeaders;
+
+  const headers = headersList
     .map((h) => <th key={h}>{h}</th>);
 
   const moveToForm = (formId) => {
     history.push(`/employee/forms/${formId}`);
+  };
+
+  const handleDate = (createdAt) => {
+    const date = new Date(Date.parse(createdAt));
+    return new Intl
+      .DateTimeFormat('pl-PL', { dateStyle: 'medium', timeStyle: 'short' })
+      .format(date);
   };
 
   const buildFormRow = (form, index) => (
@@ -71,7 +82,8 @@ const FormsTable = ({ forms, deleteForm }) => {
       <td>{index}</td>
       <td>{form.formName}</td>
       <td>{form.schema.name}</td>
-      <td>{form.createdBy.fullName}</td>
+      {isAdmin && (<td>{form.createdBy.fullName}</td>)}
+      <td>{handleDate(form.createdAt)}</td>
       <td>{form.patient.id}</td>
       <td style={{ width: '5%' }}>
         <Button
@@ -213,6 +225,7 @@ const FormsListView = () => {
 
   const rawStaffCredentials = localStorage.getItem('staff-credentials');
   const staffCredentials = rawStaffCredentials ? JSON.parse(rawStaffCredentials) : null;
+  const isAdmin = staffCredentials ? staffCredentials.employee.role === 'ADMIN' : false;
 
   useEffect(() => {
     deviceStreamService.subscribe(history);
@@ -298,7 +311,7 @@ const FormsListView = () => {
         employee={staffCredentials.employee}
         handleLogout={handleLogout}
       />
-      <FormsTable forms={formsData.forms} deleteForm={deleteForm} />
+      <FormsTable forms={formsData.forms} deleteForm={deleteForm} isAdmin={isAdmin} />
       <NewFormModal
         visible={modalVisible}
         setVisible={setModalVisible}
