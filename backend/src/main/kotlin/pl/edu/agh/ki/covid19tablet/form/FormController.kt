@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
+import pl.edu.agh.ki.covid19tablet.EmployeeUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
@@ -34,9 +35,10 @@ class FormController(
 ) {
     @GetMapping
     @PreAuthorize("hasAuthority('$FORM_READ')")
-    fun getAllForms(): List<FormDTO> =
-        formService
-            .getAllForms()
+    fun getAllForms(
+        @AuthenticationPrincipal employeeDetails: EmployeeDetails
+    ): List<FormDTO> =
+        formService.getAllForms(employeeDetails)
 
     @GetMapping("{formId}")
     @PreAuthorize("hasAuthority('$FORM_READ')")
@@ -96,12 +98,15 @@ class FormController(
     @DeleteMapping("{formId}")
     @PreAuthorize("hasAuthority('$FORM_DELETE')")
     fun deleteForm(
-        @PathVariable formId: FormId
+        @PathVariable formId: FormId,
+        @AuthenticationPrincipal employeeDetails: EmployeeDetails
     ): ResponseEntity<Nothing> =
         try {
-            formService.deleteForm(formId)
+            formService.deleteForm(formId, employeeDetails)
             ResponseEntity(HttpStatus.NO_CONTENT)
         } catch (ex: FormNotFoundException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
+        } catch (ex: EmployeeUnauthorizedException) {
+            ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
 }

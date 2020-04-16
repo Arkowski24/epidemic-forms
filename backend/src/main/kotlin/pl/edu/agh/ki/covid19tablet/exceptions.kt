@@ -8,3 +8,4 @@ class EmployeeNotFoundException : RuntimeException()
 class EmployeeSelfDeletionException : RuntimeException()
 
 class PatientUnauthorizedException : RuntimeException()
+class EmployeeUnauthorizedException : RuntimeException()
