@@ -27,6 +27,7 @@ public class PDFBuilder {
     private Font standardFont;
     private Font answerInTableFont;
     private Font answerHighlightedFont;
+    private Font subquestionFont;
     private Font personalDataFont;
     private Font answerFont;
 
@@ -36,10 +37,11 @@ public class PDFBuilder {
         this.hospitalNameFont = createRegularFont(15);
         this.titleFont = createBoldFont(20);
         this.standardFont = createRegularFont(10);
-        this.answerInTableFont = createItalicFont(8);
+        this.answerInTableFont = createItalicLightFont(8);
         this.answerHighlightedFont = createItalicBoldFont(8);
-        this.personalDataFont = createItalicFont(10);
-        this.answerFont = createItalicFont(10);
+        this.subquestionFont = createItalicFont(10);
+        this.personalDataFont = createItalicLightFont(10);
+        this.answerFont = createItalicLightFont(10);
 
         this.dirPath = dirPath;
     }
@@ -157,9 +159,9 @@ public class PDFBuilder {
                     PdfPTable subquestionTable = new PdfPTable(subwidths);
                     subquestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
                     subquestionTable.setLockedWidth(true);
-                    PdfPCell subquestionCell = new PdfPCell(new Phrase(question.getSubtitles().get(i), standardFont));
+                    PdfPCell subquestionCell = new PdfPCell(new Phrase(question.getSubtitles().get(i), subquestionFont));
                     PdfPCell subanswerCell = new PdfPCell(new Phrase(question.getSubanwsers().get(i), answerInTableFont));
-                    subquestionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    subquestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     subanswerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     subquestionTable.addCell(subquestionCell);
                     subquestionTable.addCell(subanswerCell);
@@ -262,6 +264,10 @@ public class PDFBuilder {
         return new Font(baseFont, size);
     }
     private Font createItalicFont(int size) throws DocumentException, IOException {
+        BaseFont baseFont = BaseFont.createFont("aller_italic.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        return new Font(baseFont, size);
+    }
+    private Font createItalicLightFont(int size) throws DocumentException, IOException {
         BaseFont baseFont = BaseFont.createFont("aller_italic_light.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         return new Font(baseFont, size);
     }
