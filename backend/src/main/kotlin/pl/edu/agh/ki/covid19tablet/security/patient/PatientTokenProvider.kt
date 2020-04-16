@@ -29,6 +29,6 @@ class PatientTokenProvider(
             .getOrNull()
 
     companion object {
-        private val TokenLifetime = Duration.ofMinutes(30)
+        private val TokenLifetime = Duration.ofHours(24)
     }
 }
