@@ -1,6 +1,5 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
-import org.springframework.security.core.parameters.P;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.schema.fields.ChoiceField;
 import pl.edu.agh.ki.covid19tablet.schema.fields.DerivedField;
@@ -12,23 +11,24 @@ import pl.edu.agh.ki.covid19tablet.state.fields.SliderFieldState;
 import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuestionContainer {
 
     private List<Question> questions;
-    private List<DerivedQuestion> derivedQuestions;
+    private List<ComplexQuestion> complexQuestions;
 
     public QuestionContainer(Form form) {
         this.questions = extractQuestions(form);
-        this.derivedQuestions = extractDerivedQuestions(form);
+        this.complexQuestions = extractComplexQuestions(form);
     }
 
     public List<Question> getQuestions() {
         return questions;
     }
-    public List<DerivedQuestion> getDerivedQuestions() {
-        return derivedQuestions;
+    public List<ComplexQuestion> getComplexQuestions() {
+        return complexQuestions;
     }
 
     private List<Question> extractQuestions(Form form) {
@@ -123,8 +123,8 @@ public class QuestionContainer {
         return extractedQuestions;
     }
 
-    private List<DerivedQuestion> extractDerivedQuestions(Form form) {
-        List<DerivedQuestion> extractedQuestions = new ArrayList<>();
+    private List<ComplexQuestion> extractComplexQuestions(Form form) {
+        List<ComplexQuestion> extractedQuestions = new ArrayList<>();
 
         List<DerivedFieldState> derivedFieldStates = form.getState().getDerived();
         for (DerivedFieldState derivedFieldState : derivedFieldStates) {
@@ -136,22 +136,22 @@ public class QuestionContainer {
 
             if (title.startsWith("Czy")) {
                 if (answer.equals("TAK")) {
-                    extractedQuestions.add(new DerivedQuestion(
+                    extractedQuestions.add(new ComplexQuestion(
                             fieldNumber,
                             title,
                             answer,
-                            derivedField.getTitles().get(1),
-                            derivedFieldState.getValue().get(1),
+                            new ArrayList<> (Arrays.asList(derivedField.getTitles().get(1))),
+                            new ArrayList<> (Arrays.asList(derivedFieldState.getValue().get(1))),
                             true)
                     );
                 }
                 else {
-                    extractedQuestions.add(new DerivedQuestion(
+                    extractedQuestions.add(new ComplexQuestion(
                             fieldNumber,
                             title,
                             answer,
-                            "NIE",
-                            "N.D.",
+                            new ArrayList<> (Arrays.asList("NIE")),
+                            new ArrayList<> (Arrays.asList("")),
                             false));
                 }
             }

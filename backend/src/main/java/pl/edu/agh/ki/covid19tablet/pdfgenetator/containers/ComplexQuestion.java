@@ -1,27 +1,29 @@
 package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
 
-public class DerivedQuestion {
+import java.util.List;
+
+public class ComplexQuestion {
 
     private int fieldNumber;
     private String title;
     private String answer;
-    private String subtitle;
-    private String subanwser;
+    private List<String> subtitles;
+    private List<String> subanwsers;
     private boolean highlighted;
 
-    public DerivedQuestion(
+    public ComplexQuestion(
             int fieldNumber,
             String title,
             String answer,
-            String subtitle,
-            String subanwser,
+            List<String> subtitles,
+            List<String> subanwsers,
             boolean highlighted
     ) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
-        this.subtitle = subtitle;
-        this.subanwser = subanwser;
+        this.subtitles = subtitles;
+        this.subanwsers = subanwsers;
         this.highlighted = highlighted;
     }
 
@@ -34,11 +36,11 @@ public class DerivedQuestion {
     public String getAnswer() {
         return answer;
     }
-    public String getSubtitle() {
-        return subtitle;
+    public List<String> getSubtitles() {
+        return subtitles;
     }
-    public String getSubanwser() {
-        return subanwser;
+    public List<String> getSubanwsers() {
+        return subanwsers;
     }
     public boolean isHighlighted() {
         return highlighted;
