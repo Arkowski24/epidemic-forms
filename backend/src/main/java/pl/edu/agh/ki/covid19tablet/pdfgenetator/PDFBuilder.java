@@ -19,8 +19,8 @@ public class PDFBuilder {
     private final static int hospitalLogoWidth = 30;
     private final static int hospitalLogoHeight = 30;
 
-    private final static int signatureWidth = 160;
-    private final static int signatureHeight = 120;
+    private final static int signatureWidth = 120;
+    private final static int signatureHeight = 90;
 
     private Font hospitalNameFont;
     private Font titleFont;
@@ -251,6 +251,12 @@ public class PDFBuilder {
             throws DocumentException, IOException {
         addEmptyLine(document, answerFont);
 
+        PdfPTable describtionTable = new PdfPTable(2);
+        describtionTable.setTotalWidth(document.getPageSize().getWidth());
+        describtionTable.addCell(getTextCell(new Phrase("", standardFont)));
+        describtionTable.addCell(getTextCell(new Phrase(signaturesContainer.getPatientSignatureDescription(), standardFont)));
+        document.add(describtionTable);
+
         PdfPTable imageTable = new PdfPTable(2);
         imageTable.setTotalWidth(document.getPageSize().getWidth());
         ByteArrayInputStream signatureEmployee = new ByteArrayInputStream(signaturesContainer.getEmployeeSignature().getValue());
@@ -265,15 +271,9 @@ public class PDFBuilder {
 
         PdfPTable titleTable = new PdfPTable(2);
         titleTable.setTotalWidth(document.getPageSize().getWidth());
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
-        titleTable.addCell(getTitleCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
+        titleTable.addCell(getTextCell(new Phrase(signaturesContainer.getEmployeeSignatureTitle(), standardFont)));
+        titleTable.addCell(getTextCell(new Phrase(signaturesContainer.getPatientSignatureTitle(), standardFont)));
         document.add(titleTable);
-
-        PdfPTable employeeNameTable = new PdfPTable(2);
-        employeeNameTable.setTotalWidth(document.getPageSize().getWidth());
-        employeeNameTable.addCell(getTitleCell(new Phrase(signaturesContainer.getEmployeeFullName(), standardFont)));
-        employeeNameTable.addCell(getTitleCell(new Phrase("", standardFont)));
-        document.add(employeeNameTable);
     }
 
     private PdfPCell getImageCell(Image image) {
@@ -283,7 +283,7 @@ public class PDFBuilder {
         return cell;
     }
 
-    private PdfPCell getTitleCell(Phrase phrase) {
+    private PdfPCell getTextCell(Phrase phrase) {
         PdfPCell cell = new PdfPCell(phrase);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
