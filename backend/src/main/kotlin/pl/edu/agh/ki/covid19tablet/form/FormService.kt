@@ -2,6 +2,7 @@ package pl.edu.agh.ki.covid19tablet.form
 
 import org.springframework.stereotype.Service
 import pl.edu.agh.ki.covid19tablet.DeviceNotFoundException
+import pl.edu.agh.ki.covid19tablet.EmployeeUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.FormNotFoundException
 import pl.edu.agh.ki.covid19tablet.PatientUnauthorizedException
 import pl.edu.agh.ki.covid19tablet.SchemaNotFoundException
@@ -16,19 +17,21 @@ import pl.edu.agh.ki.covid19tablet.schema.SchemaRepository
 import pl.edu.agh.ki.covid19tablet.schema.fields.buildInitialState
 import pl.edu.agh.ki.covid19tablet.security.employee.EmployeeDetails
 import pl.edu.agh.ki.covid19tablet.security.patient.PatientTokenProvider
+import pl.edu.agh.ki.covid19tablet.user.employee.Employee
 import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRepository
+import pl.edu.agh.ki.covid19tablet.user.employee.EmployeeRole
 import pl.edu.agh.ki.covid19tablet.user.patient.Patient
 import pl.edu.agh.ki.covid19tablet.user.patient.PatientRepository
 import java.util.Base64
 
 interface FormService {
-    fun getAllForms(): List<FormDTO>
+    fun getAllForms(employeeDetails: EmployeeDetails): List<FormDTO>
     fun getForm(formId: FormId): FormDTO
 
     fun createForm(request: CreateFormRequest, employeeDetails: EmployeeDetails): FormDTO
     fun updateFormStatus(formId: FormId, newStatus: FormStatus)
 
-    fun deleteForm(formId: FormId)
+    fun deleteForm(formId: FormId, employeeDetails: EmployeeDetails)
 
     fun createPatientSignature(formId: FormId, request: CreateSignatureRequest, token: String)
     fun createEmployeeSignature(formId: FormId, request: CreateSignatureRequest, employeeDetails: EmployeeDetails)
@@ -44,11 +47,13 @@ class FormServiceImpl(
     private val patientTokenProvider: PatientTokenProvider,
     private val pdfGeneratorService: PDFGeneratorService
 ) : FormService {
-    override fun getAllForms(): List<FormDTO> =
-        formRepository
-            .findAll()
-            .map { it.toDTO() }
-            .toList()
+    override fun getAllForms(employeeDetails: EmployeeDetails): List<FormDTO> {
+        val forms =
+            if (employeeDetails.employee.role == EmployeeRole.ADMIN) formRepository.findAll()
+            else formRepository.findAllByCreatedBy(employeeDetails.employee)
+
+        return forms.map { it.toDTO() }
+    }
 
     override fun getForm(formId: FormId): FormDTO =
         formRepository
@@ -100,10 +105,13 @@ class FormServiceImpl(
         formRepository.save(form)
     }
 
-    override fun deleteForm(formId: FormId) {
+    override fun deleteForm(formId: FormId, employeeDetails: EmployeeDetails) {
         val form = formRepository
             .findById(formId)
             .orElseThrow { FormNotFoundException() }
+
+        if (!canDeleteForm(employee = employeeDetails.employee, form = form))
+            throw EmployeeUnauthorizedException()
 
         formRepository.delete(form)
     }
@@ -153,5 +161,9 @@ class FormServiceImpl(
 
     private fun serializeImage(image: String): ByteArray =
         Base64.getDecoder().decode(image)
+
+    private fun canDeleteForm(form: Form, employee: Employee) =
+        if (employee.role == EmployeeRole.ADMIN) true
+        else form.createdBy.id == employee.id
 
 }
