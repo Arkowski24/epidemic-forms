@@ -67,7 +67,11 @@ public class QuestionContainer {
         for (TextFieldState textFieldState : textFieldStates) {
             TextField textField = textFieldState.getField();
 
-            if (!(textField.getTitle().startsWith("Imi") || textField.getTitle().startsWith("Nazwis"))) {
+            if (!(
+                    textField.getTitle().startsWith("Imi") ||
+                    textField.getTitle().startsWith("Nazwis") ||
+                    textField.getTitle().startsWith("Telefon")
+            )) {
                 int fieldNumber = textField.getFieldNumber();
                 String title = textField.getTitle();
                 String answer = textFieldState.getValue();

@@ -54,6 +54,7 @@ public class PersonalDataContainer {
 
         extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));
         extractedPersonalData.add(extractPatternText(form, "Imię", "Imi"));
+        extractedPersonalData.add(extractPatternText(form, "Telefon Kontaktowy", "Telefon"));
         extractedPersonalData.addAll(extractDerived(form));
 
         return extractedPersonalData;
