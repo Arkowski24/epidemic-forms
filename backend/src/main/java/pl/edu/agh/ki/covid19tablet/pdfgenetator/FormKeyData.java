@@ -3,7 +3,7 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.MetadataContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.PersonalDataContainer;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.QuestionContainer;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.QuestionContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 
 public class FormKeyData {
