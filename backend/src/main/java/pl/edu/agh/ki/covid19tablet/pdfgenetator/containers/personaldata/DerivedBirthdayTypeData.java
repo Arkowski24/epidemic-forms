@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

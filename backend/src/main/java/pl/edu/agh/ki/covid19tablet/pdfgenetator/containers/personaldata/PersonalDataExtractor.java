@@ -1,4 +1,4 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,43 +13,9 @@ import pl.edu.agh.ki.covid19tablet.state.fields.TextFieldState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalDataContainer {
-    private List<PersonalData> personalDataList;
+public class PersonalDataExtractor {
 
-    public PersonalDataContainer(Form form) {
-        this.personalDataList = extractPersonalData(form);
-    }
-
-    public List<PersonalData> getPersonalDataList() {
-        return personalDataList;
-    }
-
-    public String getSurname() {
-        for (PersonalData personalData : personalDataList) {
-            if (personalData.getTitle().startsWith("Nazwis")) {
-                String surname = personalData.getValue();
-                surname = surname.replaceAll(" ", "");
-                return surname;
-            }
-        }
-
-        return "";
-    }
-
-    public String getFirstName() {
-        for (PersonalData personalData : personalDataList) {
-            if (personalData.getTitle().startsWith("Imi")) {
-                String firstName = personalData.getValue();
-                firstName = firstName.replaceAll(" ", "");
-                firstName = firstName.replaceAll(",", "");
-                return firstName;
-            }
-        }
-
-        return "";
-    }
-
-    private List<PersonalData> extractPersonalData(Form form) {
+    public List<PersonalData> extract(Form form) {
         List<PersonalData> extractedPersonalData = new ArrayList<>();
 
         extractedPersonalData.add(extractPatternText(form, "Nazwisko", "Nazwis"));

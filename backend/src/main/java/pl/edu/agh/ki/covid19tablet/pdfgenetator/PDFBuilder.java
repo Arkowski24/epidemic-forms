@@ -6,6 +6,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.*;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata.PersonalData;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata.PersonalDataContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex.ComplexQuestion;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.QuestionContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex.SubQuestion;
