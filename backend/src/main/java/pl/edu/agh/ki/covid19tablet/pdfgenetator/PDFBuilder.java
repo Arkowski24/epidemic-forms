@@ -30,11 +30,12 @@ public class PDFBuilder {
     private Font hospitalNameFont;
     private Font titleFont;
     private Font standardFont;
-    private Font answerInTableFont;
-    private Font answerHighlightedFont;
-    private Font subQuestionFont;
     private Font personalDataFont;
+    private Font subQuestionFont;
     private Font answerFont;
+    private Font answerHighlightedFont;
+    private Font additionalInfoFont;
+    private Font emptyLineFont;
 
     private String dirPath;
 
@@ -42,11 +43,12 @@ public class PDFBuilder {
         this.hospitalNameFont = createRegularFont(13);
         this.titleFont = createBoldFont(17);
         this.standardFont = createRegularFont(9);
-        this.answerInTableFont = createItalicLightFont(7);
-        this.answerHighlightedFont = createItalicBoldFont(7);
-        this.subQuestionFont = createItalicBoldFont(9);
         this.personalDataFont = createItalicLightFont(9);
-        this.answerFont = createItalicLightFont(9);
+        this.subQuestionFont = createItalicFont(9);
+        this.answerFont = createItalicLightFont(7);
+        this.answerHighlightedFont = createItalicBoldFont(7);
+        this.additionalInfoFont = createItalicLightFont(9);
+        this.emptyLineFont = createRegularFont(11);
 
         this.dirPath = dirPath;
     }
@@ -75,7 +77,7 @@ public class PDFBuilder {
         hospitalLogo.scaleAbsolute(hospitalLogoWidth, hospitalLogoHeight);
 
         Chunk hospitalLogoChunk = new Chunk(hospitalLogo, 0, 0);
-        Chunk hospitalNameChunk = new Chunk("  " + hospitalName, hospitalNameFont);
+        Chunk hospitalNameChunk = new Chunk(hospitalName, hospitalNameFont);
         Paragraph hospitalNameParagraph = new Paragraph();
         Paragraph hospitalLogoParagraph = new Paragraph();
         hospitalNameParagraph.add(hospitalNameChunk);
@@ -127,7 +129,7 @@ public class PDFBuilder {
         );
         document.add(purposeOfVisitParagraph);
 
-        addEmptyLine(document, standardFont);
+        addEmptyLine(document, emptyLineFont);
     }
 
     private void addPersonalData(Document document, PersonalDataContainer personalDataContainer)
@@ -143,7 +145,7 @@ public class PDFBuilder {
 
             document.add(personalDataParagraph);
         }
-        addEmptyLine(document, standardFont);
+        addEmptyLine(document, emptyLineFont);
     }
 
     private void addAllQuestions(Document document, QuestionContainer questionContainer) throws DocumentException {
@@ -152,8 +154,9 @@ public class PDFBuilder {
         List<TextQuestion> textQuestions = questionContainer.getTextQuestions();
 
         addSimpleQuestions(document, simpleQuestions);
-        addEmptyLine(document, standardFont);
+        addEmptyLine(document, emptyLineFont);
         addComplexQuestions(document, complexQuestions);
+        addEmptyLine(document, emptyLineFont);
         addTextQuestions(document, textQuestions);
     }
 
@@ -171,9 +174,9 @@ public class PDFBuilder {
             questionTable.setLockedWidth(true);
 
             PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
-            PdfPCell answerCell = new PdfPCell(new Phrase("    " + question.getAnswer(), answerInTableFont));
+            PdfPCell answerCell = new PdfPCell(new Phrase(question.getAnswer(), answerFont));
             if (question.isHighlighted())
-                answerCell = new PdfPCell(new Phrase("    " + question.getAnswer() + " (!)", answerHighlightedFont));
+                answerCell = new PdfPCell(new Phrase(question.getAnswer() + " (!)", answerHighlightedFont));
 
             questionCell.setHorizontalAlignment(Element.ALIGN_LEFT);
             answerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -205,7 +208,7 @@ public class PDFBuilder {
             questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
             questionTable.setLockedWidth(true);
             PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
-            PdfPCell answerCell = new PdfPCell(new Phrase(question.getAnswer(), answerInTableFont));
+            PdfPCell answerCell = new PdfPCell(new Phrase(question.getAnswer(), answerFont));
             if (question.getAnswer().equals("TAK")) {
                 answerCell = new PdfPCell(new Phrase(question.getAnswer() + " (!)", answerHighlightedFont));
             }
@@ -222,8 +225,8 @@ public class PDFBuilder {
                 PdfPTable subQuestionTable = new PdfPTable(subWidths);
                 subQuestionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
                 subQuestionTable.setLockedWidth(true);
-                PdfPCell subQuestionCell = new PdfPCell(new Phrase(subQuestion.getTitle(), standardFont));
-                PdfPCell subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer(), answerInTableFont));
+                PdfPCell subQuestionCell = new PdfPCell(new Phrase(subQuestion.getTitle(), subQuestionFont));
+                PdfPCell subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer(), answerFont));
                 if (subQuestion.isHighlighted())
                     subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer() + " (!)", answerHighlightedFont));
                 subQuestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -244,8 +247,7 @@ public class PDFBuilder {
 
         for (TextQuestion question : textQuestions) {
             Paragraph questionParagraph = new Paragraph(question.getTitle() + ':', standardFont);
-            Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
-            questionParagraph.setSpacingBefore(10);
+            Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), additionalInfoFont);
             document.add(questionParagraph);
             document.add(answerParagraph);
         }
@@ -253,7 +255,7 @@ public class PDFBuilder {
 
     private void addSignatures(Document document, SignaturesContainer signaturesContainer)
             throws DocumentException, IOException {
-        addEmptyLine(document, answerFont);
+        addEmptyLine(document, emptyLineFont);
 
         PdfPTable describtionTable = new PdfPTable(2);
         describtionTable.setTotalWidth(document.getPageSize().getWidth());
