@@ -5,7 +5,7 @@ import pl.edu.agh.ki.covid19tablet.form.Form;
 import java.util.List;
 
 public class PersonalDataContainer {
-    private List<PersonalData> personalDataList;
+    private final List<PersonalData> personalDataList;
 
     public PersonalDataContainer(Form form) {
         PersonalDataExtractor personalDataExtractor = new PersonalDataExtractor();

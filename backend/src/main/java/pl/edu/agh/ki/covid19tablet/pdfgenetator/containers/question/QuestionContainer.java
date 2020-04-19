@@ -12,9 +12,9 @@ import java.util.List;
 
 public class QuestionContainer {
 
-    private List<SimpleQuestion> simpleQuestions;
-    private List<ComplexQuestion> complexQuestions;
-    private List<TextQuestion> textQuestions;
+    private final List<SimpleQuestion> simpleQuestions;
+    private final List<ComplexQuestion> complexQuestions;
+    private final List<TextQuestion> textQuestions;
 
     public QuestionContainer(Form form) {
         SimpleQuestionExtractor simpleExtractor = new SimpleQuestionExtractor();

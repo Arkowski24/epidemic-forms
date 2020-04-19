@@ -2,9 +2,9 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.text;
 
 public class TextQuestion {
 
-    private int fieldNumber;
-    private String title;
-    private String answer;
+    private final int fieldNumber;
+    private final String title;
+    private final String answer;
 
     public TextQuestion(
             int fieldNumber,

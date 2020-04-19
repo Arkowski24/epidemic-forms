@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 
 public class PDFBuilder {
@@ -167,7 +168,7 @@ public class PDFBuilder {
             List<SimpleQuestion> simpleQuestions
     ) throws DocumentException {
 
-        simpleQuestions.sort((final SimpleQuestion a, final SimpleQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+        simpleQuestions.sort(Comparator.comparingInt(SimpleQuestion::getFieldNumber));
 
         for (SimpleQuestion question : simpleQuestions) {
             float[] widths = {0.85f, 0.15f};
@@ -195,7 +196,7 @@ public class PDFBuilder {
             List<ComplexQuestion> complexQuestions
     ) throws DocumentException {
 
-        complexQuestions.sort((final ComplexQuestion a, final ComplexQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+        complexQuestions.sort(Comparator.comparingInt(ComplexQuestion::getFieldNumber));
 
         for (ComplexQuestion question : complexQuestions) {
             PdfPTable questionTable;
@@ -245,7 +246,7 @@ public class PDFBuilder {
             List<TextQuestion> textQuestions
     ) throws DocumentException {
 
-        textQuestions.sort((final TextQuestion a, final TextQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
+        textQuestions.sort(Comparator.comparingInt(TextQuestion::getFieldNumber));
 
         for (TextQuestion question : textQuestions) {
             Paragraph questionParagraph = new Paragraph(question.getTitle() + ':', standardFont);

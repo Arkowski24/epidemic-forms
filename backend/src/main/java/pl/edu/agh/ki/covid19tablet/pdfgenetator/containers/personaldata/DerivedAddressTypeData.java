@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DerivedAddressTypeData {
 
-    public final String postcode;
-    public final String city;
+    private final String postcode;
+    private final String city;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public DerivedAddressTypeData(@JsonProperty("postcode") String postcode, @JsonProperty("city") String city) {

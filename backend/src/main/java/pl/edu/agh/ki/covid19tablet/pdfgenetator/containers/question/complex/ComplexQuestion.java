@@ -4,10 +4,10 @@ import java.util.List;
 
 public class ComplexQuestion {
 
-    private int fieldNumber;
-    private String title;
-    private String answer;
-    private List<SubQuestion> subQuestions;
+    private final int fieldNumber;
+    private final String title;
+    private final String answer;
+    private final List<SubQuestion> subQuestions;
 
     public ComplexQuestion(
             int fieldNumber,

@@ -2,9 +2,9 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex;
 
 public class SubQuestion {
 
-    private String title;
-    private String answer;
-    private boolean highlighted;
+    private final String title;
+    private final String answer;
+    private final boolean highlighted;
 
     public SubQuestion(
             String title,

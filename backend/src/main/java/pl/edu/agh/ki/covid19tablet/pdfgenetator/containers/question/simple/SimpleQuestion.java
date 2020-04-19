@@ -2,10 +2,10 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.simple;
 
 public class SimpleQuestion {
 
-    private int fieldNumber;
-    private String title;
-    private String answer;
-    private boolean highlighted;
+    private final int fieldNumber;
+    private final String title;
+    private final String answer;
+    private final boolean highlighted;
 
     public SimpleQuestion(
             int fieldNumber,

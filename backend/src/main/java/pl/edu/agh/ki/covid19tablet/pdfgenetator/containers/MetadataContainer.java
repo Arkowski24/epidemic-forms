@@ -9,16 +9,16 @@ import java.util.List;
 public class MetadataContainer {
 
     private static final String usedDeviceTitle = "Punkt wstępnej oceny pacjentów";
-    private String usedDevice;
+    private final String usedDevice;
 
     private static final String schemaNameTitle = "Nazwa schematu";
-    private String schemaName;
+    private final String schemaName;
 
     private static final String creationDateTitle = "Data wypełnienia";
-    private String creationDate;
+    private final String creationDate;
 
     private static final String purposeOfVisitTitle = "Cel wizyty";
-    private String purposeOfVisit;
+    private final String purposeOfVisit;
 
     public MetadataContainer(Form form, String creationDate) {
         String deviceName = (form.getDevice() == null || form.getDevice().getFullName() == null) ? "" : form.getDevice().getFullName();

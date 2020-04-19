@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DerivedBirthdayTypeData {
 
-    public final String type;
-    public final String value;
+    private final String type;
+    private final String value;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public DerivedBirthdayTypeData(@JsonProperty("type") String type, @JsonProperty("value") String value) {
