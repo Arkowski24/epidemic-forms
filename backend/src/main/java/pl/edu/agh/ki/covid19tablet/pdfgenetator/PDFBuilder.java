@@ -24,8 +24,8 @@ public class PDFBuilder {
     private final static int hospitalLogoWidth = 30;
     private final static int hospitalLogoHeight = 30;
 
-    private final static int signatureWidth = 120;
-    private final static int signatureHeight = 90;
+    private final static int signatureWidth = 80;
+    private final static int signatureHeight = 60;
 
     private Font hospitalNameFont;
     private Font titleFont;
@@ -39,14 +39,14 @@ public class PDFBuilder {
     private String dirPath;
 
     public PDFBuilder(String dirPath) throws DocumentException, IOException {
-        this.hospitalNameFont = createRegularFont(15);
-        this.titleFont = createBoldFont(20);
-        this.standardFont = createRegularFont(10);
-        this.answerInTableFont = createItalicLightFont(8);
-        this.answerHighlightedFont = createItalicBoldFont(8);
-        this.subQuestionFont = createItalicBoldFont(10);
-        this.personalDataFont = createItalicLightFont(10);
-        this.answerFont = createItalicLightFont(10);
+        this.hospitalNameFont = createRegularFont(13);
+        this.titleFont = createBoldFont(17);
+        this.standardFont = createRegularFont(9);
+        this.answerInTableFont = createItalicLightFont(7);
+        this.answerHighlightedFont = createItalicBoldFont(7);
+        this.subQuestionFont = createItalicBoldFont(9);
+        this.personalDataFont = createItalicLightFont(9);
+        this.answerFont = createItalicLightFont(9);
 
         this.dirPath = dirPath;
     }
@@ -243,7 +243,7 @@ public class PDFBuilder {
         textQuestions.sort((final TextQuestion a, final TextQuestion b) -> a.getFieldNumber() - b.getFieldNumber());
 
         for (TextQuestion question : textQuestions) {
-            Paragraph questionParagraph = new Paragraph(question.getTitle(), standardFont);
+            Paragraph questionParagraph = new Paragraph(question.getTitle() + ':', standardFont);
             Paragraph answerParagraph = new Paragraph("    " + question.getAnswer(), answerFont);
             questionParagraph.setSpacingBefore(10);
             document.add(questionParagraph);
