@@ -83,6 +83,7 @@ public class PersonalDataContainer {
 
         if (!value.equals(""))
             return new PersonalData(title, value);
+
         return null;
     }
 
@@ -95,52 +96,32 @@ public class PersonalDataContainer {
 
             List<String> titles = derivedField.getTitles();
             List<String> values = derivedFieldState.getValue();
-            if (!titles.get(0).startsWith("Czy")) {
-                for (int j = 0; j < titles.size() && j < values.size(); j++) {
-                    String value = values.get(j);
 
-                    if (j == 0 && derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
-                        if (value.isEmpty()) {
-                            extractedPersonalData.add(new PersonalData("PESEL" + ':', "B.D."));
-                        } else {
-                            DerivedBirthdayTypeData data = extractBirthday(value);
-                            if (data == null) continue;
+            if (derivedField.getDerivedType() == DerivedType.BIRTHDAY_PESEL) {
+                DerivedBirthdayTypeData data = extractBirthday(values.get(0));
+                if (data == null) continue;
+                extractedPersonalData.add(new PersonalData(data.getType() + ':', data.getValue()));
 
-                            String newValue = data.getValue();
-                            if (newValue.isEmpty()) newValue = "B.D";
-                            extractedPersonalData.add(new PersonalData(data.getType() + ':', newValue));
-                        }
-                        continue;
-                    }
-                    else if (derivedField.getDerivedType() != DerivedType.ADDRESS) {
-                        if (value.isEmpty()) value = "B.D.";
+                if (!values.get(1).isEmpty())
+                    extractedPersonalData.add(new PersonalData(titles.get(1) + ':', values.get(1)));
+            }
 
-                        String title = titles.get(j);
-                        if (title.charAt(title.length() - 1) != ':') {
-                            title = title + ':';
-                        }
+            else if (derivedField.getDerivedType() == DerivedType.ADDRESS) {
+                DerivedAddressTypeData data = extractAddress(values.get(1));
+                if (data == null) continue;
 
-                        extractedPersonalData.add(new PersonalData(title, value));
-                    }
-                }
+                String street = values.get(0);
+                String postcode = data.getPostcode();
+                String city = data.getCity();
 
-                if (derivedField.getDerivedType() == DerivedType.ADDRESS) {
-                    DerivedAddressTypeData data = extractAddress(values.get(1));
-                    if (data == null) continue;
+                String title = "Adres:";
+                StringBuilder addressBuilder = new StringBuilder();
+                addressBuilder.append(street + ", ");
+                if (!postcode.equals(""))
+                    addressBuilder.append(postcode + " ");
+                addressBuilder.append(city);
 
-                    String street = values.get(0);
-                    String postcode = data.getPostcode();
-                    String city = data.getCity();
-
-                    String title = "Adres";
-                    StringBuilder addressBuilder = new StringBuilder();
-                    addressBuilder.append(street + ", ");
-                    if (!postcode.equals(""))
-                        addressBuilder.append(postcode + " ");
-                    addressBuilder.append(city);
-
-                    extractedPersonalData.add(new PersonalData(title + ':', addressBuilder.toString()));
-                }
+                extractedPersonalData.add(new PersonalData(title, addressBuilder.toString()));
             }
         }
 
