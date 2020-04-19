@@ -230,8 +230,11 @@ public class PDFBuilder {
                 subQuestionTable.setLockedWidth(true);
                 PdfPCell subQuestionCell = new PdfPCell(new Phrase(subQuestion.getTitle(), subQuestionFont));
                 PdfPCell subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer(), answerFont));
-                if (subQuestion.isHighlighted())
+                if (subQuestion.isHighlighted() && subQuestion.isWithExclamationMark()) {
                     subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer() + " (!)", answerHighlightedFont));
+                }
+                else if (subQuestion.isHighlighted())
+                    subAnswerCell = new PdfPCell(new Phrase(subQuestion.getAnswer(), answerHighlightedFont));
                 subQuestionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 subAnswerCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 subQuestionTable.addCell(subQuestionCell);

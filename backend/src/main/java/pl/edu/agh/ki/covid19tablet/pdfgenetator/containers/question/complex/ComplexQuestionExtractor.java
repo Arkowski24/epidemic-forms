@@ -39,7 +39,7 @@ public class ComplexQuestionExtractor {
 
                 if (answer.equals("TAK")) {
                     for (int i = 1; i < subtitles.size(); i++)
-                        subQuestions.add(new SubQuestion(subtitles.get(i), subAnswers.get(i), true));
+                        subQuestions.add(new SubQuestion(subtitles.get(i), subAnswers.get(i), true, false));
                 }
                 extractedQuestions.add(new ComplexQuestion(fieldNumber, title, answer, subQuestions));
             }
@@ -66,9 +66,9 @@ public class ComplexQuestionExtractor {
             List<Boolean> values = choiceFieldState.getValue();
             for (int i = 0; i < subtitles.size(); i++) {
                 if (values.get(i))
-                    subQuestions.add(new SubQuestion(subtitles.get(i), "TAK", true));
+                    subQuestions.add(new SubQuestion(subtitles.get(i), "TAK", true, true));
                 else
-                    subQuestions.add(new SubQuestion(subtitles.get(i), "NIE", false));
+                    subQuestions.add(new SubQuestion(subtitles.get(i), "NIE", false, false));
             }
 
             extractedQuestions.add(new ComplexQuestion(fieldNumber, title, answer, subQuestions));

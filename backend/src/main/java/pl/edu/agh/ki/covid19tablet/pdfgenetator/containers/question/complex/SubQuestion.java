@@ -5,15 +5,18 @@ public class SubQuestion {
     private final String title;
     private final String answer;
     private final boolean highlighted;
+    private final boolean withExclamationMark;
 
     public SubQuestion(
             String title,
             String answer,
-            boolean highlighted
+            boolean highlighted,
+            boolean withExclamationMark
     ) {
         this.title = title;
         this.answer = answer;
         this.highlighted = highlighted;
+        this.withExclamationMark = withExclamationMark;
     }
 
     public String getTitle() {
@@ -24,5 +27,8 @@ public class SubQuestion {
     }
     public boolean isHighlighted() {
         return highlighted;
+    }
+    public boolean isWithExclamationMark() {
+        return withExclamationMark;
     }
 }
