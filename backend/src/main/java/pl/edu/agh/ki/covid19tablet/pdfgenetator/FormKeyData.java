@@ -9,7 +9,7 @@ import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 public class FormKeyData {
 
     private final String hospitalName = "Krakowski Szpital Specjalistyczny im. Jana Pawła II";
-    private String title = "Formularz epidemiczny";
+    private final String title = "Formularz epidemiczny";
 
     private MetadataContainer metadata;
     private PersonalDataContainer personalData;

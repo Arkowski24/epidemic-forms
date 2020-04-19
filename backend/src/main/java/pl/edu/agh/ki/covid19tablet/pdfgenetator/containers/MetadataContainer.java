@@ -17,7 +17,7 @@ public class MetadataContainer {
     private static final String creationDateTitle = "Data wypełnienia";
     private String creationDate;
 
-    private String purposeOfVisitTitle = "Cel wizyty";
+    private static final String purposeOfVisitTitle = "Cel wizyty";
     private String purposeOfVisit;
 
     public MetadataContainer(Form form, String creationDate) {

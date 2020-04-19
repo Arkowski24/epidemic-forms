@@ -17,7 +17,6 @@ public class DerivedBirthdayTypeData {
     public String getType() {
         return type;
     }
-
     public String getValue() {
         return value;
     }
