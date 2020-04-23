@@ -113,8 +113,7 @@ public class SimpleQuestionExtractor {
         }
 
         if (title.startsWith("Satura")) {
-            if (value < LimitValues.getMinAeration())
-                return true;
+            return value < LimitValues.getMinAeration();
         }
 
         return false;

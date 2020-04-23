@@ -82,9 +82,9 @@ public class PersonalDataExtractor {
 
                 String title = "Adres:";
                 StringBuilder addressBuilder = new StringBuilder();
-                addressBuilder.append(street + ", ");
+                addressBuilder.append(street).append(", ");
                 if (!postcode.equals(""))
-                    addressBuilder.append(postcode + " ");
+                    addressBuilder.append(postcode).append(" ");
                 addressBuilder.append(city);
 
                 extractedPersonalData.add(new PersonalData(title, addressBuilder.toString()));

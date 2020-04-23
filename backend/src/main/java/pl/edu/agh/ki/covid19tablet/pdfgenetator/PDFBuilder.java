@@ -5,11 +5,12 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.*;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.MetadataContainer;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata.PersonalData;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata.PersonalDataContainer;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex.ComplexQuestion;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.QuestionContainer;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex.ComplexQuestion;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.complex.SubQuestion;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.simple.SimpleQuestion;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.text.TextQuestion;
@@ -200,14 +201,13 @@ public class PDFBuilder {
 
         for (ComplexQuestion question : complexQuestions) {
             PdfPTable questionTable;
-            if (question.getAnswer().equals("")){
-                float[] widths = {1.0f};
-                questionTable = new PdfPTable(widths);
+            float[] widths;
+            if (question.getAnswer().equals("")) {
+                widths = new float[]{1.0f};
+            } else {
+                widths = new float[]{0.85f, 0.15f};
             }
-            else {
-                float[] widths = {0.85f, 0.15f};
-                questionTable = new PdfPTable(widths);
-            }
+            questionTable = new PdfPTable(widths);
             questionTable.setTotalWidth(PageSize.A4.getWidth() * 0.88f);
             questionTable.setLockedWidth(true);
             PdfPCell questionCell = new PdfPCell(new Phrase(question.getTitle(), standardFont));
