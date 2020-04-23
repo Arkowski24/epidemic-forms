@@ -2,21 +2,21 @@ package pl.edu.agh.ki.covid19tablet.pdfgenetator;
 
 import pl.edu.agh.ki.covid19tablet.form.Form;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.MetadataContainer;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.PersonalDataContainer;
-import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.QuestionContainer;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata.PersonalDataContainer;
+import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.QuestionContainer;
 import pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.SignaturesContainer;
 
 public class FormKeyData {
 
     private final String hospitalName = "Krakowski Szpital Specjalistyczny im. Jana Pawła II";
-    private String title = "Formularz epidemiczny";
+    private final String title = "Formularz epidemiczny";
 
-    private MetadataContainer metadata;
-    private PersonalDataContainer personalData;
-    private QuestionContainer questions;
-    private SignaturesContainer signatures;
+    private final MetadataContainer metadata;
+    private final PersonalDataContainer personalData;
+    private final QuestionContainer questions;
+    private final SignaturesContainer signatures;
 
-    private String pdfDirPath;
+    private final String pdfDirPath;
 
     public FormKeyData(Form form, String creationDate, String pdfBasicDirPath) {
         this.metadata = new MetadataContainer(form, creationDate);

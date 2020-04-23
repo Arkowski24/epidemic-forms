@@ -1,12 +1,12 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.personaldata;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DerivedAddressTypeData {
 
-    public final String postcode;
-    public final String city;
+    private final String postcode;
+    private final String city;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public DerivedAddressTypeData(@JsonProperty("postcode") String postcode, @JsonProperty("city") String city) {

@@ -1,25 +1,22 @@
-package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers;
+package pl.edu.agh.ki.covid19tablet.pdfgenetator.containers.question.simple;
 
-public class Question {
+public class SimpleQuestion {
 
-    private int fieldNumber;
-    private String title;
-    private String answer;
-    private boolean highlighted;
-    private boolean inTable;
+    private final int fieldNumber;
+    private final String title;
+    private final String answer;
+    private final boolean highlighted;
 
-    public Question(
+    public SimpleQuestion(
             int fieldNumber,
             String title,
             String answer,
-            boolean highlighted,
-            boolean inTable
+            boolean highlighted
     ) {
         this.fieldNumber = fieldNumber;
         this.title = title;
         this.answer = answer;
         this.highlighted = highlighted;
-        this.inTable = inTable;
     }
 
     public int getFieldNumber() {
@@ -33,8 +30,5 @@ public class Question {
     }
     public boolean isHighlighted() {
         return highlighted;
-    }
-    public boolean isInTable() {
-        return inTable;
     }
 }

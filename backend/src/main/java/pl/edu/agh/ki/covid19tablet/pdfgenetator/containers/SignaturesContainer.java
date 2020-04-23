@@ -5,13 +5,13 @@ import pl.edu.agh.ki.covid19tablet.form.signature.Signature;
 
 public class SignaturesContainer {
 
-    private String patientSignatureDescription;
+    private final String patientSignatureDescription;
 
-    private Signature employeeSignature;
-    private Signature patientSignature;
+    private final Signature employeeSignature;
+    private final Signature patientSignature;
 
-    private String employeeSignatureTitle;
-    private String patientSignatureTitle;
+    private final String employeeSignatureTitle;
+    private final String patientSignatureTitle;
 
     public SignaturesContainer(Form form) {
         this.patientSignatureDescription = form.getSchema().getPatientSignature().getDescription();
