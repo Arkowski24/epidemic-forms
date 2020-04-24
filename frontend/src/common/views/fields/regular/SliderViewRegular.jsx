@@ -44,7 +44,7 @@ const RangeForm = ({
         </Col>
         <Col>
           <div className="w-100">
-            <h2 className="text-center">{Math.round(value * 100) / 100}</h2>
+            <h2 className="text-center">{(Math.round(value * 100) / 100).toFixed(1)}</h2>
           </div>
         </Col>
         <Col>
