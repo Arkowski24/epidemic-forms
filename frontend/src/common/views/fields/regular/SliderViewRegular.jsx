@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button, Col, Row,
+  Button, ButtonGroup, Col, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import Slider from 'rc-slider';
@@ -14,22 +14,33 @@ const RangeForm = ({
   value, setValue,
   isBlocked,
 }) => {
-  const decValue = () => { if (value - step >= minValue) setValue(value - step); };
-  const incValue = () => { if (value + step <= maxValue) setValue(value + step); };
+  const decValue = (multiple) => { if (value - multiple * step >= minValue) { setValue(value - multiple * step); } else { setValue(minValue); } };
+  const incValue = (multiple) => { if (value + multiple * step <= maxValue) { setValue(value + multiple * step); } else { setValue(maxValue); } };
 
   return (
     <div className="w-100 pl-3 pr-3">
       <Row>
         <Col>
-          <div className="w-25">
+          <ButtonGroup>
             <Button
-              onClick={decValue}
+              type="button"
               variant="danger"
+              size="lg"
+              onClick={() => { decValue(1); }}
               disabled={isBlocked || value - step < minValue}
             >
               <FaMinus />
             </Button>
-          </div>
+            <Button
+              type="button"
+              variant="outline-danger"
+              size="lg"
+              onClick={() => { decValue(5); }}
+              disabled={isBlocked || value - step < minValue}
+            >
+              5-
+            </Button>
+          </ButtonGroup>
         </Col>
         <Col>
           <div className="w-100">
@@ -37,20 +48,30 @@ const RangeForm = ({
           </div>
         </Col>
         <Col>
-          <div className="w-25 float-right">
+          <ButtonGroup className="float-right">
             <Button
-              className="btn float-right"
+              type="button"
+              variant="outline-primary"
+              size="lg"
+              onClick={() => { incValue(5); }}
+              disabled={isBlocked || value + step > maxValue}
+            >
+              5+
+            </Button>
+            <Button
+              type="button"
               variant="primary"
-              onClick={incValue}
+              size="lg"
+              onClick={() => { incValue(1); }}
               disabled={isBlocked || value + step > maxValue}
             >
               <FaPlus />
             </Button>
-          </div>
+          </ButtonGroup>
         </Col>
       </Row>
       <Row>
-        <div className="w-100 mb-1 pl-2 pr-2">
+        <div className="w-100 mt-1 p-2 ml-1 mr-1">
           <Slider
             min={minValue}
             max={maxValue}
