@@ -363,7 +363,14 @@ class DatabaseInitializer {
                                     fieldNumber = 0,
                                     fieldType = FieldType.HIDDEN,
                                     title = "Cel wizyty",
-                                    choices = listOf("Pacjent", "Odwiedziny", "Pracownik")
+                                    choices = listOf(
+                                        "Pacjent",
+                                        "Odwiedziny",
+                                        "Pracownik",
+                                        "Rodzina",
+                                        "Administracja",
+                                        "Inne"
+                                    )
                                 ),
                                 ChoiceField(
                                     fieldNumber = 7,
