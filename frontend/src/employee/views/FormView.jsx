@@ -54,8 +54,8 @@ const FormView = () => {
       authService
         .meEmployee(staffCredentials.token)
         .catch(() => { localStorage.removeItem('staff-credentials'); history.push('/employee/login'); })
-        .then(() => formService.getForm(formId).catch(() => { history.push('/employee/'); }))
-        .then(() => setupServices());
+        .then(() => setupServices())
+        .then(() => formService.getForm(formId).catch(() => { history.push('/employee/'); }));
     };
 
     if (!form) { fetchTokenAndData(); }
