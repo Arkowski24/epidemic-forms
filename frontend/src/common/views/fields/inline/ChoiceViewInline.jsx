@@ -145,7 +145,7 @@ const ChoiceViewInline = ({
       <ChoiceFormMultiChoice
         title={title}
         choices={choices}
-        isMultiChoice={isMultiChoice}
+        isMultiChoice
         input={input}
         setInput={setInput}
         isBlocked={isBlocked}
@@ -161,7 +161,16 @@ const ChoiceViewInline = ({
         isBlocked={isBlocked}
       />
     )}
-    {!isMultiChoice && !(choices.length === 2) && (
+    {!isMultiChoice && (choices.length !== 2) && (choices.length <= 5) && (
+      <ChoiceFormMultiChoice
+        title={title}
+        choices={choices}
+        input={input}
+        setInput={setInput}
+        isBlocked={isBlocked}
+      />
+    )}
+    {!isMultiChoice && (choices.length > 5) && (
       <ChoiceFormSingleChoice
         title={title}
         choices={choices}
