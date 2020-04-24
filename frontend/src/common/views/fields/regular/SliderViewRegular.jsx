@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Button, ButtonGroup, Col, Row,
 } from 'react-bootstrap';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import Slider from 'rc-slider';
-import SingleInputButton from './common/SingleInputButton';
+import SingleInputButtons from './common/SingleInputButtons';
 import 'rc-slider/assets/index.css';
 
 
@@ -98,6 +98,7 @@ const SliderViewRegular = ({
   isHighlighted, isEmployee,
   isBlocked,
 }) => {
+  const [isLocked, setIsLocked] = useState(false);
   const hidden = input < minValue;
 
   const setHidden = () => {
@@ -105,14 +106,18 @@ const SliderViewRegular = ({
     if (input >= minValue) setInput(minValue - step);
   };
 
+  const setLocked = () => { setIsLocked(!isLocked); };
+
   return (
-    <SingleInputButton
+    <SingleInputButtons
       title={title}
       description={description}
       isHighlighted={isHighlighted}
       isEmployee={isEmployee}
-      clicked={hidden}
-      onClick={setHidden}
+      clickedLeft={hidden}
+      onClickLeft={setHidden}
+      clickedRight={isLocked}
+      onClickRight={setLocked}
       isBlocked={isBlocked}
     >
       {!hidden && (
@@ -123,10 +128,10 @@ const SliderViewRegular = ({
           defaultValue={defaultValue}
           value={input}
           setValue={setInput}
-          isBlocked={isBlocked}
+          isBlocked={isBlocked || isLocked}
         />
       )}
-    </SingleInputButton>
+    </SingleInputButtons>
   );
 };
 
