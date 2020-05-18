@@ -5,6 +5,12 @@ Limiting patient-personnel contact is one of the most important safety measures.
 The projects aim to eliminate paper forms used during an epidemic interview and replace them with a digital one, filled on a tablet that can be easily decontaminated afterward. 
 The answers are conveniently saved to the PDF files that can be printed if necessary.
 
+## Key features
+
+* **Collaborative approach** - the state of the form is shared between multiple devices, which enables the physical separation between the patient and the employee.
+* **Extensive customization** - the form is entirely defined by the schema stored in the database with six different types of fields.
+* **Mobile-first** - the UI was optimized for tablets with simplicity in mind to keep things simple for the older patients.
+
 ## To start using the project
 
 The project requires [Docker Compose](https://docs.docker.com/compose/).
@@ -45,3 +51,7 @@ You can access patient part under `http://localhost/`
 and the employee one under `http://localhost/employee/`.
 
 To access the device panel in the patient part, click on the hospital logo 5 times. After a successful login, the continuous mode is enabled, which enables employees to send forms directly to the device.
+
+## Deployments
+
+* [Krakowski Szpital Specjalistyczny im. Jana Pawła II](https://www.informatyka.agh.edu.pl/pl/blog/studenci-informatyki-stworzyli-aplikacje-dla-szpitala-specjalistycznego-im-jana-pawla-ii/)
